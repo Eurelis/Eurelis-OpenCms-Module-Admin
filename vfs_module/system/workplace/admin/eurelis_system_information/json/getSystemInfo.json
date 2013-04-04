@@ -1,0 +1,152 @@
+<%@page buffer="none" session="true" language="java" trimDirectiveWhitespaces="true" contentType="application/json; charset=UTF-8" pageEncoding="UTF-8" %>
+<jsp:useBean id="actionbean" class="org.opencms.jsp.CmsJspActionElement">
+<% 
+  actionbean.init(pageContext, request, response);
+  actionbean.setContentType("application/json");
+%>
+</jsp:useBean>
+<%
+  com.sun.management.OperatingSystemMXBean sunOsBean = (com.sun.management.OperatingSystemMXBean)java.lang.management.ManagementFactory.getOperatingSystemMXBean();
+  java.lang.management.OperatingSystemMXBean osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
+  java.lang.management.ThreadMXBean threadBean = java.lang.management.ManagementFactory.getThreadMXBean();
+  java.lang.management.ClassLoadingMXBean classesBean = java.lang.management.ManagementFactory.getClassLoadingMXBean();
+  //java.lang.management.GarbageCollectorMXBean gcBean = java.lang.management.ManagementFactory.getGarbageCollectorMXBean();
+  java.lang.management.RuntimeMXBean runtimeBean = java.lang.management.ManagementFactory.getRuntimeMXBean();
+  
+  String myconfigPath = org.opencms.main.OpenCms.getSystemInfo().getAbsoluteRfsPathRelativeToWebInf(org.opencms.main.CmsSystemInfo.FOLDER_CONFIG_DEFAULT);
+  
+  org.opencms.configuration.CmsConfigurationManager myconfig = new org.opencms.configuration.CmsConfigurationManager(myconfigPath);
+  
+  org.opencms.configuration.CmsParameterConfiguration propertyConfiguration = null;
+  String path = null;
+  try {
+  	path = org.opencms.main.OpenCms.getSystemInfo().getConfigurationFileRfsPath();
+    propertyConfiguration = new org.opencms.configuration.CmsParameterConfiguration(path);
+    myconfig.setConfiguration(propertyConfiguration); 
+  } catch (Exception e) {
+    	//LOG.error(e.getMessage() + " (" + path + ")",e);
+  }
+  java.util.Map configParameter = myconfig.getConfiguration();
+
+  java.util.List poolsName = new java.util.ArrayList();
+  if(configParameter!=null){
+  	String poolsNameProperty = (String) configParameter.get("db.pools");
+    String[] poolNames = poolsNameProperty.split(",");
+    for(int i =0; i< poolNames.length; i++){
+        if(poolNames[i] != null){
+          poolsName.add(poolNames[i]);
+        }
+    }
+  }
+  
+  org.opencms.db.CmsSqlManager sqlM = org.opencms.main.OpenCms.getSqlManager() ;
+%>
+{ 
+  "system" : {
+    "os"  : "<%=osBean.getName()%>",
+    "cpu" : {
+      "number" : <%=osBean.getAvailableProcessors()%>,
+      "usage"  : <%=100*osBean.getSystemLoadAverage()%>
+    },
+    "jvm" : {
+      "uptime" : <%=runtimeBean.getUptime()%>,
+      "start-time" : <%=runtimeBean.getStartTime()%>
+    },
+    "memory" : {<%
+    for(java.lang.management.MemoryPoolMXBean item : java.lang.management.ManagementFactory.getMemoryPoolMXBeans())  {
+      java.lang.management.MemoryUsage mu = item.getUsage();
+      String name = item.getName();
+      if(name.contains("Perm")) { name = "perm"; } 
+      else if(name.contains("Eden")) { name = "eden"; } 
+      else if(name.contains("Survivor")) { name = "survivor"; } 
+      else if(name.contains("Old")) { name = "old"; } 
+      else { continue; } 
+      %>
+      "<%=name%>" : {
+        "full-name" : "<%=item.getName()%>",
+        "used"      : <%=mu.getUsed()%>,
+        "committed" : <%=mu.getCommitted()%>,
+        "max"       : <%=mu.getMax()%>
+      },<%  }%>
+      "heap" : {
+        "free"  : <%= Runtime.getRuntime().freeMemory() %>,
+        "total" : <%= Runtime.getRuntime().totalMemory() %>,
+        "max"   : <%= Runtime.getRuntime().maxMemory() %>
+      },
+      "physical" : {
+        "free"  : <%=sunOsBean.getFreePhysicalMemorySize()%>,
+        "total" : <%=sunOsBean.getTotalPhysicalMemorySize()%>
+      },
+      "swap" : {
+        "free"  : <%=sunOsBean.getFreeSwapSpaceSize()%>,
+        "total" : <%=sunOsBean.getTotalSwapSpaceSize()%>
+      }
+    },
+    "classes" : {
+      "totalloaded" : <%=classesBean.getTotalLoadedClassCount()%>,
+      "loaded"       : <%=classesBean.getLoadedClassCount()%>,
+      "unloaded"     : <%=classesBean.getUnloadedClassCount()%>
+    },
+    "threads" : {
+      "counts" : {
+        "total"         : <%=threadBean.getThreadCount()%>,
+        "total-started" : <%=threadBean.getTotalStartedThreadCount()%>,
+        "peak"          : <%=threadBean.getPeakThreadCount()%>,
+        "daemon"        : <%=threadBean.getDaemonThreadCount()%>
+      }
+    },
+    "dbpools" : { <%  java.util.Iterator poolIterator = poolsName.iterator();
+        while(poolIterator.hasNext()){
+          String poolName = (String)poolIterator.next();
+          if(poolName != null){
+        	  	java.util.Iterator poolsURLIterator = sqlM.getDbPoolUrls().iterator();
+              while(poolsURLIterator.hasNext()){
+                String poolURL = (String) poolsURLIterator.next();
+                if(poolURL != null && poolURL.endsWith(poolName)){
+                		String url = poolURL;
+                	  int activeConnections = sqlM.getActiveConnections(url);
+                	  int idleConnections = sqlM.getIdleConnections(url);
+                	  String poolStrategyProperty = (String) configParameter.get("db.pool."+poolName+".whenExhaustedAction");
+                	  String maxActivesConfiguratedString = (String)configParameter.get("db.pool."+poolName+".maxActive");
+                	  float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));
+                	  
+                	  /*java.sql.Connection conn = null;
+                	  long timeBeforeRequest = 0;
+                	  long timeAfterRequest = 0;
+                		try{
+                			conn = sqlM.getConnection(poolName);
+                		
+                			String showTableQuery = "select * from CMS_PROJECTS;";
+                			java.sql.PreparedStatement stmt = null;
+                			stmt = conn.prepareStatement(showTableQuery);
+                			java.sql.ResultSet resultset = null;
+                			try{
+                				 timeBeforeRequest = System.currentTimeMillis();
+                				 resultset = stmt.executeQuery(); 
+                				 timeAfterRequest = System.currentTimeMillis();
+                			}catch(java.sql.SQLException e){ 
+                				 anError = true;
+                				 error += e.getMessage().toString();
+                			}
+                		}catch(Exception e){
+                			anError = true;
+                			error += e.getMessage().toString();     
+                		}finally{
+                			//conn.close();
+                		}*/ %>
+      "<%=poolName%>" : {
+        "url" : "<%=url%>",
+        "activeConnections" : <%=activeConnections%>,
+        "idleConnections" : <%=idleConnections%>,
+        "pourcentage"       : <%=pourcentage%>
+      },<%
+                     	  
+                } 
+              }
+          }
+        }%>
+      "count" : <%=poolsName.size() %> <% 
+    %>
+    }
+  }
+}
