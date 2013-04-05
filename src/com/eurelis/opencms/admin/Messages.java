@@ -164,6 +164,23 @@ public final class Messages extends A_CmsMessageBundle {
     
     
     
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_SYSTEMINFORMATION_OVERVIEW_SETTINGS_NAME_0 = "GUI_SYSTEMINFORMATION_OVERVIEW_SETTINGS_NAME_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String INIT_ADMIN_CONFIGURATION_FINISHED_0 = "INIT_ADMIN_CONFIGURATION_FINISHED_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String INIT_ADMIN_CONFIGURATION_INIT_0 = "INIT_ADMIN_CONFIGURATION_INIT_0";
+    
+    
+    
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_ADMIN_SETTINGS_INTERVALS_5000 = "GUI_ADMIN_SETTINGS_INTERVALS_5000";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_ADMIN_SETTINGS_INTERVALS_10000 = "GUI_ADMIN_SETTINGS_INTERVALS_10000";
+    
+    
 
     /** Name of the used resource bundle. */
     private static final String BUNDLE_NAME = "com.eurelis.opencms.admin.messages";

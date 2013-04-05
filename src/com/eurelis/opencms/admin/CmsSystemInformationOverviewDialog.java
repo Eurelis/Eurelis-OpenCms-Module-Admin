@@ -3,13 +3,19 @@ package com.eurelis.opencms.admin;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
+import org.apache.commons.logging.Log;
 import org.opencms.jsp.CmsJspActionElement;
+import org.opencms.main.CmsLog;
+import org.opencms.util.CmsStringUtil;
 import org.opencms.widgets.CmsDisplayWidget;
+import org.opencms.widgets.CmsSelectWidget;
+import org.opencms.widgets.CmsSelectWidgetOption;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
 
@@ -18,6 +24,9 @@ import org.opencms.workplace.CmsWidgetDialogParameter;
  * 
  */
 public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
+	
+	/** The log object for this class. */
+    private static final Log LOG = CmsLog.getLog(CmsSystemInformationOverviewDialog.class);
 
     /** localized messages Keys prefix. */
     public static final String KEY_PREFIX = "sysinfo.stats";
@@ -36,6 +45,9 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
     
     /** System infos . */
     private String m_jvmStarttime;
+    
+    /** The admin settings object that is edited on this dialog. */
+    protected CmsAdminSettings m_adminSettings;
 
 
     /**
@@ -62,12 +74,27 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
     }
 
     /**
-     * Commits the edited group to the db.<p>
+     * Commits the edited interval to the db.<p>
      */
     public void actionCommit() {
+        
+    	LOG.debug("Admin settings actionCommit...");
+        List errors = new ArrayList();
+        setDialogObject(m_adminSettings);
 
-        // no saving needed
-        setCommitErrors(new ArrayList());
+        boolean enabled = m_adminSettings.getInterval() > 0;
+        int interval = m_adminSettings.getInterval();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
+
+        //memorisation system du parametre...
+        //OpenCms.getSystemInfo().setVersionHistorySettings(enabled, versions, versionsDeleted);
+        //OpenCms.writeConfiguration(CmsSystemConfiguration.class);
+        //TODO
+        LOG.debug("Admin settings actionCommit : memorisation TODO");
+
+        // set the list of errors to display when saving failed
+        setCommitErrors(errors);
+        
     }
 
     /**
@@ -109,6 +136,8 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
 
         return m_jvmStarttime;
     }
+    
+    
 
 
     /**
@@ -150,6 +179,8 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
 
         m_jvmStarttime = jvmStarttime;
     }
+    
+   
 
     /**
      * Creates the dialog HTML for all defined widgets of the named dialog (page).<p>
@@ -174,6 +205,13 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
             result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_OVERVIEW_ADMIN_TOOL_BLOCK_1)));
             result.append(createWidgetTableStart());
             result.append(createDialogRowsHtml(0, 3));
+            result.append(createWidgetTableEnd());
+            result.append(dialogBlockEnd());
+            
+            // create the widgets for the settings page
+            result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_OVERVIEW_SETTINGS_NAME_0)));
+            result.append(createWidgetTableStart());
+            result.append(createDialogRowsHtml(4, 4));
             result.append(createWidgetTableEnd());
             result.append(dialogBlockEnd());
         }
@@ -207,6 +245,10 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         addWidget(new CmsWidgetDialogParameter(this, "javaVersion", PAGES[0], new CmsDisplayWidget()));
         addWidget(new CmsWidgetDialogParameter(this, "jvmUptime", PAGES[0], new CmsDisplayWidget()));
         addWidget(new CmsWidgetDialogParameter(this, "jvmStarttime", PAGES[0], new CmsDisplayWidget()));
+           
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsSelectWidget(
+                getIntervals())));
+        
     }
 
     /**
@@ -244,6 +286,21 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
     	setJvmUptime(""+jvmuptimestring);
     	setJvmStarttime(""+jvmstarttimestring);
 
+    	
+    	Object o;
+        if (CmsStringUtil.isEmpty(getParamAction())) {
+            o = new CmsAdminSettings();
+        } else {
+            // this is not the initial call, get the job object from session
+            o = getDialogObject();
+        }
+        if (!(o instanceof CmsAdminSettings)) {
+            // create a new history settings handler object
+            m_adminSettings = new CmsAdminSettings();
+        } else {
+            // reuse html import handler object stored in session
+            m_adminSettings = (CmsAdminSettings)o;
+        }
         
     }
 
@@ -267,5 +324,35 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
 
         super.initWorkplaceMembers(jsp);
         setOnlineHelpUriCustom("/eurelis_system_information/");
+    }
+    
+    
+    
+    /**
+     * Returns a list with the possible interval to choose from.<p>
+     * 
+     * @return a list with the possible interval to choose from
+     */
+    private List getIntervals() {
+
+        ArrayList ret = new ArrayList();
+
+        //recuperation du parametre memorise en system
+        //int defaultHistoryVersions = OpenCms.getSystemInfo().getHistoryVersions();
+        //int historyVersions = 0;
+        //TODO
+        int defaultInterval = 5000;
+
+        ret.add(new CmsSelectWidgetOption(
+            String.valueOf(5000),
+            defaultInterval == 5000,
+            key(Messages.GUI_ADMIN_SETTINGS_INTERVALS_5000))); 
+
+        ret.add(new CmsSelectWidgetOption(
+            String.valueOf(10000),
+            defaultInterval == 10000,
+            key(Messages.GUI_ADMIN_SETTINGS_INTERVALS_10000)));
+
+        return ret;
     }
 }
