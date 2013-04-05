@@ -53,7 +53,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     private String m_threadsDaemonCount;
     
     
-    private int frequencyInMillis = 5000;
+    private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms());
     private String jsonPath = getJsp().link("/system/workplace/admin/eurelis_system_information/json/getSystemInfo.json");
 
 

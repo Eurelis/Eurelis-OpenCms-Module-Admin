@@ -4,14 +4,22 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
+import org.opencms.file.CmsFile;
+import org.opencms.file.CmsObject;
+import org.opencms.file.CmsProperty;
+import org.opencms.file.CmsResource;
 import org.opencms.jsp.CmsJspActionElement;
+import org.opencms.main.CmsException;
+import org.opencms.main.CmsIllegalArgumentException;
 import org.opencms.main.CmsLog;
+import org.opencms.main.OpenCms;
 import org.opencms.util.CmsStringUtil;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.widgets.CmsSelectWidget;
@@ -87,10 +95,7 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
 
         //memorisation system du parametre...
-        //OpenCms.getSystemInfo().setVersionHistorySettings(enabled, versions, versionsDeleted);
-        //OpenCms.writeConfiguration(CmsSystemConfiguration.class);
-        //TODO
-        LOG.debug("Admin settings actionCommit : memorisation TODO");
+        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval);
 
         // set the list of errors to display when saving failed
         setCommitErrors(errors);
@@ -246,8 +251,7 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         addWidget(new CmsWidgetDialogParameter(this, "jvmUptime", PAGES[0], new CmsDisplayWidget()));
         addWidget(new CmsWidgetDialogParameter(this, "jvmStarttime", PAGES[0], new CmsDisplayWidget()));
            
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsSelectWidget(
-                getIntervals())));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsSelectWidget(getIntervals())));
         
     }
 
@@ -338,19 +342,19 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         ArrayList ret = new ArrayList();
 
         //recuperation du parametre memorise en system
-        //int defaultHistoryVersions = OpenCms.getSystemInfo().getHistoryVersions();
-        //int historyVersions = 0;
-        //TODO
-        int defaultInterval = 5000;
-
+        int defaultInterval = CmsAdminSettings.getSettingsIntervalValue(getCms());
+        LOG.debug("Admin settings getIntervals(), defaultInterval = " + defaultInterval);
+        LOG.debug("Admin settings getIntervals(), defaultInterval =? 5000 " + (defaultInterval==5000));
+        LOG.debug("Admin settings getIntervals(), defaultInterval =? 10000 " + (defaultInterval==10000));
+        
         ret.add(new CmsSelectWidgetOption(
             String.valueOf(5000),
-            defaultInterval == 5000,
+            (defaultInterval==5000),
             key(Messages.GUI_ADMIN_SETTINGS_INTERVALS_5000))); 
 
         ret.add(new CmsSelectWidgetOption(
             String.valueOf(10000),
-            defaultInterval == 10000,
+            (defaultInterval==10000),
             key(Messages.GUI_ADMIN_SETTINGS_INTERVALS_10000)));
 
         return ret;

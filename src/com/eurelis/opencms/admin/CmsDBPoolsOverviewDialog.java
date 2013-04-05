@@ -38,7 +38,7 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     private Map m_configParameter = null;
     private List m_poolsName = null;
     
-    private int frequencyInMillis = 5000;
+    private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms());
     private String jsonPath = getJsp().link("/system/workplace/admin/eurelis_system_information/json/getSystemInfo.json");
 
 

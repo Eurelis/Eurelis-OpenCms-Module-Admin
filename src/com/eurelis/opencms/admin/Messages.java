@@ -179,6 +179,8 @@ public final class Messages extends A_CmsMessageBundle {
     public static final String GUI_ADMIN_SETTINGS_INTERVALS_5000 = "GUI_ADMIN_SETTINGS_INTERVALS_5000";
     /** Message constant for key in the resource bundle. */
     public static final String GUI_ADMIN_SETTINGS_INTERVALS_10000 = "GUI_ADMIN_SETTINGS_INTERVALS_10000";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_ADMIN_SETTINGS_INTERVALS_ERROR_INTEGER = "GUI_ADMIN_SETTINGS_INTERVALS_ERROR_INTEGER";
     
     
 
