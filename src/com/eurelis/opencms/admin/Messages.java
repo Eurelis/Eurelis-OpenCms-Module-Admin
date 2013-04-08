@@ -146,7 +146,8 @@ public final class Messages extends A_CmsMessageBundle {
     
     
     
-    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_SETTINGS = "GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_SETTINGS";
     /** Message constant for key in the resource bundle. */
     public static final String GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_1 = "GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_1";
     /** Message constant for key in the resource bundle. */
@@ -155,9 +156,12 @@ public final class Messages extends A_CmsMessageBundle {
     public static final String GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_3 = "GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_3";
     
     /** Message constant for key in the resource bundle. */
+    public static final String GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_SETTINGS = "GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_SETTINGS";
+    /** Message constant for key in the resource bundle. */
     public static final String GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_ = "GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_";
     
-    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_SETTINGS = "GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_SETTINGS";
     /** Message constant for key in the resource bundle. */
     public static final String GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_ = "GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_";
     

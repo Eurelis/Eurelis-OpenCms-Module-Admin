@@ -22,6 +22,7 @@ import org.opencms.main.CmsLog;
 import org.opencms.main.OpenCms;
 import org.opencms.util.CmsStringUtil;
 import org.opencms.widgets.CmsDisplayWidget;
+import org.opencms.widgets.CmsInputWidget;
 import org.opencms.widgets.CmsSelectWidget;
 import org.opencms.widgets.CmsSelectWidgetOption;
 import org.opencms.workplace.CmsWidgetDialog;
@@ -90,12 +91,11 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         List errors = new ArrayList();
         setDialogObject(m_adminSettings);
 
-        boolean enabled = m_adminSettings.getInterval() > 0;
         int interval = m_adminSettings.getInterval();
         LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
 
         //memorisation system du parametre...
-        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval);
+        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval, getSession());
 
         // set the list of errors to display when saving failed
         setCommitErrors(errors);
@@ -251,7 +251,8 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         addWidget(new CmsWidgetDialogParameter(this, "jvmUptime", PAGES[0], new CmsDisplayWidget()));
         addWidget(new CmsWidgetDialogParameter(this, "jvmStarttime", PAGES[0], new CmsDisplayWidget()));
            
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsSelectWidget(getIntervals())));
+        //addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsSelectWidget(getIntervals())));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsInputWidget()));
         
     }
 
@@ -293,14 +294,14 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
     	
     	Object o;
         if (CmsStringUtil.isEmpty(getParamAction())) {
-            o = new CmsAdminSettings();
+            o = new CmsAdminSettings(getSession());
         } else {
             // this is not the initial call, get the job object from session
             o = getDialogObject();
         }
         if (!(o instanceof CmsAdminSettings)) {
             // create a new history settings handler object
-            m_adminSettings = new CmsAdminSettings();
+            m_adminSettings = new CmsAdminSettings(getSession());
         } else {
             // reuse html import handler object stored in session
             m_adminSettings = (CmsAdminSettings)o;
@@ -342,10 +343,10 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         ArrayList ret = new ArrayList();
 
         //recuperation du parametre memorise en system
-        int defaultInterval = CmsAdminSettings.getSettingsIntervalValue(getCms());
-        LOG.debug("Admin settings getIntervals(), defaultInterval = " + defaultInterval);
+        int defaultInterval = CmsAdminSettings.getSettingsIntervalValue(getCms(), getSession());
+        /*LOG.debug("Admin settings getIntervals(), defaultInterval = " + defaultInterval);
         LOG.debug("Admin settings getIntervals(), defaultInterval =? 5000 " + (defaultInterval==5000));
-        LOG.debug("Admin settings getIntervals(), defaultInterval =? 10000 " + (defaultInterval==10000));
+        LOG.debug("Admin settings getIntervals(), defaultInterval =? 10000 " + (defaultInterval==10000));*/
         
         ret.add(new CmsSelectWidgetOption(
             String.valueOf(5000),

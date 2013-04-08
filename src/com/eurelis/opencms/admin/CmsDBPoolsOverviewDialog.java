@@ -16,6 +16,7 @@ import org.opencms.db.CmsDbException;
 import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.main.CmsLog;
 import org.opencms.util.CmsStringUtil;
+import org.opencms.widgets.CmsCheckboxWidget;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
@@ -35,13 +36,60 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     /** Defines which pages are valid for this dialog. */
     public static final String[] PAGES = {"page1"};
 
+    /** System infos . */
+    private String m_poolName1;
+    /** System infos . */
+    private String m_activeConnections1;
+    /** System infos . */
+    private String m_idleConnections1;
+    /** System infos . */
+    private String m_currentUsage1;
+    
+    /** System infos . */
+    private String m_poolName2;
+    /** System infos . */
+    private String m_activeConnections2;
+    /** System infos . */
+    private String m_idleConnections2;
+    /** System infos . */
+    private String m_currentUsage2;
+    
+    /** System infos . */
+    private String m_poolName3;
+    /** System infos . */
+    private String m_activeConnections3;
+    /** System infos . */
+    private String m_idleConnections3;
+    /** System infos . */
+    private String m_currentUsage3;
+    
+    /** System infos . */
+    private String m_poolName4;
+    /** System infos . */
+    private String m_activeConnections4;
+    /** System infos . */
+    private String m_idleConnections4;
+    /** System infos . */
+    private String m_currentUsage4;
+    
+    /** System infos . */
+    private String m_poolName5;
+    /** System infos . */
+    private String m_activeConnections5;
+    /** System infos . */
+    private String m_idleConnections5;
+    /** System infos . */
+    private String m_currentUsage5;
+    
+    
+    
     private Map m_configParameter = null;
     private List m_poolsName = null;
     
     /** The admin settings object that is edited on this dialog. */
     protected CmsAdminSettings m_adminSettings;
     
-    private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms());
+    private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms(), getSession());
     private String jsonPath = getJsp().link("/system/workplace/admin/eurelis_system_information/json/getSystemInfo.json");
 
 
@@ -80,17 +128,438 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         boolean enabled = m_adminSettings.getInterval() > 0;
         int interval = m_adminSettings.getInterval();
         LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
+        
+        boolean displayPool1 = m_adminSettings.getDisplayPool1();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayPool1() = " + displayPool1);
+        
+        boolean displayPool2 = m_adminSettings.getDisplayPool2();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayPool2() = " + displayPool2);
+        
+        boolean displayPool3 = m_adminSettings.getDisplayPool3();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayPool3() = " + displayPool3);
+        
+        boolean displayPool4 = m_adminSettings.getDisplayPool4();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayPool4() = " + displayPool4);
+        
+        boolean displayPool5 = m_adminSettings.getDisplayPool5();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayPool5() = " + displayPool5);
 
         //memorisation system du parametre...
-        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval);
+        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval, getSession());
+        CmsAdminSettings.setSettingsDisplayPool1Value(getCms(), displayPool1, getSession());
+        CmsAdminSettings.setSettingsDisplayPool2Value(getCms(), displayPool2, getSession());
+        CmsAdminSettings.setSettingsDisplayPool3Value(getCms(), displayPool3, getSession());
+        CmsAdminSettings.setSettingsDisplayPool4Value(getCms(), displayPool4, getSession());
+        CmsAdminSettings.setSettingsDisplayPool5Value(getCms(), displayPool5, getSession());
+        //CmsAdminSettings.publishSettingsFile(getCms());
 
         // set the list of errors to display when saving failed
         setCommitErrors(errors);
     }
 
     
-    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolName1() {
 
+        return m_poolName1;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getActiveConnections1() {
+
+        return m_activeConnections1;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getIdleConnections1() {
+
+        return m_idleConnections1;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getCurrentUsage1() {
+
+        return m_currentUsage1;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolName2() {
+
+        return m_poolName2;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getActiveConnections2() {
+
+        return m_activeConnections2;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getIdleConnections2() {
+
+        return m_idleConnections2;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getCurrentUsage2() {
+
+        return m_currentUsage2;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolName3() {
+
+        return m_poolName3;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getActiveConnections3() {
+
+        return m_activeConnections3;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getIdleConnections3() {
+
+        return m_idleConnections3;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getCurrentUsage3() {
+
+        return m_currentUsage3;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolName4() {
+
+        return m_poolName4;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getActiveConnections4() {
+
+        return m_activeConnections4;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getIdleConnections4() {
+
+        return m_idleConnections4;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getCurrentUsage4() {
+
+        return m_currentUsage4;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolName5() {
+
+        return m_poolName5;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getActiveConnections5() {
+
+        return m_activeConnections5;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getIdleConnections5() {
+
+        return m_idleConnections5;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getCurrentUsage5() {
+
+        return m_currentUsage5;
+    }
+
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolName1(String arg) {
+
+        m_poolName1 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setActiveConnections1(String arg) {
+
+        m_activeConnections1 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setIdleConnections1(String arg) {
+
+        m_idleConnections1 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setCurrentUsage1(String arg) {
+
+        m_currentUsage1 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolName2(String arg) {
+
+        m_poolName2 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setActiveConnections2(String arg) {
+
+        m_activeConnections2 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setIdleConnections2(String arg) {
+
+        m_idleConnections2 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setCurrentUsage2(String arg) {
+
+        m_currentUsage2 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolName3(String arg) {
+
+        m_poolName3 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setActiveConnections3(String arg) {
+
+        m_activeConnections3 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setIdleConnections3(String arg) {
+
+        m_idleConnections3 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setCurrentUsage3(String arg) {
+
+        m_currentUsage3 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolName4(String arg) {
+
+        m_poolName4 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setActiveConnections4(String arg) {
+
+        m_activeConnections4 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setIdleConnections4(String arg) {
+
+        m_idleConnections4 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setCurrentUsage4(String arg) {
+
+        m_currentUsage4 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolName5(String arg) {
+
+        m_poolName5 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setActiveConnections5(String arg) {
+
+        m_activeConnections5 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setIdleConnections5(String arg) {
+
+        m_idleConnections5 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setCurrentUsage5(String arg) {
+
+        m_currentUsage5 = arg;
+    }
+    
+    
     /**
      * Creates the dialog HTML for all defined widgets of the named dialog (page).<p>
      * 
@@ -113,25 +582,80 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         	initPools();
         }
         
+        LOG.debug("createDialogHtml... pools count = " + m_poolsName.size());
+        if(m_poolsName.size() > 5){
+        	LOG.error("There are more DBPools configured than available in this tool. Only 5 out of " + m_poolsName.size() + " will be displayed.");
+        }
+        
         if (dialog.equals(PAGES[0])) {
-        	result.append(createDialogRowsHtml(0, 0));
         	
-            // create the widgets for the first dialog page
         	if(m_poolsName!=null && m_configParameter!=null){
-        		LOG.debug("createDialogHtml... " + m_poolsName.size() + " pool(s)");
-                int count = 1;
-                Iterator it = m_poolsName.iterator();
-                while(it.hasNext()){
-                    String poolName = (String)it.next();
-                    
-                    result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
-                    result.append(createWidgetTableStart());
-                    result.append(createDialogRowsHtml(count, count+4));
-                    result.append(createWidgetTableEnd());
-                    result.append(dialogBlockEnd());
-                    
-                    count = count + 5;
-                }
+        		
+	        	//settings
+	        	result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_SETTINGS)));
+	            result.append(createWidgetTableStart());
+	            if(m_poolsName.size() > 5){
+	            	result.append(createDialogRowsHtml(0, 5));
+	            }else{
+	            	result.append(createDialogRowsHtml(0, m_poolsName.size()));
+	            }
+	        	result.append(createWidgetTableEnd());
+	            result.append(dialogBlockEnd());
+	        	
+	            // create the widgets for the first dialog page
+	            int lineNumber = m_poolsName.size() + 1;
+	            int poolNumber = 1;
+	            Iterator it = m_poolsName.iterator();
+	            while(it.hasNext()){
+	            	String poolName = (String)it.next();
+	                    
+	            	if(poolNumber<=5){
+	            		if(poolNumber==1 && m_adminSettings.getDisplayPool1()){
+	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
+			                result.append(createWidgetTableStart());
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createWidgetTableEnd());
+			                result.append(dialogBlockEnd());
+			                    
+			                lineNumber = lineNumber + 3;
+	            		}else if(poolNumber==2 && m_adminSettings.getDisplayPool2()){
+	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
+			                result.append(createWidgetTableStart());
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createWidgetTableEnd());
+			                result.append(dialogBlockEnd());
+			                    
+			                lineNumber = lineNumber + 3;
+	            		}else if(poolNumber==3 && m_adminSettings.getDisplayPool3()){
+	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
+			                result.append(createWidgetTableStart());
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createWidgetTableEnd());
+			                result.append(dialogBlockEnd());
+			                    
+			                lineNumber = lineNumber + 2;
+	            		}else if(poolNumber==4 && m_adminSettings.getDisplayPool4()){
+	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
+			                result.append(createWidgetTableStart());
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createWidgetTableEnd());
+			                result.append(dialogBlockEnd());
+			                    
+			                lineNumber = lineNumber + 3;
+	            		}else if(poolNumber==5 && m_adminSettings.getDisplayPool5()){
+	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
+			                result.append(createWidgetTableStart());
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createWidgetTableEnd());
+			                result.append(dialogBlockEnd());
+			                    
+			                lineNumber = lineNumber + 3;
+	            		}
+	            	}
+	                
+	                poolNumber++;
+	            }
+        	
         	}
         }
 
@@ -139,38 +663,70 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         result.append(createWidgetTableEnd());
         
         
-        // add highstock scripts
         result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/jquery/packed/jquery.js") + "'></script>\n");
         result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/highstock.js'></script>\n");
         result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/modules/exporting.js'></script>\n");
         
-        // add graphs building scripts
         result.append("<script type='text/javascript'>\n");
         result.append("$(function() {\n");
+        result.append("  $('form#EDITOR').after('");
+        result.append("<div class=\"customScripts\">");
+        int poolNumber = 1;
+        if(m_poolsName!=null && m_configParameter!=null){
+	        Iterator it = m_poolsName.iterator();
+	        while(it.hasNext()){
+	            String poolName = (String)it.next();
+	            if(poolNumber<=5){
+			        if(poolNumber==1 && m_adminSettings.getDisplayPool1()){
+			        	result.append("<div id=\""+poolName+"\" style=\"height: 300px; width: 50%; float: left;\">Loading pool 1 graph...</div>");
+			        }else if(poolNumber==2 && m_adminSettings.getDisplayPool2()){
+			        	result.append("<div id=\""+poolName+"\" style=\"height: 300px; width: 50%; float: left;\">Loading pool 2 graph...</div>");
+			        }else if(poolNumber==3 && m_adminSettings.getDisplayPool3()){
+			        	result.append("<div id=\""+poolName+"\" style=\"height: 300px; width: 50%; float: left;\">Loading pool 3 graph...</div>");
+			        }else if(poolNumber==4 && m_adminSettings.getDisplayPool4()){
+			        	result.append("<div id=\""+poolName+"\" style=\"height: 300px; width: 50%; float: left;\">Loading pool 4 graph...</div>");
+			        }else if(poolNumber==5 && m_adminSettings.getDisplayPool5()){
+			        	result.append("<div id=\""+poolName+"\" style=\"height: 300px; width: 50%; float: left;\">Loading pool 5 graph...</div>");
+			        }
+	            }
+	            poolNumber++;
+	        }
+        }
+        result.append("</div>");
+        result.append("  ');\n");
         result.append("  Highcharts.setOptions({\n");
         result.append("    global : { useUTC : true }\n");
-        result.append("  });\n");
-        result.append(getUpdateInfoFunction());
-        
+        result.append("  }); \n");
+        result.append(getUpdateInfoFunction(
+				m_adminSettings.getDisplayPool1(),
+				m_adminSettings.getDisplayPool2(),
+				m_adminSettings.getDisplayPool3(),
+				m_adminSettings.getDisplayPool4(),
+				m_adminSettings.getDisplayPool5()
+				));
+        poolNumber = 1;
         if(m_poolsName!=null && m_configParameter!=null){
 	        Iterator it = m_poolsName.iterator();
 	        while(it.hasNext()){
 	            String poolName = (String)it.next();
-	            result.append(getHighChartPool(poolName));
+	            if(poolNumber<=5){
+			        if(poolNumber==1 && m_adminSettings.getDisplayPool1()){
+			        	result.append(getHighChartPool(poolName));
+			        }else if(poolNumber==2 && m_adminSettings.getDisplayPool2()){
+			        	result.append(getHighChartPool(poolName));
+			        }else if(poolNumber==3 && m_adminSettings.getDisplayPool3()){
+			        	result.append(getHighChartPool(poolName));
+			        }else if(poolNumber==4 && m_adminSettings.getDisplayPool4()){
+			        	result.append(getHighChartPool(poolName));
+			        }else if(poolNumber==5 && m_adminSettings.getDisplayPool5()){
+			        	result.append(getHighChartPool(poolName));
+			        }
+	            }
+	            poolNumber++;
 	        }
         }
-
         result.append("});\n");
         result.append("</script>\n");
-        
-        
-        if(m_poolsName!=null && m_configParameter!=null){
-	        Iterator it = m_poolsName.iterator();
-	        while(it.hasNext()){
-	            String poolName = (String)it.next();
-	            result.append("<div id=\""+poolName+"\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
-	        }
-        }
 
         return result.toString();
     }
@@ -193,116 +749,130 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
 
         setKeyPrefix(KEY_PREFIX);
         
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsDisplayWidget()));
-        
         org.opencms.db.CmsSqlManager sqlM = org.opencms.main.OpenCms.getSqlManager() ;
 
-        // widgets to display
         if(m_poolsName==null || m_configParameter==null){
         	initPools();
         }
-        
         if(sqlM==null){
         	LOG.error("CmsSqlManager null");
         }
         
+        // widgets to display
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsDisplayWidget()));
+        int lineNumber = 1;
+        if(m_poolsName.size() >= 1){
+        	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayPool1", PAGES[0], new CmsCheckboxWidget()));
+        	lineNumber = 2;
+        }
+        if(m_poolsName.size() >= 2){
+        	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayPool2", PAGES[0], new CmsCheckboxWidget()));
+        	lineNumber = 3;
+        }
+        if(m_poolsName.size() >= 3){
+        	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayPool3", PAGES[0], new CmsCheckboxWidget()));
+        	lineNumber = 4;
+        }
+        if(m_poolsName.size() >= 4){
+        	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayPool4", PAGES[0], new CmsCheckboxWidget()));
+        	lineNumber = 5;
+        }
+        if(m_poolsName.size() >= 5){
+        	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayPool5", PAGES[0], new CmsCheckboxWidget()));
+        	lineNumber = 6;
+        }
+        
+        
+        
         if(m_poolsName!=null && m_configParameter!=null && sqlM!=null){
-        	int count = 0;
-            int countItem = 0;
+        	int poolNumber = 1;
             Iterator it = m_poolsName.iterator();
             while(it.hasNext()){
                 String poolName = (String)it.next();
-                LOG.debug("defineWidgets... poolName = " + poolName);
-                
-                if(sqlM.getDbPoolUrls()!=null){
-                	Iterator poolsURLIterator = sqlM.getDbPoolUrls().iterator();
-                    while(poolsURLIterator.hasNext()){
-                    	String poolURL = (String) poolsURLIterator.next();
-                    	if(poolURL != null && poolURL.endsWith(poolName)){
-                    		LOG.debug("defineWidgets... poolURL = " + poolURL);
-                      	  	String url = poolURL;
-                      	  	int activeConnections = 0;
-                      	  	int idleConnections = 0;
-                      	  	try {
-                      	  		activeConnections = sqlM.getActiveConnections(url);
-                      	  		LOG.debug("defineWidgets... activeConnections = " + activeConnections);
-                      	  		
-                      	  		idleConnections = sqlM.getIdleConnections(url);
-                      	  		LOG.debug("defineWidgets... idleConnections = " + idleConnections);
-                      	  		
-                      	  		String poolStrategyProperty = (String) m_configParameter.get("db.pool."+poolName+".whenExhaustedAction");
-                      	  		if(poolStrategyProperty==null) poolStrategyProperty = "";
-                      	  		LOG.debug("defineWidgets... poolStrategyProperty = " + poolStrategyProperty);
-                      	  		
-                      	  		String maxActivesConfiguratedString = (String) m_configParameter.get("db.pool."+poolName+".maxActive");
-                      	  		if(maxActivesConfiguratedString==null) maxActivesConfiguratedString = "";
-                      	  		LOG.debug("defineWidgets... maxActivesConfiguratedString = " + maxActivesConfiguratedString);
-                        	  
-                      	  		float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));
-                        	  
-                      	  		LOG.debug("defineWidgets... pourcentage=" + pourcentage + "%");
-                      	  		
-                      	  		/*java.sql.Connection conn = null;
-                      	  		long timeBeforeRequest = 0;
-                      	  		long timeAfterRequest = 0;
-                        		try{
-                        			conn = sqlM.getConnection(poolName);
-                        		
-                        			String showTableQuery = "select * from CMS_PROJECTS;";
-                        			java.sql.PreparedStatement stmt = null;
-                        			stmt = conn.prepareStatement(showTableQuery);
-                        			java.sql.ResultSet resultset = null;
-                        			try{
-                        				 timeBeforeRequest = System.currentTimeMillis();
-                        				 resultset = stmt.executeQuery(); 
-                        				 timeAfterRequest = System.currentTimeMillis();
-                        			}catch(java.sql.SQLException e){ 
-                        				 LOG.error(e.getMessage(),e);
-                        			}
-                        		}catch(Exception e){
-                        			LOG.error(e.getMessage(),e);
-                        		}finally{
-                        			//conn.close();
-                        		}*/
-                        		
-                        		
-                        		addWidget(new CmsWidgetDialogParameter(
-                          			""+poolStrategyProperty, ""+poolStrategyProperty, 
-                          			"strategy" + countItem , 
-                          			new CmsDisplayWidget(), "",
-                          			1, 1, count));
-                        		addWidget(new CmsWidgetDialogParameter(
-                          			""+Integer.parseInt(maxActivesConfiguratedString), ""+Integer.parseInt(maxActivesConfiguratedString), 
-                          			"maxsize" + countItem , 
-                          			new CmsDisplayWidget(), "",
-                          			1, 1, count + 1));
-                        		addWidget(new CmsWidgetDialogParameter(
-                          			""+activeConnections, ""+activeConnections, 
-                          			"activeconnections" + countItem , 
-                          			new CmsDisplayWidget(), "",
-                          			1, 1, count + 2));
-                        		addWidget(new CmsWidgetDialogParameter(
-                          			""+idleConnections, ""+idleConnections, 
-                          			"idleconnections" + countItem , 
-                          			new CmsDisplayWidget(), "",
-                          			1, 1, count + 3));
-                        		addWidget(new CmsWidgetDialogParameter(
-                          			""+pourcentage+"%", ""+pourcentage+"%", 
-                          			"currentusage" + countItem , 
-                          			new CmsDisplayWidget(), "",
-                          			1, 1, count + 4));
-                        		
-                        	  
-                      	  	} catch (CmsDbException e1) {
-                      	  		e1.printStackTrace();
-                      	  		LOG.error(e1);
-                      	  	}
-                      }
-                    }
-                    
-                    count = count + 5;
-                    countItem++;
-                }
+                if(poolNumber<=5){
+			        if(poolNumber==1 && m_adminSettings.getDisplayPool1()){
+			        	
+			        	/*String poolUrl = getPoolUrl(poolName);
+			        	int activeConnections = getActiveConnections(poolUrl);
+                  	  	int idleConnections = getIdleConnections(poolUrl);
+                  	  	String poolStrategyProperty = getStrategy(poolName);
+                  	  	String maxActivesConfiguratedString = getMaxActive(poolName);
+                  	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+                  	  	
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections1", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections1", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "currentUsage1", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "strategy1", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "maxActive1", PAGES[0], new CmsDisplayWidget()));
+                  	  	lineNumber = lineNumber + 3;
+			        	
+			        }else if(poolNumber==2 && m_adminSettings.getDisplayPool2()){
+			        	
+			        	/*String poolUrl = getPoolUrl(poolName);
+			        	int activeConnections = getActiveConnections(poolUrl);
+                  	  	int idleConnections = getIdleConnections(poolUrl);
+                  	  	String poolStrategyProperty = getStrategy(poolName);
+                  	  	String maxActivesConfiguratedString = getMaxActive(poolName);
+                  	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+                  	  	
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections2", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections2", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "currentUsage2", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "strategy2", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "maxActive2", PAGES[0], new CmsDisplayWidget()));
+                  	  	lineNumber = lineNumber + 3;
+			        	
+			        }else if(poolNumber==3 && m_adminSettings.getDisplayPool3()){
+			        	
+			        	/*String poolUrl = getPoolUrl(poolName);
+			        	int activeConnections = getActiveConnections(poolUrl);
+                  	  	int idleConnections = getIdleConnections(poolUrl);
+                  	  	String poolStrategyProperty = getStrategy(poolName);
+                  	  	String maxActivesConfiguratedString = getMaxActive(poolName);
+                  	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+                  	  	
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections3", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections3", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "currentUsage3", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "strategy3", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "maxActive3", PAGES[0], new CmsDisplayWidget()));
+                  	  	lineNumber = lineNumber + 3;
+			        	
+			        }else if(poolNumber==4 && m_adminSettings.getDisplayPool4()){
+			        	
+			        	/*String poolUrl = getPoolUrl(poolName);
+			        	int activeConnections = getActiveConnections(poolUrl);
+                  	  	int idleConnections = getIdleConnections(poolUrl);
+                  	  	String poolStrategyProperty = getStrategy(poolName);
+                  	  	String maxActivesConfiguratedString = getMaxActive(poolName);
+                  	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+                  	  	
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections4", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections4", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "currentUsage4", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "strategy4", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "maxActive4", PAGES[0], new CmsDisplayWidget()));
+                  	  	lineNumber = lineNumber + 3;
+			        	
+			        }else if(poolNumber==5 && m_adminSettings.getDisplayPool5()){
+			        	
+			        	/*String poolUrl = getPoolUrl(poolName);
+			        	int activeConnections = getActiveConnections(poolUrl);
+                  	  	int idleConnections = getIdleConnections(poolUrl);
+                  	  	String poolStrategyProperty = getStrategy(poolName);
+                  	  	String maxActivesConfiguratedString = getMaxActive(poolName);
+                  	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+                  	  	
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections5", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections5", PAGES[0], new CmsDisplayWidget()));
+                  	  	addWidget(new CmsWidgetDialogParameter(this, "currentUsage5", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "strategy5", PAGES[0], new CmsDisplayWidget()));
+                  	  	//addWidget(new CmsWidgetDialogParameter(this, "maxActive5", PAGES[0], new CmsDisplayWidget()));
+                  	  	lineNumber = lineNumber + 3;
+			        	
+			        }
+                }                
+                poolNumber++;
                 
             }
         }
@@ -333,14 +903,14 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     	
     	Object o;
         if (CmsStringUtil.isEmpty(getParamAction())) {
-            o = new CmsAdminSettings();
+            o = new CmsAdminSettings(getSession());
         } else {
             // this is not the initial call, get the job object from session
             o = getDialogObject();
         }
         if (!(o instanceof CmsAdminSettings)) {
             // create a new history settings handler object
-            m_adminSettings = new CmsAdminSettings();
+            m_adminSettings = new CmsAdminSettings(getSession());
         } else {
             // reuse html import handler object stored in session
             m_adminSettings = (CmsAdminSettings)o;
@@ -374,49 +944,44 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     
     
     
-    protected StringBuffer getUpdateInfoFunction(){
+    protected StringBuffer getUpdateInfoFunction(boolean display1, boolean display2, boolean display3, boolean display4, boolean display5){
     	
     	StringBuffer result = new StringBuffer(1024);
     	result.append("  function updateInfo() {\n");
         result.append("    $.getJSON('"+jsonPath+"', function(data) {\n");
         result.append("      var time = (new Date()).getTime();\n");
         result.append("      var $system = data.system;\n");
-        result.append("      var heapMax = $system.memory.heap.max;\n");
-        result.append("      var heapTotal = $system.memory.heap.total;\n");
-        result.append("      var heapUsed = heapTotal - $system.memory.heap.free;\n");
-        result.append("      var totalSwapMemory = $system.memory.swap.total;\n");
-        result.append("      var usedSwapMemory = totalSwapMemory - $system.memory.swap.free;\n");
         
-        /*result.append("      if(window.chartHeap) window.chartHeap.series[0].addPoint([time, heapMax], true, true, true); \n");
-        result.append("      if(window.chartHeap) window.chartHeap.series[1].addPoint([time, heapTotal], true, true, true); \n");
-        result.append("      if(window.chartHeap) window.chartHeap.series[2].addPoint([time, heapUsed], true, true, true); \n");
-        result.append("      if(window.chartCpu) window.chartCpu.series[0].addPoint([time, $system.cpu.usage], true, true, true); \n");
-        result.append("      if(window.chartThreads) window.chartThreads.series[0].addPoint([time, $system.threads.counts.total], true, true, true);\n");
-        result.append("      if(window.chartThreads) window.chartThreads.series[1].addPoint([time, $system.threads.counts.daemon], true, true, true);\n");
-        result.append("      if(window.chartClasses) window.chartClasses.series[0].addPoint([time, $system.classes.loaded], true, true, true);\n");
-        result.append("      if(window.chartClasses) window.chartClasses.series[1].addPoint([time, $system.classes.unloaded], true, true, true);\n");
-        result.append("      if(window.chartClasses) window.chartClasses.series[2].addPoint([time, $system.classes.totalloaded], true, true, true);\n");
-        result.append("      if(window.chartPerm) window.chartPerm.series[0].addPoint([time, $system.memory.perm.max], true, true, true);\n");
-        result.append("      if(window.chartPerm) window.chartPerm.series[1].addPoint([time, $system.memory.perm.committed], true, true, true);\n");
-        result.append("      if(window.chartPerm) window.chartPerm.series[2].addPoint([time, $system.memory.perm.used], true, true, true);\n");
-        result.append("      if(window.chartOld) window.chartOld.series[0].addPoint([time, $system.memory.old.max], true, true, true);\n");
-        result.append("      if(window.chartOld) window.chartOld.series[1].addPoint([time, $system.memory.old.committed], true, true, true);\n");
-        result.append("      if(window.chartOld) window.chartOld.series[2].addPoint([time, $system.memory.old.used], true, true, true);\n");
-        result.append("      if(window.chartEden) window.chartEden.series[0].addPoint([time, $system.memory.eden.max], true, true, true);\n");
-        result.append("      if(window.chartEden) window.chartEden.series[1].addPoint([time, $system.memory.eden.committed], true, true, true);\n");
-        result.append("      if(window.chartEden) window.chartEden.series[2].addPoint([time, $system.memory.eden.used], true, true, true);\n");
-        result.append("      if(window.chartSurvivor) window.chartSurvivor.series[0].addPoint([time, $system.memory.survivor.max], true, true, true);\n");
-        result.append("      if(window.chartSurvivor) window.chartSurvivor.series[1].addPoint([time, $system.memory.survivor.committed], true, true, true);\n");
-        result.append("      if(window.chartSurvivor) window.chartSurvivor.series[2].addPoint([time, $system.memory.survivor.used], true, true, true);\n");*/
-        
+        int poolNumber = 1;
         Iterator poolIterator =  m_poolsName.iterator();
         while(poolIterator.hasNext()){
-          String poolName = (String)poolIterator.next();
-          if(poolName != null){
-        	  result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[0].addPoint([time, $system.dbpools."+poolName+".activeConnections], true, true, true);\n");
-        	  result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[1].addPoint([time, $system.dbpools."+poolName+".idleConnections], true, true, true);\n");
-        	  result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[2].addPoint([time, $system.dbpools."+poolName+".pourcentage], true, true, true);\n");
-          }
+        	String poolName = (String)poolIterator.next();
+        	if(poolName != null){
+        		if(poolNumber<=5){
+        			if(poolNumber==1 && display1){
+        				result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[0].addPoint([time, $system.dbpools."+poolName+".activeConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[1].addPoint([time, $system.dbpools."+poolName+".idleConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[2].addPoint([time, $system.dbpools."+poolName+".pourcentage], true, true, true);\n");
+			        }else if(poolNumber==2 && display2){
+        				result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[0].addPoint([time, $system.dbpools."+poolName+".activeConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[1].addPoint([time, $system.dbpools."+poolName+".idleConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[2].addPoint([time, $system.dbpools."+poolName+".pourcentage], true, true, true);\n");
+			        }else if(poolNumber==3 && display3){
+        				result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[0].addPoint([time, $system.dbpools."+poolName+".activeConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[1].addPoint([time, $system.dbpools."+poolName+".idleConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[2].addPoint([time, $system.dbpools."+poolName+".pourcentage], true, true, true);\n");
+			        }else if(poolNumber==4 && display4){
+        				result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[0].addPoint([time, $system.dbpools."+poolName+".activeConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[1].addPoint([time, $system.dbpools."+poolName+".idleConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[2].addPoint([time, $system.dbpools."+poolName+".pourcentage], true, true, true);\n");
+			        }else if(poolNumber==5 && display5){
+        				result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[0].addPoint([time, $system.dbpools."+poolName+".activeConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[1].addPoint([time, $system.dbpools."+poolName+".idleConnections], true, true, true);\n");
+        	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[2].addPoint([time, $system.dbpools."+poolName+".pourcentage], true, true, true);\n");
+			        }
+        		}
+        		poolNumber++;
+        	}
         }   	  
 
         result.append("    });\n");
@@ -504,8 +1069,10 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
           	LOG.error(e.getMessage() + " (" + path + ")",e);
         }
         Map configParameter = myconfig.getConfiguration();
+        this.m_configParameter = configParameter;
 
         List poolsName = new ArrayList();
+        int poolNumber = 1;
         if(configParameter!=null){
         	String poolsNameProperty = (String) configParameter.get("db.pools");
             String[] poolNames = poolsNameProperty.split(",");
@@ -513,14 +1080,138 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
               if(poolNames[i] != null){
                 poolsName.add(poolNames[i]);
                 LOG.debug("initPools... Pool name = " + poolNames[i]) ;
+                if(poolNumber<=5){
+                	String poolName = poolNames[i];
+		        	String poolUrl = getPoolUrl(poolName);
+		        	LOG.debug("initPools... Pool url = " + poolUrl) ;
+		        	int activeConnections = getActiveConnections(poolUrl);
+		        	LOG.debug("initPools... Pool activeConnections = " + activeConnections) ;
+              	  	int idleConnections = getIdleConnections(poolUrl);
+              	  	LOG.debug("initPools... Pool idleConnections = " + idleConnections) ;
+              	  	String poolStrategyProperty = getStrategy(poolName);
+              	  	LOG.debug("initPools... Pool poolStrategyProperty = " + poolStrategyProperty) ;
+              	  	String maxActivesConfiguratedString = getMaxActive(poolName);
+              	  	LOG.debug("initPools... Pool maxActivesConfiguratedString = " + maxActivesConfiguratedString) ;
+              	  	float pourcentage = Float.NaN;
+              	  	if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(maxActivesConfiguratedString)){
+              	  		pourcentage = (activeConnections * 100f)/(1f* (Integer.valueOf(maxActivesConfiguratedString)));
+              	  	}
+			        if(poolNumber==1){
+			        	setActiveConnections1(""+activeConnections);
+			        	setIdleConnections1(""+idleConnections);
+			        	setCurrentUsage1(""+pourcentage+"%");
+			        }else if(poolNumber==2){
+			        	setActiveConnections2(""+activeConnections);
+			        	setIdleConnections2(""+idleConnections);
+			        	setCurrentUsage2(""+pourcentage+"%");
+			        }else if(poolNumber==3){
+			        	setActiveConnections3(""+activeConnections);
+			        	setIdleConnections3(""+idleConnections);
+			        	setCurrentUsage3(""+pourcentage+"%");
+			        }else if(poolNumber==4){
+			        	setActiveConnections4(""+activeConnections);
+			        	setIdleConnections4(""+idleConnections);
+			        	setCurrentUsage4(""+pourcentage+"%");
+			        }else if(poolNumber==5){
+			        	setActiveConnections5(""+activeConnections);
+			        	setIdleConnections5(""+idleConnections);
+			        	setCurrentUsage5(""+pourcentage+"%");
+			        }
+                }
+                poolNumber++;
+                
               }
             }
         }
     	
-        this.m_configParameter = configParameter;
+        
     	this.m_poolsName = poolsName;
     }
     
     
+    protected String getPoolUrl(String poolName){
+    	
+    	String result = null;
+    	org.opencms.db.CmsSqlManager sqlM = org.opencms.main.OpenCms.getSqlManager() ;
+    	if(sqlM==null){
+    		LOG.error("initPools - getPoolUrl : OpenCms.getSqlManager() null or empty") ;
+    		return null;
+    	}
+    	if(CmsStringUtil.isEmptyOrWhitespaceOnly(poolName)){
+	  		LOG.error("initPools - getPoolUrl : poolName null or empty") ;
+	  		return null;
+	  	}
+    	if(sqlM.getDbPoolUrls()!=null){
+        	Iterator poolsURLIterator = sqlM.getDbPoolUrls().iterator();
+            while(poolsURLIterator.hasNext()){
+            	String poolURL = (String) poolsURLIterator.next();
+            	if(poolURL != null && poolURL.endsWith(poolName)){
+            		return poolURL;
+            	}
+            }
+    	}
+    	return result ;
+    	
+    }
+    	
+    protected int getActiveConnections(String poolUrl){
+    	
+    	org.opencms.db.CmsSqlManager sqlM = org.opencms.main.OpenCms.getSqlManager() ;
+    	if(sqlM==null){
+    		LOG.error("initPools - getActiveConnections : OpenCms.getSqlManager() null or empty") ;
+    		return 0;
+    	}
+  	  	try {
+  	  		if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(poolUrl)){
+  	  			return sqlM.getActiveConnections(poolUrl);
+  	  		}else{
+  	  			LOG.error("initPools - getActiveConnections : poolUrl null or empty") ;
+  	  		}
+  	  	}catch (CmsDbException e1) {
+  	  		e1.printStackTrace();
+  	  		LOG.error(e1);
+  	  	}
+  	  	return 0;
+    	
+    }
+    
+    protected int getIdleConnections(String poolUrl){
+    	
+    	org.opencms.db.CmsSqlManager sqlM = org.opencms.main.OpenCms.getSqlManager() ;
+    	if(sqlM==null){
+    		LOG.error("initPools - getIdleConnections : OpenCms.getSqlManager() null or empty") ;
+    		return 0;
+    	}
+  	  	try {
+  	  		if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(poolUrl)){
+	  			return sqlM.getIdleConnections(poolUrl);
+	  		}else{
+	  			LOG.error("initPools - getIdleConnections : poolUrl null or empty") ;
+	  		}
+  	  	}catch (CmsDbException e1) {
+  	  		e1.printStackTrace();
+  	  		LOG.error(e1);
+  	  	}
+  	  	return 0;
+    	
+    }
+    
+    protected String getStrategy(String poolName){
+    	
+    	if(m_configParameter==null) return "";
+    	String poolStrategyProperty = (String) m_configParameter.get("db.pool."+poolName+".whenExhaustedAction");
+	  	if(poolStrategyProperty==null) poolStrategyProperty = "";
+  	  	return poolStrategyProperty;
+    	
+    }
+    
+    protected String getMaxActive(String poolName){
+    	
+    	if(m_configParameter==null) return "";
+    	String maxActivesConfiguratedString = (String) m_configParameter.get("db.pool."+poolName+".maxActive");
+	  	if(maxActivesConfiguratedString==null) maxActivesConfiguratedString = "";
+  	  	return maxActivesConfiguratedString;
+    	
+    }
     
 }

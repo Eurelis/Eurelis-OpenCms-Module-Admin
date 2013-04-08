@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
+import org.opencms.file.CmsObject;
 import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.main.CmsLog;
 import org.opencms.util.CmsStringUtil;
+import org.opencms.widgets.CmsCheckboxWidget;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
@@ -31,7 +33,9 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
 
     /** Defines which pages are valid for this dialog. */
     public static final String[] PAGES = {"page1"};
-
+    
+    
+    
     /** System infos . */
     private String m_cpuCount;
     
@@ -63,7 +67,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     protected CmsAdminSettings m_adminSettings;
     
     
-    private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms());
+    private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms(), getSession());
     private String jsonPath = getJsp().link("/system/workplace/admin/eurelis_system_information/json/getSystemInfo.json");
 
 
@@ -75,7 +79,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     public CmsCPUThreadsClassesOverviewDialog(CmsJspActionElement jsp) {
 
         super(jsp);
-
+        
     }
 
     /**
@@ -88,6 +92,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     public CmsCPUThreadsClassesOverviewDialog(PageContext context, HttpServletRequest req, HttpServletResponse res) {
 
         this(new CmsJspActionElement(context, req, res));
+        
     }
 
     /**
@@ -99,16 +104,35 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         List errors = new ArrayList();
         setDialogObject(m_adminSettings);
 
-        boolean enabled = m_adminSettings.getInterval() > 0;
         int interval = m_adminSettings.getInterval();
         LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
+        
+        boolean displayCPU = m_adminSettings.getDisplayCPU();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayCPU() = " + displayCPU);
+        
+        boolean displayHeap = m_adminSettings.getDisplayHeap();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayHeap() = " + displayHeap);
+        
+        boolean displayClasses = m_adminSettings.getDisplayClasses();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayClasses() = " + displayClasses);
+        
+        boolean displayThreads = m_adminSettings.getDisplayThreads();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayThreads() = " + displayThreads);
 
         //memorisation system du parametre...
-        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval);
+        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval, getSession());
+        CmsAdminSettings.setSettingsDisplayCPUValue(getCms(), displayCPU, getSession());
+        CmsAdminSettings.setSettingsDisplayHeapValue(getCms(), displayHeap, getSession());
+        CmsAdminSettings.setSettingsDisplayClassesValue(getCms(), displayClasses, getSession());
+        CmsAdminSettings.setSettingsDisplayThreadsValue(getCms(), displayThreads, getSession());
+        //CmsAdminSettings.publishSettingsFile(getCms());
+        
 
         // set the list of errors to display when saving failed
         setCommitErrors(errors);
     }
+    
+    
 
     /**
      * Returns the .<p>
@@ -310,64 +334,94 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         result.append(createWidgetErrorHeader());
 
         if (dialog.equals(PAGES[0])) {
-        	result.append(createDialogRowsHtml(0, 0));
         	
-            // create the widgets for the first dialog page
-            result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_1)));
+        	//settings
+        	result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_SETTINGS)));
             result.append(createWidgetTableStart());
-            result.append(createDialogRowsHtml(1, 2));
-            result.append(createWidgetTableEnd());
+        	result.append(createDialogRowsHtml(0, 4));
+        	result.append(createWidgetTableEnd());
             result.append(dialogBlockEnd());
-            
-            result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_2)));
-            result.append(createWidgetTableStart());
-            result.append(createDialogRowsHtml(3, 5));
-            result.append(createWidgetTableEnd());
-            result.append(dialogBlockEnd());
-            
-            result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_3)));
-            result.append(createWidgetTableStart());
-            result.append(createDialogRowsHtml(6, 9));
-            result.append(createWidgetTableEnd());
-            result.append(dialogBlockEnd());
+        	
+        	int lineNumber = 5;
+        	
+        	if(m_adminSettings.getDisplayCPU()){
+	            result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_1)));
+	            result.append(createWidgetTableStart());
+	            result.append(createDialogRowsHtml(lineNumber, lineNumber+1));
+	            result.append(createWidgetTableEnd());
+	            result.append(dialogBlockEnd());
+	            lineNumber = lineNumber + 2;
+        	}
+        	if(m_adminSettings.getDisplayClasses()){
+	            result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_2)));
+	            result.append(createWidgetTableStart());
+	            result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+	            result.append(createWidgetTableEnd());
+	            result.append(dialogBlockEnd());
+	            lineNumber = lineNumber + 3;
+        	}
+        	if(m_adminSettings.getDisplayThreads()){
+	            result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_3)));
+	            result.append(createWidgetTableStart());
+	            result.append(createDialogRowsHtml(lineNumber, lineNumber+3));
+	            result.append(createWidgetTableEnd());
+	            result.append(dialogBlockEnd());
+	            lineNumber = lineNumber + 4;
+        	}
         }
 
         // close widget table
         result.append(createWidgetTableEnd());
         
-        
-        // add highstock scripts
         result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/jquery/packed/jquery.js") + "'></script>\n");
         result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/highstock.js'></script>\n");
         result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/modules/exporting.js'></script>\n");
-        
-        // add graphs building scripts
         result.append("<script type='text/javascript'>\n");
         result.append("$(function() {\n");
-        result.append("  console.log('chargement de la page');\n");
+        result.append("  $('form#EDITOR').after('");
+        result.append("<div class=\"customScripts\">");
+        if(m_adminSettings.getDisplayCPU()){
+        	result.append("<div id=\"cpu\" style=\"height: 300px; width: 50%; float: left;\">Loading CPU graph...</div>");
+        }
+        if(m_adminSettings.getDisplayHeap()){
+        	result.append("<div id=\"heap\" style=\"height: 300px; width: 50%; float: left;\">Loading HEAP graph...</div>");
+        }
+        if(m_adminSettings.getDisplayClasses()){
+        	result.append("<div id=\"classes\" style=\"height: 300px; width: 50%; float: left;\">Loading CLASSES graph...</div>");
+        }
+        if(m_adminSettings.getDisplayThreads()){
+        	result.append("<div id=\"threads\" style=\"height: 300px; width: 50%; float: left;\">Loading THREADS graph...</div>");
+        }
+        result.append("</div>");
+        result.append("  ');\n");
         result.append("  Highcharts.setOptions({\n");
         result.append("    global : { useUTC : true }\n");
         result.append("  }); \n");
-        result.append("  console.log('options highcharts settees');\n");
-        result.append(getUpdateInfoFunction());
-        result.append(getHighChartCPU());
-        result.append(getHighChartHeap());
-        result.append(getHighChartThreads());
-        result.append(getHighChartClasses());
-        result.append("  console.log('graphs highcharts inities');\n");
+        result.append(getUpdateInfoFunction(
+				m_adminSettings.getDisplayCPU(),
+				m_adminSettings.getDisplayHeap(),
+				m_adminSettings.getDisplayClasses(),
+				m_adminSettings.getDisplayThreads()
+				));
+        if(m_adminSettings.getDisplayCPU()){
+        	result.append(getHighChartCPU());
+        }
+        if(m_adminSettings.getDisplayHeap()){
+        	result.append(getHighChartHeap());
+        }
+        if(m_adminSettings.getDisplayClasses()){
+        	result.append(getHighChartClasses());
+        }
+        if(m_adminSettings.getDisplayThreads()){
+        	result.append(getHighChartThreads());
+        }
         result.append("});\n");
         result.append("</script>\n");
-        
-        // add graphs divs
-        result.append("<div id=\"cpu\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
-        result.append("<div id=\"heap\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
-        result.append("<div id=\"classes\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
-        result.append("<div id=\"threads\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
-        
-        
 
         return result.toString();
     }
+    
+    
 
     /**
      * @see org.opencms.workplace.CmsWidgetDialog#defaultActionHtmlEnd()
@@ -389,16 +443,31 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
 
         // widgets to display
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsDisplayWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayCPU", PAGES[0], new CmsCheckboxWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayHeap", PAGES[0], new CmsCheckboxWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayClasses", PAGES[0], new CmsCheckboxWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayThreads", PAGES[0], new CmsCheckboxWidget()));
         
-        addWidget(new CmsWidgetDialogParameter(this, "cpuCount", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(this, "cpuUsage", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(this, "loadedClassesCount", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(this, "unloadedClassesCount", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(this, "totalLoadedClassesCount", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(this, "threadsCount", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(this, "threadsStartedCount", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(this, "threadsPeakCount", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(this, "threadsDaemonCount", PAGES[0], new CmsDisplayWidget()));
+        if(m_adminSettings.getDisplayCPU()){
+	        addWidget(new CmsWidgetDialogParameter(this, "cpuCount", PAGES[0], new CmsDisplayWidget()));
+	        addWidget(new CmsWidgetDialogParameter(this, "cpuUsage", PAGES[0], new CmsDisplayWidget()));
+        }
+        if(m_adminSettings.getDisplayHeap()){
+        	
+        }
+        if(m_adminSettings.getDisplayClasses()){
+        	addWidget(new CmsWidgetDialogParameter(this, "loadedClassesCount", PAGES[0], new CmsDisplayWidget()));
+            addWidget(new CmsWidgetDialogParameter(this, "unloadedClassesCount", PAGES[0], new CmsDisplayWidget()));
+            addWidget(new CmsWidgetDialogParameter(this, "totalLoadedClassesCount", PAGES[0], new CmsDisplayWidget()));
+        }
+        if(m_adminSettings.getDisplayThreads()){
+        	addWidget(new CmsWidgetDialogParameter(this, "threadsCount", PAGES[0], new CmsDisplayWidget()));
+            addWidget(new CmsWidgetDialogParameter(this, "threadsStartedCount", PAGES[0], new CmsDisplayWidget()));
+            addWidget(new CmsWidgetDialogParameter(this, "threadsPeakCount", PAGES[0], new CmsDisplayWidget()));
+            addWidget(new CmsWidgetDialogParameter(this, "threadsDaemonCount", PAGES[0], new CmsDisplayWidget()));
+		}
+        
+        
     }
 
     /**
@@ -436,14 +505,14 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     	
     	Object o;
         if (CmsStringUtil.isEmpty(getParamAction())) {
-            o = new CmsAdminSettings();
+            o = new CmsAdminSettings(getSession());
         } else {
             // this is not the initial call, get the job object from session
             o = getDialogObject();
         }
         if (!(o instanceof CmsAdminSettings)) {
             // create a new history settings handler object
-            m_adminSettings = new CmsAdminSettings();
+            m_adminSettings = new CmsAdminSettings(getSession());
         } else {
             // reuse html import handler object stored in session
             m_adminSettings = (CmsAdminSettings)o;
@@ -477,93 +546,35 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     
     
     
-    protected StringBuffer getUpdateInfoFunction(){
+    protected StringBuffer getUpdateInfoFunction(boolean displayCPU, boolean displayHeap, boolean displayClasses, boolean displayThreads){
     	
     	StringBuffer result = new StringBuffer(1024);
     	result.append("  function updateInfo() {\n");
         result.append("    $.getJSON('"+jsonPath+"', function(data) {\n");
         result.append("      console.log(data);\n");
-        result.append("      console.log('updateInfo!!');\n");
+        //result.append("      console.log('updateInfo!!');\n");
         result.append("      var time = (new Date()).getTime();\n");
         result.append("      var $system = data.system;\n");
-        result.append("      var heapMax = $system.memory.heap.max;\n");
-        result.append("      var heapTotal = $system.memory.heap.total;\n");
-        result.append("      var heapUsed = heapTotal - $system.memory.heap.free;\n");
-        result.append("      var totalSwapMemory = $system.memory.swap.total;\n");
-        result.append("      var usedSwapMemory = totalSwapMemory - $system.memory.swap.free;\n");
-        
-        result.append("      /*if(window.chartHeap)*/ window.chartHeap.series[0].addPoint([time, heapMax], true, true, true); \n");
-        result.append("      /*if(window.chartHeap)*/ window.chartHeap.series[1].addPoint([time, heapTotal], true, true, true); \n");
-        result.append("      /*if(window.chartHeap)*/ window.chartHeap.series[2].addPoint([time, heapUsed], true, true, true); \n");
-        result.append("      /*if(window.chartCpu)*/ window.chartCpu.series[0].addPoint([time, $system.cpu.usage], true, true, true); \n");
-        result.append("      /*if(window.chartThreads)*/ window.chartThreads.series[0].addPoint([time, $system.threads.counts.total], true, true, true);\n");
-        result.append("      /*if(window.chartThreads)*/ window.chartThreads.series[1].addPoint([time, $system.threads.counts.daemon], true, true, true);\n");
-        result.append("      /*if(window.chartClasses)*/ window.chartClasses.series[0].addPoint([time, $system.classes.loaded], true, true, true);\n");
-        result.append("      /*if(window.chartClasses)*/ window.chartClasses.series[1].addPoint([time, $system.classes.unloaded], true, true, true);\n");
-        result.append("      /*if(window.chartClasses)*/ window.chartClasses.series[2].addPoint([time, $system.classes.totalloaded], true, true, true);\n");
-        /*result.append("      if(window.chartPerm) window.chartPerm.series[0].addPoint([time, $system.memory.perm.max], true, true, true);\n");
-        result.append("      if(window.chartPerm) window.chartPerm.series[1].addPoint([time, $system.memory.perm.committed], true, true, true);\n");
-        result.append("      if(window.chartPerm) window.chartPerm.series[2].addPoint([time, $system.memory.perm.used], true, true, true);\n");
-        result.append("      if(window.chartOld) window.chartOld.series[0].addPoint([time, $system.memory.old.max], true, true, true);\n");
-        result.append("      if(window.chartOld) window.chartOld.series[1].addPoint([time, $system.memory.old.committed], true, true, true);\n");
-        result.append("      if(window.chartOld) window.chartOld.series[2].addPoint([time, $system.memory.old.used], true, true, true);\n");
-        result.append("      if(window.chartEden) window.chartEden.series[0].addPoint([time, $system.memory.eden.max], true, true, true);\n");
-        result.append("      if(window.chartEden) window.chartEden.series[1].addPoint([time, $system.memory.eden.committed], true, true, true);\n");
-        result.append("      if(window.chartEden) window.chartEden.series[2].addPoint([time, $system.memory.eden.used], true, true, true);\n");
-        result.append("      if(window.chartSurvivor) window.chartSurvivor.series[0].addPoint([time, $system.memory.survivor.max], true, true, true);\n");
-        result.append("      if(window.chartSurvivor) window.chartSurvivor.series[1].addPoint([time, $system.memory.survivor.committed], true, true, true);\n");
-        result.append("      if(window.chartSurvivor) window.chartSurvivor.series[2].addPoint([time, $system.memory.survivor.used], true, true, true);\n");*/
-        /*
-        Iterator poolIterator =  poolsName.iterator();
-        while(poolIterator.hasNext()){
-          String poolName = (String)poolIterator.next();
-          if(poolName != null){
-        	  	Iterator poolsURLIterator = sqlM.getDbPoolUrls().iterator();
-              while(poolsURLIterator.hasNext()){
-                String poolURL = (String) poolsURLIterator.next();
-                if(poolURL != null && poolURL.endsWith(poolName)){
-                		String url = poolURL;
-                	  int activeConnections = sqlM.getActiveConnections(url);
-                	  int idleConnections = sqlM.getIdleConnections(url);
-                	  
-                	  String poolStrategyProperty = (String) configParameter.get("db.pool."+poolName+".whenExhaustedAction");
-                	  String maxActivesConfiguratedString = (String)configParameter.get("db.pool."+poolName+".maxActive");
-                	  
-                	  float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));
-                	  
-                	  java.sql.Connection conn = null;
-                	  long timeBeforeRequest = 0;
-                	  long timeAfterRequest = 0;
-                		try{
-                			conn = sqlM.getConnection(poolName);
-                		
-                			String showTableQuery = "select * from CMS_PROJECTS;";
-                			java.sql.PreparedStatement stmt = null;
-                			stmt = conn.prepareStatement(showTableQuery);
-                			java.sql.ResultSet resultset = null;
-                			try{
-                				 timeBeforeRequest = System.currentTimeMillis();
-                				 resultset = stmt.executeQuery(); 
-                				 timeAfterRequest = System.currentTimeMillis();
-                			}catch(java.sql.SQLException e){ 
-                				 anError = true;
-                				 error += e.getMessage().toString();
-                			}
-                		}catch(Exception e){
-                			anError = true;
-                			error += e.getMessage().toString();     
-                		}finally{
-                			//conn.close();
-                		}
-                	  
-                	  result.append("      window.chart"+poolName+".series[0].addPoint([time, "+activeConnections+"], true, true, true);");
-                	  result.append("      window.chart"+poolName+".series[1].addPoint([time, "+idleConnections+"], true, true, true);");
-                	  result.append("      window.chart"+poolName+".series[2].addPoint([time, "+pourcentage+"], true, true, true);");
-                }
-              }
-          }
-        } */  	  
-
+        if(displayCPU){
+        	result.append("      /*if(window.chartCpu)*/ window.chartCpu.series[0].addPoint([time, $system.cpu.usage], true, true, true); \n");
+        }
+        if(displayHeap){
+        	result.append("      var heapMax = $system.memory.heap.max;\n");
+            result.append("      var heapTotal = $system.memory.heap.total;\n");
+            result.append("      var heapUsed = heapTotal - $system.memory.heap.free;\n");
+        	result.append("      /*if(window.chartHeap)*/ window.chartHeap.series[0].addPoint([time, heapMax], true, true, true); \n");
+            result.append("      /*if(window.chartHeap)*/ window.chartHeap.series[1].addPoint([time, heapTotal], true, true, true); \n");
+            result.append("      /*if(window.chartHeap)*/ window.chartHeap.series[2].addPoint([time, heapUsed], true, true, true); \n");
+        }
+        if(displayClasses){
+        	result.append("      /*if(window.chartClasses)*/ window.chartClasses.series[0].addPoint([time, $system.classes.loaded], true, true, true);\n");
+            result.append("      /*if(window.chartClasses)*/ window.chartClasses.series[1].addPoint([time, $system.classes.unloaded], true, true, true);\n");
+            result.append("      /*if(window.chartClasses)*/ window.chartClasses.series[2].addPoint([time, $system.classes.totalloaded], true, true, true);\n");
+        }
+        if(displayThreads){
+        	result.append("      /*if(window.chartThreads)*/ window.chartThreads.series[0].addPoint([time, $system.threads.counts.total], true, true, true);\n");
+            result.append("      /*if(window.chartThreads)*/ window.chartThreads.series[1].addPoint([time, $system.threads.counts.daemon], true, true, true);\n");
+        } 
         result.append("    });\n");
         result.append("  }\n");
     	return result;

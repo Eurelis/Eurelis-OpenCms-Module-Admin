@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.main.CmsLog;
 import org.opencms.util.CmsStringUtil;
+import org.opencms.widgets.CmsCheckboxWidget;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
@@ -32,11 +33,35 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     /** Defines which pages are valid for this dialog. */
     public static final String[] PAGES = {"page1"};
 
+    /** System infos . */
+    private String m_memPermMax;
+    /** System infos . */
+    private String m_memPermTotal;
+    /** System infos . */
+    private String m_memPermUsed;
+    /** System infos . */
+    private String m_memOldMax;
+    /** System infos . */
+    private String m_memOldTotal;
+    /** System infos . */
+    private String m_memOldUsed;
+    /** System infos . */
+    private String m_memEdenMax;
+    /** System infos . */
+    private String m_memEdenTotal;
+    /** System infos . */
+    private String m_memEdenUsed;
+    /** System infos . */
+    private String m_memSurvivorMax;
+    /** System infos . */
+    private String m_memSurvivorTotal;
+    /** System infos . */
+    private String m_memSurvivorUsed;
     
     /** The admin settings object that is edited on this dialog. */
     protected CmsAdminSettings m_adminSettings;
     
-    private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms());
+    private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms(), getSession());
     private String jsonPath = getJsp().link("/system/workplace/admin/eurelis_system_information/json/getSystemInfo.json");
 
 
@@ -75,17 +100,273 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         boolean enabled = m_adminSettings.getInterval() > 0;
         int interval = m_adminSettings.getInterval();
         LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
+        
+        boolean displayMemPerm = m_adminSettings.getDisplayMemPerm();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayMemPerm() = " + displayMemPerm);
+        
+        boolean displayMemOld = m_adminSettings.getDisplayMemOld();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayMemOld() = " + displayMemOld);
+        
+        boolean displayMemEden = m_adminSettings.getDisplayMemEden();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayMemEden() = " + displayMemEden);
+        
+        boolean displayMemSurvivor = m_adminSettings.getDisplayMemSurvivor();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getDisplayMemSurvivor() = " + displayMemSurvivor);
 
         //memorisation system du parametre...
-        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval);
+        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval, getSession());
+        CmsAdminSettings.setSettingsDisplayMemPermValue(getCms(), displayMemPerm, getSession());
+        CmsAdminSettings.setSettingsDisplayMemOldValue(getCms(), displayMemOld, getSession());
+        CmsAdminSettings.setSettingsDisplayMemEdenValue(getCms(), displayMemEden, getSession());
+        CmsAdminSettings.setSettingsDisplayMemSurvivorValue(getCms(), displayMemSurvivor, getSession());
+        //CmsAdminSettings.publishSettingsFile(getCms());
 
         // set the list of errors to display when saving failed
         setCommitErrors(errors);
     }
 
     
-    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemPermMax() {
 
+        return m_memPermMax;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemPermTotal() {
+
+        return m_memPermTotal;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemPermUsed() {
+
+        return m_memPermUsed;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemOldMax() {
+
+        return m_memOldMax;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemOldTotal() {
+
+        return m_memOldTotal;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemOldUsed() {
+
+        return m_memOldUsed;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemEdenMax() {
+
+        return m_memEdenMax;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemEdenTotal() {
+
+        return m_memEdenTotal;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemEdenUsed() {
+
+        return m_memEdenUsed;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemSurvivorMax() {
+
+        return m_memSurvivorMax;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemSurvivorTotal() {
+
+        return m_memSurvivorTotal;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getMemSurvivorUsed() {
+
+        return m_memSurvivorUsed;
+    }
+
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemPermMax(String arg) {
+
+        m_memPermMax = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemPermTotal(String arg) {
+
+        m_memPermTotal = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemPermUsed(String arg) {
+
+        m_memPermUsed = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemOldMax(String arg) {
+
+        m_memOldMax = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemOldTotal(String arg) {
+
+        m_memOldTotal = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemOldUsed(String arg) {
+
+        m_memOldUsed = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemEdenMax(String arg) {
+
+        m_memEdenMax = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemEdenTotal(String arg) {
+
+        m_memEdenTotal = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemEdenUsed(String arg) {
+
+        m_memEdenUsed = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemSurvivorMax(String arg) {
+
+        m_memSurvivorMax = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemSurvivorTotal(String arg) {
+
+        m_memSurvivorTotal = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setMemSurvivorUsed(String arg) {
+
+        m_memSurvivorUsed = arg;
+    }
+    
     /**
      * Creates the dialog HTML for all defined widgets of the named dialog (page).<p>
      * 
@@ -106,53 +387,107 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
 
         if (dialog.equals(PAGES[0])) {
         	
-        	result.append(createDialogRowsHtml(0, 0));
+        	//settings
+        	result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_SETTINGS)));
+            result.append(createWidgetTableStart());
+        	result.append(createDialogRowsHtml(0, 4));
+        	result.append(createWidgetTableEnd());
+            result.append(dialogBlockEnd());
         	
             // create the widgets for the first dialog page
-            int count = 1;
+            int lineNumber = 5;
             for(java.lang.management.MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans())  {
                 java.lang.management.MemoryUsage mu = item.getUsage();
                 String name = item.getName();
                 
-                result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_)+name.toUpperCase()));
-                result.append(createWidgetTableStart());
-                result.append(createDialogRowsHtml(count, count+2));
-                result.append(createWidgetTableEnd());
-                result.append(dialogBlockEnd());
+                if(name.toLowerCase().contains("perm")){
+                	if(m_adminSettings.getDisplayMemPerm()){
+                		result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_)+name.toUpperCase()));
+                        result.append(createWidgetTableStart());
+                        result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+                        result.append(createWidgetTableEnd());
+                        result.append(dialogBlockEnd());
+                        lineNumber = lineNumber + 3;
+                	}
+                }else if(name.toLowerCase().contains("old")){
+                	if(m_adminSettings.getDisplayMemOld()){
+                		result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_)+name.toUpperCase()));
+                        result.append(createWidgetTableStart());
+                        result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+                        result.append(createWidgetTableEnd());
+                        result.append(dialogBlockEnd());
+                        lineNumber = lineNumber + 3;
+                	}
+                }else if(name.toLowerCase().contains("eden")){
+                	if(m_adminSettings.getDisplayMemEden()){
+                		result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_)+name.toUpperCase()));
+                        result.append(createWidgetTableStart());
+                        result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+                        result.append(createWidgetTableEnd());
+                        result.append(dialogBlockEnd());
+                        lineNumber = lineNumber + 3;
+                	}
+                }else if(name.toLowerCase().contains("survivor")){
+                	if(m_adminSettings.getDisplayMemSurvivor()){
+                		result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_)+name.toUpperCase()));
+                        result.append(createWidgetTableStart());
+                        result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+                        result.append(createWidgetTableEnd());
+                        result.append(dialogBlockEnd());
+                        lineNumber = lineNumber + 3;
+                	}
+                }
                 
-                count = count + 3;
             }
         }
 
         // close widget table
         result.append(createWidgetTableEnd());
         
-        
-        // add highstock scripts
         result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/jquery/packed/jquery.js") + "'></script>\n");
         result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/highstock.js'></script>\n");
         result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/modules/exporting.js'></script>\n");
-        
-        // add graphs building scripts
         result.append("<script type='text/javascript'>\n");
         result.append("$(function() {\n");
+        result.append("  $('form#EDITOR').after('");
+        result.append("<div class=\"customScripts\">");
+        if(m_adminSettings.getDisplayMemPerm()){
+        	result.append("<div id=\"perm\" style=\"height: 300px; width: 50%; float: left;\">Loading Mem Perm graph...</div>");
+        }
+        if(m_adminSettings.getDisplayMemOld()){
+        	result.append("<div id=\"old\" style=\"height: 300px; width: 50%; float: left;\">Loading Mem Old graph...</div>");
+        }
+        if(m_adminSettings.getDisplayMemEden()){
+        	result.append("<div id=\"eden\" style=\"height: 300px; width: 50%; float: left;\">Loading Mem Eden graph...</div>");
+        }
+        if(m_adminSettings.getDisplayMemSurvivor()){
+        	result.append("<div id=\"survivor\" style=\"height: 300px; width: 50%; float: left;\">Loading Mem Survivor graph...</div>");
+        }
+        result.append("</div>");
+        result.append("  ');\n");
         result.append("  Highcharts.setOptions({\n");
         result.append("    global : { useUTC : true }\n");
-        result.append("  });\n");
-        result.append(getUpdateInfoFunction());
-        
-        result.append(getHighChartPerm());
-        result.append(getHighChartOld());
-        result.append(getHighChartEden());
-        result.append(getHighChartSurvivor());
-
+        result.append("  }); \n");
+        result.append(getUpdateInfoFunction(
+				m_adminSettings.getDisplayMemPerm(),
+				m_adminSettings.getDisplayMemOld(),
+				m_adminSettings.getDisplayMemEden(),
+				m_adminSettings.getDisplayMemSurvivor()
+				));
+        if(m_adminSettings.getDisplayMemPerm()){
+        	result.append(getHighChartPerm());
+        }
+        if(m_adminSettings.getDisplayMemOld()){
+        	result.append(getHighChartOld());
+        }
+        if(m_adminSettings.getDisplayMemEden()){
+        	result.append(getHighChartEden());
+        }
+        if(m_adminSettings.getDisplayMemSurvivor()){
+        	result.append(getHighChartSurvivor());
+        }
         result.append("});\n");
         result.append("</script>\n");
-        
-        result.append("<div id=\"perm\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
-        result.append("<div id=\"old\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
-        result.append("<div id=\"eden\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
-        result.append("<div id=\"survivor\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
 
         return result.toString();
     }
@@ -175,31 +510,53 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
 
         setKeyPrefix(KEY_PREFIX);
         
+        // widgets to display
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsDisplayWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemPerm", PAGES[0], new CmsCheckboxWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemOld", PAGES[0], new CmsCheckboxWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemEden", PAGES[0], new CmsCheckboxWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemSurvivor", PAGES[0], new CmsCheckboxWidget()));
 
         // widgets to display
-        int count = 0;
+        int lineNumber = 5;
         int countItem = 0;
         for(java.lang.management.MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans())  {
             java.lang.management.MemoryUsage mu = item.getUsage();
             String name = item.getName();
             
-            LOG.debug("addWidget... Used = " + mu.getUsed() + " Commited = " + mu.getCommitted() + " Max = " + mu.getMax());
-            addWidget(new CmsWidgetDialogParameter(
-            			""+mu.getUsed(), ""+mu.getUsed(), 
-            			"used" + countItem , 
-            			new CmsDisplayWidget(), "",
-            			1, 1, count));
-            addWidget(new CmsWidgetDialogParameter(
-        			""+mu.getCommitted(), ""+mu.getCommitted(), 
-        			"commited" + countItem , 
-        			new CmsDisplayWidget(), "",
-        			1, 1, count + 1));
-            addWidget(new CmsWidgetDialogParameter(
-        			""+mu.getMax(), ""+mu.getMax(), 
-        			"max" + countItem , 
-        			new CmsDisplayWidget(), "",
-        			1, 1, count + 2));
+            if(name.toLowerCase().contains("perm")){
+            	if(m_adminSettings.getDisplayMemPerm()){
+            		addWidget(new CmsWidgetDialogParameter(this, "memPermMax", PAGES[0], new CmsDisplayWidget()));
+            		addWidget(new CmsWidgetDialogParameter(this, "memPermTotal", PAGES[0], new CmsDisplayWidget()));
+            		addWidget(new CmsWidgetDialogParameter(this, "memPermUsed", PAGES[0], new CmsDisplayWidget()));
+	                lineNumber = lineNumber + 3;
+	                countItem++;
+            	}
+            }else if(name.toLowerCase().contains("old")){
+            	if(m_adminSettings.getDisplayMemOld()){
+            		addWidget(new CmsWidgetDialogParameter(this, "memOldMax", PAGES[0], new CmsDisplayWidget()));
+            		addWidget(new CmsWidgetDialogParameter(this, "memOldTotal", PAGES[0], new CmsDisplayWidget()));
+            		addWidget(new CmsWidgetDialogParameter(this, "memOldUsed", PAGES[0], new CmsDisplayWidget()));
+	                lineNumber = lineNumber + 3;
+	                countItem++;
+            	}
+            }else if(name.toLowerCase().contains("eden")){
+            	if(m_adminSettings.getDisplayMemEden()){
+            		addWidget(new CmsWidgetDialogParameter(this, "memEdenMax", PAGES[0], new CmsDisplayWidget()));
+            		addWidget(new CmsWidgetDialogParameter(this, "memEdenTotal", PAGES[0], new CmsDisplayWidget()));
+            		addWidget(new CmsWidgetDialogParameter(this, "memEdenUsed", PAGES[0], new CmsDisplayWidget()));
+	                lineNumber = lineNumber + 3;
+	                countItem++;
+            	}
+            }else if(name.toLowerCase().contains("survivor")){
+            	if(m_adminSettings.getDisplayMemSurvivor()){
+            		addWidget(new CmsWidgetDialogParameter(this, "memSurvivorMax", PAGES[0], new CmsDisplayWidget()));
+            		addWidget(new CmsWidgetDialogParameter(this, "memSurvivorTotal", PAGES[0], new CmsDisplayWidget()));
+            		addWidget(new CmsWidgetDialogParameter(this, "memSurvivorUsed", PAGES[0], new CmsDisplayWidget()));
+	                lineNumber = lineNumber + 3;
+	                countItem++;
+            	}
+            }
             
             /*if(idname.equals("heap")){
             	result.append(writeRow(Messages.get().getBundle().key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_LABEL_HEAPFREE), ""+Runtime.getRuntime().freeMemory()));
@@ -215,8 +572,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
             	
             }*/
             
-            count = count + 3;
-            countItem++;
+            
         }
     }
 
@@ -239,17 +595,39 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     	java.lang.management.RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean(); 
     	java.lang.management.ClassLoadingMXBean classesBean = ManagementFactory.getClassLoadingMXBean(); 
     	
+    	for(java.lang.management.MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans())  {
+        	java.lang.management.MemoryUsage mu = item.getUsage();
+            String name = item.getName();
+	      
+            if(name.toLowerCase().contains("perm")){
+            	setMemPermMax(""+mu.getMax());
+    	    	setMemPermTotal(""+mu.getCommitted());
+    	    	setMemPermUsed(""+mu.getUsed());
+            }else if(name.toLowerCase().contains("old")){
+            	setMemOldMax(""+mu.getMax());
+    	    	setMemOldTotal(""+mu.getCommitted());
+    	    	setMemOldUsed(""+mu.getUsed());
+            }else if(name.toLowerCase().contains("eden")){
+            	setMemEdenMax(""+mu.getMax());
+    	    	setMemEdenTotal(""+mu.getCommitted());
+    	    	setMemEdenUsed(""+mu.getUsed());
+            }else if(name.toLowerCase().contains("survivor")){
+            	setMemSurvivorMax(""+mu.getMax());
+    	    	setMemSurvivorTotal(""+mu.getCommitted());
+    	    	setMemSurvivorUsed(""+mu.getUsed());
+            }	
+	    }
     	
     	Object o;
         if (CmsStringUtil.isEmpty(getParamAction())) {
-            o = new CmsAdminSettings();
+            o = new CmsAdminSettings(getSession());
         } else {
             // this is not the initial call, get the job object from session
             o = getDialogObject();
         }
         if (!(o instanceof CmsAdminSettings)) {
             // create a new history settings handler object
-            m_adminSettings = new CmsAdminSettings();
+            m_adminSettings = new CmsAdminSettings(getSession());
         } else {
             // reuse html import handler object stored in session
             m_adminSettings = (CmsAdminSettings)o;
@@ -284,7 +662,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     
     
     
-    protected StringBuffer getUpdateInfoFunction(){
+    protected StringBuffer getUpdateInfoFunction(boolean displayPerm, boolean displayOld, boolean displayEden, boolean displaySurvivor){
     	
     	StringBuffer result = new StringBuffer(1024);
     	result.append("  function updateInfo() {\n");
@@ -292,83 +670,27 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         result.append("      console.log('updateInfo!!');\n");
         result.append("      var time = (new Date()).getTime();\n");
         result.append("      var $system = data.system;\n");
-        result.append("      var heapMax = $system.memory.heap.max;\n");
-        result.append("      var heapTotal = $system.memory.heap.total;\n");
-        result.append("      var heapUsed = heapTotal - $system.memory.heap.free;\n");
-        result.append("      var totalSwapMemory = $system.memory.swap.total;\n");
-        result.append("      var usedSwapMemory = totalSwapMemory - $system.memory.swap.free;\n");
         
-        /*result.append("      if(window.chartHeap) window.chartHeap.series[0].addPoint([time, heapMax], true, true, true); \n");
-        result.append("      if(window.chartHeap) window.chartHeap.series[1].addPoint([time, heapTotal], true, true, true); \n");
-        result.append("      if(window.chartHeap) window.chartHeap.series[2].addPoint([time, heapUsed], true, true, true); \n");
-        result.append("      if(window.chartCpu) window.chartCpu.series[0].addPoint([time, $system.cpu.usage], true, true, true); \n");
-        result.append("      if(window.chartThreads) window.chartThreads.series[0].addPoint([time, $system.threads.counts.total], true, true, true);\n");
-        result.append("      if(window.chartThreads) window.chartThreads.series[1].addPoint([time, $system.threads.counts.daemon], true, true, true);\n");
-        result.append("      if(window.chartClasses) window.chartClasses.series[0].addPoint([time, $system.classes.loaded], true, true, true);\n");
-        result.append("      if(window.chartClasses) window.chartClasses.series[1].addPoint([time, $system.classes.unloaded], true, true, true);\n");
-        result.append("      if(window.chartClasses) window.chartClasses.series[2].addPoint([time, $system.classes.totalloaded], true, true, true);\n");*/
-        result.append("      /*if(window.chartPerm)*/ window.chartPerm.series[0].addPoint([time, $system.memory.perm.max], true, true, true);\n");
-        result.append("      /*if(window.chartPerm)*/ window.chartPerm.series[1].addPoint([time, $system.memory.perm.committed], true, true, true);\n");
-        result.append("      /*if(window.chartPerm)*/ window.chartPerm.series[2].addPoint([time, $system.memory.perm.used], true, true, true);\n");
-        result.append("      /*if(window.chartOld)*/ window.chartOld.series[0].addPoint([time, $system.memory.old.max], true, true, true);\n");
-        result.append("      /*if(window.chartOld)*/ window.chartOld.series[1].addPoint([time, $system.memory.old.committed], true, true, true);\n");
-        result.append("      /*if(window.chartOld)*/ window.chartOld.series[2].addPoint([time, $system.memory.old.used], true, true, true);\n");
-        result.append("      /*if(window.chartEden)*/ window.chartEden.series[0].addPoint([time, $system.memory.eden.max], true, true, true);\n");
-        result.append("      /*if(window.chartEden)*/ window.chartEden.series[1].addPoint([time, $system.memory.eden.committed], true, true, true);\n");
-        result.append("      /*if(window.chartEden)*/ window.chartEden.series[2].addPoint([time, $system.memory.eden.used], true, true, true);\n");
-        result.append("      /*if(window.chartSurvivor)*/ window.chartSurvivor.series[0].addPoint([time, $system.memory.survivor.max], true, true, true);\n");
-        result.append("      /*if(window.chartSurvivor)*/ window.chartSurvivor.series[1].addPoint([time, $system.memory.survivor.committed], true, true, true);\n");
-        result.append("      /*if(window.chartSurvivor)*/ window.chartSurvivor.series[2].addPoint([time, $system.memory.survivor.used], true, true, true);\n");
-        /*
-        Iterator poolIterator =  poolsName.iterator();
-        while(poolIterator.hasNext()){
-          String poolName = (String)poolIterator.next();
-          if(poolName != null){
-        	  	Iterator poolsURLIterator = sqlM.getDbPoolUrls().iterator();
-              while(poolsURLIterator.hasNext()){
-                String poolURL = (String) poolsURLIterator.next();
-                if(poolURL != null && poolURL.endsWith(poolName)){
-                		String url = poolURL;
-                	  int activeConnections = sqlM.getActiveConnections(url);
-                	  int idleConnections = sqlM.getIdleConnections(url);
-                	  
-                	  String poolStrategyProperty = (String) configParameter.get("db.pool."+poolName+".whenExhaustedAction");
-                	  String maxActivesConfiguratedString = (String)configParameter.get("db.pool."+poolName+".maxActive");
-                	  
-                	  float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));
-                	  
-                	  java.sql.Connection conn = null;
-                	  long timeBeforeRequest = 0;
-                	  long timeAfterRequest = 0;
-                		try{
-                			conn = sqlM.getConnection(poolName);
-                		
-                			String showTableQuery = "select * from CMS_PROJECTS;";
-                			java.sql.PreparedStatement stmt = null;
-                			stmt = conn.prepareStatement(showTableQuery);
-                			java.sql.ResultSet resultset = null;
-                			try{
-                				 timeBeforeRequest = System.currentTimeMillis();
-                				 resultset = stmt.executeQuery(); 
-                				 timeAfterRequest = System.currentTimeMillis();
-                			}catch(java.sql.SQLException e){ 
-                				 anError = true;
-                				 error += e.getMessage().toString();
-                			}
-                		}catch(Exception e){
-                			anError = true;
-                			error += e.getMessage().toString();     
-                		}finally{
-                			//conn.close();
-                		}
-                	  
-                	  result.append("      window.chart"+poolName+".series[0].addPoint([time, "+activeConnections+"], true, true, true);");
-                	  result.append("      window.chart"+poolName+".series[1].addPoint([time, "+idleConnections+"], true, true, true);");
-                	  result.append("      window.chart"+poolName+".series[2].addPoint([time, "+pourcentage+"], true, true, true);");
-                }
-              }
-          }
-        } */  	  
+        if(displayPerm){
+        	result.append("      /*if(window.chartPerm)*/ window.chartPerm.series[0].addPoint([time, $system.memory.perm.max], true, true, true);\n");
+            result.append("      /*if(window.chartPerm)*/ window.chartPerm.series[1].addPoint([time, $system.memory.perm.committed], true, true, true);\n");
+            result.append("      /*if(window.chartPerm)*/ window.chartPerm.series[2].addPoint([time, $system.memory.perm.used], true, true, true);\n");
+        }
+        if(displayOld){
+        	result.append("      /*if(window.chartOld)*/ window.chartOld.series[0].addPoint([time, $system.memory.old.max], true, true, true);\n");
+            result.append("      /*if(window.chartOld)*/ window.chartOld.series[1].addPoint([time, $system.memory.old.committed], true, true, true);\n");
+            result.append("      /*if(window.chartOld)*/ window.chartOld.series[2].addPoint([time, $system.memory.old.used], true, true, true);\n");
+        }
+        if(displayEden){
+        	result.append("      /*if(window.chartEden)*/ window.chartEden.series[0].addPoint([time, $system.memory.eden.max], true, true, true);\n");
+            result.append("      /*if(window.chartEden)*/ window.chartEden.series[1].addPoint([time, $system.memory.eden.committed], true, true, true);\n");
+            result.append("      /*if(window.chartEden)*/ window.chartEden.series[2].addPoint([time, $system.memory.eden.used], true, true, true);\n");
+        }
+        if(displaySurvivor){
+        	result.append("      /*if(window.chartSurvivor)*/ window.chartSurvivor.series[0].addPoint([time, $system.memory.survivor.max], true, true, true);\n");
+            result.append("      /*if(window.chartSurvivor)*/ window.chartSurvivor.series[1].addPoint([time, $system.memory.survivor.committed], true, true, true);\n");
+            result.append("      /*if(window.chartSurvivor)*/ window.chartSurvivor.series[2].addPoint([time, $system.memory.survivor.used], true, true, true);\n");
+        }	  
 
         result.append("    });\n");
         result.append("  }\n");
