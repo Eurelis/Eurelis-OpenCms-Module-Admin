@@ -56,7 +56,6 @@ public class CmsAdminSettings {
 
     /** Interval between graphs refresh. */
     private int m_interval;
-    private String m_intervalString;
 
     public static final String SETTINGS_FILE_PATH = "/system/shared/eurelis-admin.txt";
     public static final String KEY_INTERVAL = "interval";
@@ -72,12 +71,10 @@ public class CmsAdminSettings {
 		try {
 			adminObject = workplaceAction.getCmsAdminObject();
 			m_interval = getSettingsIntervalValue(adminObject);
-	        m_intervalString = String.valueOf(m_interval);
 		} catch (CmsException e) {
 			e.printStackTrace();
 			LOG.error(e);
 			m_interval = DEFAULT_VALUE;
-	        m_intervalString = String.valueOf(m_interval);
 		}
         
     }
@@ -92,10 +89,6 @@ public class CmsAdminSettings {
 
         return m_interval;
     }
-    public String getIntervalString() {
-
-        return m_intervalString;
-    }
 
 
     /**
@@ -106,12 +99,6 @@ public class CmsAdminSettings {
     public void setInterval(int interval) {
 
         m_interval = interval;
-        m_intervalString = String.valueOf(interval);
-    }
-    public void setIntervalString(String interval) {
-
-        m_interval = Integer.valueOf(interval).intValue();
-        m_intervalString = interval;
     }
     
     

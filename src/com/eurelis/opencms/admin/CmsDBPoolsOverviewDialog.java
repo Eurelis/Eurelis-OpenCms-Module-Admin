@@ -38,6 +38,9 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     private Map m_configParameter = null;
     private List m_poolsName = null;
     
+    /** The admin settings object that is edited on this dialog. */
+    protected CmsAdminSettings m_adminSettings;
+    
     private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms());
     private String jsonPath = getJsp().link("/system/workplace/admin/eurelis_system_information/json/getSystemInfo.json");
 
@@ -70,8 +73,19 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
      */
     public void actionCommit() {
 
-        // no saving needed
-        setCommitErrors(new ArrayList());
+    	LOG.debug("Admin settings actionCommit...");
+        List errors = new ArrayList();
+        setDialogObject(m_adminSettings);
+
+        boolean enabled = m_adminSettings.getInterval() > 0;
+        int interval = m_adminSettings.getInterval();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
+
+        //memorisation system du parametre...
+        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval);
+
+        // set the list of errors to display when saving failed
+        setCommitErrors(errors);
     }
 
     
@@ -100,10 +114,12 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         }
         
         if (dialog.equals(PAGES[0])) {
+        	result.append(createDialogRowsHtml(0, 0));
+        	
             // create the widgets for the first dialog page
         	if(m_poolsName!=null && m_configParameter!=null){
         		LOG.debug("createDialogHtml... " + m_poolsName.size() + " pool(s)");
-                int count = 0;
+                int count = 1;
                 Iterator it = m_poolsName.iterator();
                 while(it.hasNext()){
                     String poolName = (String)it.next();
@@ -152,7 +168,7 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
 	        Iterator it = m_poolsName.iterator();
 	        while(it.hasNext()){
 	            String poolName = (String)it.next();
-	            result.append("<div id=\""+poolName+"\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
+	            result.append("<div id=\""+poolName+"\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
 	        }
         }
 
@@ -176,6 +192,8 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         initInfosObject();
 
         setKeyPrefix(KEY_PREFIX);
+        
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsDisplayWidget()));
         
         org.opencms.db.CmsSqlManager sqlM = org.opencms.main.OpenCms.getSqlManager() ;
 
@@ -313,6 +331,20 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     	
     	initPools();
     	
+    	Object o;
+        if (CmsStringUtil.isEmpty(getParamAction())) {
+            o = new CmsAdminSettings();
+        } else {
+            // this is not the initial call, get the job object from session
+            o = getDialogObject();
+        }
+        if (!(o instanceof CmsAdminSettings)) {
+            // create a new history settings handler object
+            m_adminSettings = new CmsAdminSettings();
+        } else {
+            // reuse html import handler object stored in session
+            m_adminSettings = (CmsAdminSettings)o;
+        }
     	
     }
 

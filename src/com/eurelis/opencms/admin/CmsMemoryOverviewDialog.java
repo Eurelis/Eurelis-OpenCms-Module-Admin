@@ -3,6 +3,7 @@ package com.eurelis.opencms.admin;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +33,8 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     public static final String[] PAGES = {"page1"};
 
     
-    
+    /** The admin settings object that is edited on this dialog. */
+    protected CmsAdminSettings m_adminSettings;
     
     private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms());
     private String jsonPath = getJsp().link("/system/workplace/admin/eurelis_system_information/json/getSystemInfo.json");
@@ -66,8 +68,19 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
      */
     public void actionCommit() {
 
-        // no saving needed
-        setCommitErrors(new ArrayList());
+    	LOG.debug("Admin settings actionCommit...");
+        List errors = new ArrayList();
+        setDialogObject(m_adminSettings);
+
+        boolean enabled = m_adminSettings.getInterval() > 0;
+        int interval = m_adminSettings.getInterval();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
+
+        //memorisation system du parametre...
+        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval);
+
+        // set the list of errors to display when saving failed
+        setCommitErrors(errors);
     }
 
     
@@ -92,8 +105,11 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         result.append(createWidgetErrorHeader());
 
         if (dialog.equals(PAGES[0])) {
+        	
+        	result.append(createDialogRowsHtml(0, 0));
+        	
             // create the widgets for the first dialog page
-            int count = 0;
+            int count = 1;
             for(java.lang.management.MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans())  {
                 java.lang.management.MemoryUsage mu = item.getUsage();
                 String name = item.getName();
@@ -133,10 +149,10 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         result.append("});\n");
         result.append("</script>\n");
         
-        result.append("<div id=\"perm\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
-        result.append("<div id=\"old\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
-        result.append("<div id=\"eden\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
-        result.append("<div id=\"survivor\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
+        result.append("<div id=\"perm\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
+        result.append("<div id=\"old\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
+        result.append("<div id=\"eden\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
+        result.append("<div id=\"survivor\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
 
         return result.toString();
     }
@@ -158,6 +174,8 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         initInfosObject();
 
         setKeyPrefix(KEY_PREFIX);
+        
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsDisplayWidget()));
 
         // widgets to display
         int count = 0;
@@ -222,7 +240,20 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     	java.lang.management.ClassLoadingMXBean classesBean = ManagementFactory.getClassLoadingMXBean(); 
     	
     	
-    	
+    	Object o;
+        if (CmsStringUtil.isEmpty(getParamAction())) {
+            o = new CmsAdminSettings();
+        } else {
+            // this is not the initial call, get the job object from session
+            o = getDialogObject();
+        }
+        if (!(o instanceof CmsAdminSettings)) {
+            // create a new history settings handler object
+            m_adminSettings = new CmsAdminSettings();
+        } else {
+            // reuse html import handler object stored in session
+            m_adminSettings = (CmsAdminSettings)o;
+        }
     	
     	
     }

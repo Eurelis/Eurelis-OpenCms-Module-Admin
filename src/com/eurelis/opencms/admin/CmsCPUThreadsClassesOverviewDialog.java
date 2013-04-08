@@ -3,12 +3,16 @@ package com.eurelis.opencms.admin;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
+import org.apache.commons.logging.Log;
 import org.opencms.jsp.CmsJspActionElement;
+import org.opencms.main.CmsLog;
+import org.opencms.util.CmsStringUtil;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
@@ -18,6 +22,9 @@ import org.opencms.workplace.CmsWidgetDialogParameter;
  * 
  */
 public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
+	
+	/** The log object for this class. */
+    private static final Log LOG = CmsLog.getLog(CmsCPUThreadsClassesOverviewDialog.class);
 
     /** localized messages Keys prefix. */
     public static final String KEY_PREFIX = "cputhreadsclasses.stats";
@@ -52,6 +59,9 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     /** System infos . */
     private String m_threadsDaemonCount;
     
+    /** The admin settings object that is edited on this dialog. */
+    protected CmsAdminSettings m_adminSettings;
+    
     
     private int frequencyInMillis = CmsAdminSettings.getSettingsIntervalValue(getCms());
     private String jsonPath = getJsp().link("/system/workplace/admin/eurelis_system_information/json/getSystemInfo.json");
@@ -85,8 +95,19 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
      */
     public void actionCommit() {
 
-        // no saving needed
-        setCommitErrors(new ArrayList());
+    	LOG.debug("Admin settings actionCommit...");
+        List errors = new ArrayList();
+        setDialogObject(m_adminSettings);
+
+        boolean enabled = m_adminSettings.getInterval() > 0;
+        int interval = m_adminSettings.getInterval();
+        LOG.debug("Admin settings actionCommit : m_adminSettings.getInterval() = " + interval);
+
+        //memorisation system du parametre...
+        CmsAdminSettings.setSettingsIntervalValue(getCms(), interval);
+
+        // set the list of errors to display when saving failed
+        setCommitErrors(errors);
     }
 
     /**
@@ -289,22 +310,24 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         result.append(createWidgetErrorHeader());
 
         if (dialog.equals(PAGES[0])) {
+        	result.append(createDialogRowsHtml(0, 0));
+        	
             // create the widgets for the first dialog page
             result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_1)));
             result.append(createWidgetTableStart());
-            result.append(createDialogRowsHtml(0, 1));
+            result.append(createDialogRowsHtml(1, 2));
             result.append(createWidgetTableEnd());
             result.append(dialogBlockEnd());
             
             result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_2)));
             result.append(createWidgetTableStart());
-            result.append(createDialogRowsHtml(2, 4));
+            result.append(createDialogRowsHtml(3, 5));
             result.append(createWidgetTableEnd());
             result.append(dialogBlockEnd());
             
             result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_3)));
             result.append(createWidgetTableStart());
-            result.append(createDialogRowsHtml(5, 8));
+            result.append(createDialogRowsHtml(6, 9));
             result.append(createWidgetTableEnd());
             result.append(dialogBlockEnd());
         }
@@ -336,10 +359,10 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         result.append("</script>\n");
         
         // add graphs divs
-        result.append("<div id=\"cpu\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
-        result.append("<div id=\"heap\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
-        result.append("<div id=\"classes\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
-        result.append("<div id=\"threads\" style=\"height: 300px; width: 25%; float: left;\"></div>\n");
+        result.append("<div id=\"cpu\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
+        result.append("<div id=\"heap\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
+        result.append("<div id=\"classes\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
+        result.append("<div id=\"threads\" style=\"height: 300px; width: 50%; float: left;\"></div>\n");
         
         
 
@@ -365,6 +388,8 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         setKeyPrefix(KEY_PREFIX);
 
         // widgets to display
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsDisplayWidget()));
+        
         addWidget(new CmsWidgetDialogParameter(this, "cpuCount", PAGES[0], new CmsDisplayWidget()));
         addWidget(new CmsWidgetDialogParameter(this, "cpuUsage", PAGES[0], new CmsDisplayWidget()));
         addWidget(new CmsWidgetDialogParameter(this, "loadedClassesCount", PAGES[0], new CmsDisplayWidget()));
@@ -408,6 +433,21 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     	setThreadsStartedCount(""+threadBean.getTotalStartedThreadCount());
     	setThreadsPeakCount(""+threadBean.getPeakThreadCount());
     	setThreadsDaemonCount(""+threadBean.getDaemonThreadCount());
+    	
+    	Object o;
+        if (CmsStringUtil.isEmpty(getParamAction())) {
+            o = new CmsAdminSettings();
+        } else {
+            // this is not the initial call, get the job object from session
+            o = getDialogObject();
+        }
+        if (!(o instanceof CmsAdminSettings)) {
+            // create a new history settings handler object
+            m_adminSettings = new CmsAdminSettings();
+        } else {
+            // reuse html import handler object stored in session
+            m_adminSettings = (CmsAdminSettings)o;
+        }
     	
     }
 
