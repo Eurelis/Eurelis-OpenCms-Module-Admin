@@ -110,7 +110,9 @@
 	<!-- COMPILATION DES CLASSES -->
   <target name="compile" depends="init" description="Compilation des classes.">
     <javac srcdir="${folder.src}" destdir="${folder.build.jar.classes}" classpathref="compil.classpath" debug="off" />
-    <jar jarfile="${folder.build.jar}/${jar.file}" basedir="${folder.build.jar.classes}" >
+    <jar jarfile="${folder.build.jar}/${jar.file}">
+      <fileset dir="${folder.build.jar.classes}"/>
+      <fileset dir="${folder.etc}/license" />
       <manifest>
         <attribute name="Built-By" value="${module.module.authorname}" />
         <attribute name="Build-Jdk" value="${jdk.version}" />
@@ -121,7 +123,9 @@
 	
   <target name="jar" depends="compile" description="Creation du jar dans le repertoire d'archives.">
 		<javac srcdir="${folder.src}" destdir="${folder.build.jar.classes}" classpathref="compil.classpath" debug="off" />
-		<jar jarfile="${folder.build.jar}/${jar.file}" basedir="${folder.build.jar.classes}" >
+		<jar jarfile="${folder.build.jar}/${jar.file}" >
+      <fileset dir="${folder.build.jar.classes}"/>
+      <fileset dir="${folder.etc}/license" />
       <manifest>
         <attribute name="Built-By" value="${module.module.authorname}" />
         <attribute name="Build-Jdk" value="${jdk.version}" />
