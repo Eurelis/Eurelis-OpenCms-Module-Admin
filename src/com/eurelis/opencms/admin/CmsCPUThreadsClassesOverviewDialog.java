@@ -520,7 +520,8 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     	
     	
     	setCpuCount(""+osBean.getAvailableProcessors());
-    	setCpuUsage(""+100*osBean.getSystemLoadAverage()+"%");
+    	double usage = com.eurelis.opencms.admin.CmsCPUThreadsClassesOverviewDialog.getCPUUsage(getSession());
+    	setCpuUsage(""+100*usage+"%");
     	
     	setLoadedClassesCount(""+classesBean.getLoadedClassCount());
     	setUnloadedClassesCount(""+classesBean.getUnloadedClassCount());
@@ -579,10 +580,9 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     	StringBuffer result = new StringBuffer(1024);
     	result.append("  function updateInfo() {\n");
         result.append("    $.getJSON('"+jsonPath+"', function(data) {\n");
-        result.append("      console.log(data);\n");
-        //result.append("      console.log('updateInfo!!');\n");
         result.append("      var time = (new Date()).getTime();\n");
         result.append("      var $system = data.system;\n");
+        //graphs
         if(displayCPU){
         	result.append("      /*if(window.chartCpu)*/ window.chartCpu.series[0].addPoint([time, $system.cpu.usage], true, true, true); \n");
         }
@@ -603,6 +603,30 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         	result.append("      /*if(window.chartThreads)*/ window.chartThreads.series[0].addPoint([time, $system.threads.counts.total], true, true, true);\n");
             result.append("      /*if(window.chartThreads)*/ window.chartThreads.series[1].addPoint([time, $system.threads.counts.daemon], true, true, true);\n");
         } 
+        //valeurs
+        if(displayCPU){
+        	result.append("      var $cpuUsageTag = $('[id^=\"cpuUsage\"]'); var cpuUsageValue = $system.cpu.usage +'%'; \n");
+        	result.append("      //console.log('getUpdateInfoFunction... #cpuUsage.0 : '+cpuUsageValue+' '+$cpuUsageTag.length); \n");
+        	result.append("      $cpuUsageTag.val(cpuUsageValue);$cpuUsageTag.prev().html(cpuUsageValue); \n");
+        }
+        if(displayClasses){
+        	result.append("      var $loadedClassesCountTag = $('[id^=\"loadedClassesCount\"]'); \n");
+        	result.append("      var $unloadedClassesCountTag = $('[id^=\"unloadedClassesCount\"]'); \n");
+        	result.append("      var $totalLoadedClassesCountTag = $('[id^=\"totalLoadedClassesCount\"]'); \n");
+        	result.append("      $loadedClassesCountTag.val($system.classes.loaded);$loadedClassesCountTag.prev().html($system.classes.loaded); \n");
+        	result.append("      $unloadedClassesCountTag.val($system.classes.unloaded);$unloadedClassesCountTag.prev().html($system.classes.unloaded); \n");
+        	result.append("      $totalLoadedClassesCountTag.val($system.classes.totalloaded);$totalLoadedClassesCountTag.prev().html($system.classes.totalloaded); \n");
+        }
+        if(displayThreads){
+        	result.append("      var $threadsCountTag = $('[id^=\"threadsCount\"]'); \n");
+        	result.append("      var $threadsStartedCountTag = $('[id^=\"threadsStartedCount\"]'); \n");
+        	result.append("      var $threadsPeakCountTag = $('[id^=\"threadsPeakCount\"]'); \n");
+        	result.append("      var $threadsDaemonCountTag = $('[id^=\"threadsDaemonCount\"]'); \n");
+        	result.append("      $threadsCountTag.val($system.threads.counts.total);$threadsCountTag.prev().html($system.threads.counts.total); \n");
+        	//result.append("      $threadsStartedCountTag.val($system.threads.counts.total-started);$threadsStartedCountTag.prev().html($system.threads.counts.total-started); \n");
+        	result.append("      $threadsPeakCountTag.val($system.threads.counts.peak);$threadsPeakCountTag.prev().html($system.threads.counts.peak); \n");
+        	result.append("      $threadsDaemonCountTag.val($system.threads.counts.daemon);$threadsDaemonCountTag.prev().html($system.threads.counts.daemon); \n");
+        }
         result.append("    });\n");
         result.append("  }\n");
     	return result;

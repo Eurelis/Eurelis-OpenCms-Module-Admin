@@ -540,7 +540,6 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         int lineNumber = 5;
         int countItem = 0;
         for(java.lang.management.MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans())  {
-            java.lang.management.MemoryUsage mu = item.getUsage();
             String name = item.getName();
             
             if(name.toLowerCase().contains("perm")){
@@ -575,6 +574,8 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
 	                lineNumber = lineNumber + 3;
 	                countItem++;
             	}
+            }else{
+            	LOG.debug("MemoryPoolMXBean name = " + name.toLowerCase());
             }
             
             /*if(idname.equals("heap")){
@@ -634,7 +635,9 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
             	setMemSurvivorMax(""+mu.getMax());
     	    	setMemSurvivorTotal(""+mu.getCommitted());
     	    	setMemSurvivorUsed(""+mu.getUsed());
-            }	
+            }else{
+            	LOG.debug("MemoryPoolMXBean name = " + name.toLowerCase());
+            }
 	    }
     	
     	Object o;
@@ -686,10 +689,9 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     	StringBuffer result = new StringBuffer(1024);
     	result.append("  function updateInfo() {\n");
         result.append("    $.getJSON('"+jsonPath+"', function(data) {\n");
-        result.append("      console.log('updateInfo!!');\n");
         result.append("      var time = (new Date()).getTime();\n");
         result.append("      var $system = data.system;\n");
-        
+        //graphs
         if(displayPerm){
         	result.append("      /*if(window.chartPerm)*/ window.chartPerm.series[0].addPoint([time, $system.memory.perm.max], true, true, true);\n");
             result.append("      /*if(window.chartPerm)*/ window.chartPerm.series[1].addPoint([time, $system.memory.perm.committed], true, true, true);\n");
@@ -710,7 +712,39 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
             result.append("      /*if(window.chartSurvivor)*/ window.chartSurvivor.series[1].addPoint([time, $system.memory.survivor.committed], true, true, true);\n");
             result.append("      /*if(window.chartSurvivor)*/ window.chartSurvivor.series[2].addPoint([time, $system.memory.survivor.used], true, true, true);\n");
         }	  
-
+        //valeurs
+        if(displayPerm){
+        	result.append("      var $memPermMaxTag = $('[id^=\"memPermMax\"]');  \n");
+        	result.append("      var $memPermTotalTag = $('[id^=\"memPermTotal\"]');  \n");
+        	result.append("      var $memPermUsedTag = $('[id^=\"memPermUsed\"]');  \n");
+        	result.append("      $memPermMaxTag.val($system.memory.perm.max);$memPermMaxTag.prev().html($system.memory.perm.max); \n");
+        	result.append("      $memPermTotalTag.val($system.memory.perm.committed);$memPermTotalTag.prev().html($system.memory.perm.committed); \n");
+        	result.append("      $memPermUsedTag.val($system.memory.perm.used);$memPermUsedTag.prev().html($system.memory.perm.used); \n");
+        }
+        if(displayOld){
+        	result.append("      var $memOldMaxTag = $('[id^=\"memOldMax\"]');  \n");
+        	result.append("      var $memOldTotalTag = $('[id^=\"memOldTotal\"]');  \n");
+        	result.append("      var $memOldUsedTag = $('[id^=\"memOldUsed\"]');  \n");
+        	result.append("      $memOldMaxTag.val($system.memory.old.max);$memOldMaxTag.prev().html($system.memory.old.max); \n");
+        	result.append("      $memOldTotalTag.val($system.memory.old.committed);$memOldTotalTag.prev().html($system.memory.old.committed); \n");
+        	result.append("      $memOldUsedTag.val($system.memory.old.used);$memOldUsedTag.prev().html($system.memory.old.used); \n");
+        }
+        if(displayEden){
+        	result.append("      var $memEdenMaxTag = $('[id^=\"memEdenMax\"]');  \n");
+        	result.append("      var $memEdenTotalTag = $('[id^=\"memEdenTotal\"]');  \n");
+        	result.append("      var $memEdenUsedTag = $('[id^=\"memEdenUsed\"]');  \n");
+        	result.append("      $memEdenMaxTag.val($system.memory.eden.max);$memEdenMaxTag.prev().html($system.memory.eden.max); \n");
+        	result.append("      $memEdenTotalTag.val($system.memory.eden.committed);$memEdenTotalTag.prev().html($system.memory.eden.committed); \n");
+        	result.append("      $memEdenUsedTag.val($system.memory.eden.used);$memEdenUsedTag.prev().html($system.memory.eden.used); \n");
+        }
+        if(displaySurvivor){
+        	result.append("      var $memSurvivorMaxTag = $('[id^=\"memSurvivorMax\"]');  \n");
+        	result.append("      var $memSurvivorTotalTag = $('[id^=\"memSurvivorTotal\"]');  \n");
+        	result.append("      var $memSurvivorUsedTag = $('[id^=\"memSurvivorUsed\"]');  \n");
+        	result.append("      $memSurvivorMaxTag.val($system.memory.survivor.max);$memSurvivorMaxTag.prev().html($system.memory.survivor.max); \n");
+        	result.append("      $memSurvivorTotalTag.val($system.memory.survivor.committed);$memSurvivorTotalTag.prev().html($system.memory.survivor.committed); \n");
+        	result.append("      $memSurvivorUsedTag.val($system.memory.survivor.used);$memSurvivorUsedTag.prev().html($system.memory.survivor.used); \n");
+        }
         result.append("    });\n");
         result.append("  }\n");
     	return result;

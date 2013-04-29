@@ -58,6 +58,12 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     /** System infos . */
     private String m_poolName1;
     /** System infos . */
+    private String m_poolUrl1;
+    /** System infos . */
+    private String m_poolStrategy1;
+    /** System infos . */
+    private String m_poolMaxPoolSize1;
+    /** System infos . */
     private String m_activeConnections1;
     /** System infos . */
     private String m_idleConnections1;
@@ -66,6 +72,12 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     
     /** System infos . */
     private String m_poolName2;
+    /** System infos . */
+    private String m_poolUrl2;
+    /** System infos . */
+    private String m_poolStrategy2;
+    /** System infos . */
+    private String m_poolMaxPoolSize2;
     /** System infos . */
     private String m_activeConnections2;
     /** System infos . */
@@ -76,6 +88,12 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     /** System infos . */
     private String m_poolName3;
     /** System infos . */
+    private String m_poolUrl3;
+    /** System infos . */
+    private String m_poolStrategy3;
+    /** System infos . */
+    private String m_poolMaxPoolSize3;
+    /** System infos . */
     private String m_activeConnections3;
     /** System infos . */
     private String m_idleConnections3;
@@ -85,6 +103,12 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     /** System infos . */
     private String m_poolName4;
     /** System infos . */
+    private String m_poolUrl4;
+    /** System infos . */
+    private String m_poolStrategy4;
+    /** System infos . */
+    private String m_poolMaxPoolSize4;
+    /** System infos . */
     private String m_activeConnections4;
     /** System infos . */
     private String m_idleConnections4;
@@ -93,6 +117,12 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     
     /** System infos . */
     private String m_poolName5;
+    /** System infos . */
+    private String m_poolUrl5;
+    /** System infos . */
+    private String m_poolStrategy5;
+    /** System infos . */
+    private String m_poolMaxPoolSize5;
     /** System infos . */
     private String m_activeConnections5;
     /** System infos . */
@@ -192,6 +222,37 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
      *
      * @return the 
      */
+    public String getPoolUrl1() {
+
+        return m_poolUrl1;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolStrategy1() {
+
+        return m_poolStrategy1;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolMaxPoolSize1() {
+
+        return m_poolMaxPoolSize1;
+    }
+    
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
     public String getActiveConnections1() {
 
         return m_activeConnections1;
@@ -225,6 +286,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     public String getPoolName2() {
 
         return m_poolName2;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolUrl2() {
+
+        return m_poolUrl2;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolStrategy2() {
+
+        return m_poolStrategy2;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolMaxPoolSize2() {
+
+        return m_poolMaxPoolSize2;
     }
     
     /**
@@ -272,6 +363,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
      *
      * @return the 
      */
+    public String getPoolUrl3() {
+
+        return m_poolUrl3;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolStrategy3() {
+
+        return m_poolStrategy3;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolMaxPoolSize3() {
+
+        return m_poolMaxPoolSize3;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
     public String getActiveConnections3() {
 
         return m_activeConnections3;
@@ -312,6 +433,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
      *
      * @return the 
      */
+    public String getPoolUrl4() {
+
+        return m_poolUrl4;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolStrategy4() {
+
+        return m_poolStrategy4;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolMaxPoolSize4() {
+
+        return m_poolMaxPoolSize4;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
     public String getActiveConnections4() {
 
         return m_activeConnections4;
@@ -345,6 +496,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     public String getPoolName5() {
 
         return m_poolName5;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolUrl5() {
+
+        return m_poolUrl5;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolStrategy5() {
+
+        return m_poolStrategy5;
+    }
+    
+    /**
+     * Returns the .<p>
+     *
+     * @return the 
+     */
+    public String getPoolMaxPoolSize5() {
+
+        return m_poolMaxPoolSize5;
     }
     
     /**
@@ -393,6 +574,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
      *
      * @param arg the  to set
      */
+    public void setPoolUrl1(String arg) {
+
+        m_poolUrl1 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolStrategy1(String arg) {
+
+        m_poolStrategy1 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolMaxPoolSize1(String arg) {
+
+        m_poolMaxPoolSize1 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
     public void setActiveConnections1(String arg) {
 
         m_activeConnections1 = arg;
@@ -426,6 +637,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     public void setPoolName2(String arg) {
 
         m_poolName2 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolUrl2(String arg) {
+
+        m_poolUrl2 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolStrategy2(String arg) {
+
+        m_poolStrategy2 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolMaxPoolSize2(String arg) {
+
+        m_poolMaxPoolSize2 = arg;
     }
     
     /**
@@ -473,6 +714,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
      *
      * @param arg the  to set
      */
+    public void setPoolUrl3(String arg) {
+
+        m_poolUrl3 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolStrategy3(String arg) {
+
+        m_poolStrategy3 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolMaxPoolSize3(String arg) {
+
+        m_poolMaxPoolSize3 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
     public void setActiveConnections3(String arg) {
 
         m_activeConnections3 = arg;
@@ -513,6 +784,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
      *
      * @param arg the  to set
      */
+    public void setPoolUrl4(String arg) {
+
+        m_poolUrl4 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolStrategy4(String arg) {
+
+        m_poolStrategy4 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolMaxPoolSize4(String arg) {
+
+        m_poolMaxPoolSize4 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
     public void setActiveConnections4(String arg) {
 
         m_activeConnections4 = arg;
@@ -546,6 +847,36 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
     public void setPoolName5(String arg) {
 
         m_poolName5 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolUrl5(String arg) {
+
+        m_poolUrl5 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolStrategy5(String arg) {
+
+        m_poolStrategy5 = arg;
+    }
+    
+    /**
+     * Sets the .<p>
+     *
+     * @param arg the  to set
+     */
+    public void setPoolMaxPoolSize5(String arg) {
+
+        m_poolMaxPoolSize5 = arg;
     }
     
     /**
@@ -632,43 +963,43 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
 	            		if(poolNumber==1 && m_adminSettings.getDisplayPool1()){
 	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
 			                result.append(createWidgetTableStart());
-			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+5));
 			                result.append(createWidgetTableEnd());
 			                result.append(dialogBlockEnd());
 			                    
-			                lineNumber = lineNumber + 3;
+			                lineNumber = lineNumber + 6;
 	            		}else if(poolNumber==2 && m_adminSettings.getDisplayPool2()){
 	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
 			                result.append(createWidgetTableStart());
-			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+5));
 			                result.append(createWidgetTableEnd());
 			                result.append(dialogBlockEnd());
 			                    
-			                lineNumber = lineNumber + 3;
+			                lineNumber = lineNumber + 6;
 	            		}else if(poolNumber==3 && m_adminSettings.getDisplayPool3()){
 	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
 			                result.append(createWidgetTableStart());
-			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+5));
 			                result.append(createWidgetTableEnd());
 			                result.append(dialogBlockEnd());
 			                    
-			                lineNumber = lineNumber + 2;
+			                lineNumber = lineNumber + 6;
 	            		}else if(poolNumber==4 && m_adminSettings.getDisplayPool4()){
 	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
 			                result.append(createWidgetTableStart());
-			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+5));
 			                result.append(createWidgetTableEnd());
 			                result.append(dialogBlockEnd());
 			                    
-			                lineNumber = lineNumber + 3;
+			                lineNumber = lineNumber + 6;
 	            		}else if(poolNumber==5 && m_adminSettings.getDisplayPool5()){
 	            			result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_DBPOOLS_ADMIN_TOOL_BLOCK_)+poolName));
 			                result.append(createWidgetTableStart());
-			                result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
+			                result.append(createDialogRowsHtml(lineNumber, lineNumber+5));
 			                result.append(createWidgetTableEnd());
 			                result.append(dialogBlockEnd());
 			                    
-			                lineNumber = lineNumber + 3;
+			                lineNumber = lineNumber + 6;
 	            		}
 	            	}
 	                
@@ -817,6 +1148,10 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
                   	  	String poolStrategyProperty = getStrategy(poolName);
                   	  	String maxActivesConfiguratedString = getMaxActive(poolName);
                   	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+			        	
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolUrl1", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolStrategy1", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolMaxPoolSize1", PAGES[0], new CmsDisplayWidget()));
                   	  	
                   	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections1", PAGES[0], new CmsDisplayWidget()));
                   	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections1", PAGES[0], new CmsDisplayWidget()));
@@ -833,6 +1168,10 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
                   	  	String poolStrategyProperty = getStrategy(poolName);
                   	  	String maxActivesConfiguratedString = getMaxActive(poolName);
                   	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+			        	
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolUrl2", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolStrategy2", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolMaxPoolSize2", PAGES[0], new CmsDisplayWidget()));
                   	  	
                   	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections2", PAGES[0], new CmsDisplayWidget()));
                   	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections2", PAGES[0], new CmsDisplayWidget()));
@@ -849,6 +1188,10 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
                   	  	String poolStrategyProperty = getStrategy(poolName);
                   	  	String maxActivesConfiguratedString = getMaxActive(poolName);
                   	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+			        	
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolUrl3", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolStrategy3", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolMaxPoolSize3", PAGES[0], new CmsDisplayWidget()));
                   	  	
                   	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections3", PAGES[0], new CmsDisplayWidget()));
                   	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections3", PAGES[0], new CmsDisplayWidget()));
@@ -866,6 +1209,10 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
                   	  	String maxActivesConfiguratedString = getMaxActive(poolName);
                   	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
                   	  	
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolUrl4", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolStrategy4", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolMaxPoolSize4", PAGES[0], new CmsDisplayWidget()));
+			        	
                   	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections4", PAGES[0], new CmsDisplayWidget()));
                   	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections4", PAGES[0], new CmsDisplayWidget()));
                   	  	addWidget(new CmsWidgetDialogParameter(this, "currentUsage4", PAGES[0], new CmsDisplayWidget()));
@@ -881,6 +1228,10 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
                   	  	String poolStrategyProperty = getStrategy(poolName);
                   	  	String maxActivesConfiguratedString = getMaxActive(poolName);
                   	  	float pourcentage = (activeConnections * 100f)/(1f* (new Integer(maxActivesConfiguratedString)));*/
+			        	
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolUrl5", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolStrategy5", PAGES[0], new CmsDisplayWidget()));
+			        	addWidget(new CmsWidgetDialogParameter(this, "poolMaxPoolSize5", PAGES[0], new CmsDisplayWidget()));
                   	  	
                   	  	addWidget(new CmsWidgetDialogParameter(this, "activeConnections5", PAGES[0], new CmsDisplayWidget()));
                   	  	addWidget(new CmsWidgetDialogParameter(this, "idleConnections5", PAGES[0], new CmsDisplayWidget()));
@@ -977,6 +1328,7 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         	String poolName = (String)poolIterator.next();
         	if(poolName != null){
         		if(poolNumber<=5){
+        			//graphs
         			if(poolNumber==1 && display1){
         				result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[0].addPoint([time, $system.dbpools."+poolName+".activeConnections], true, true, true);\n");
         	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[1].addPoint([time, $system.dbpools."+poolName+".idleConnections], true, true, true);\n");
@@ -998,6 +1350,47 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[1].addPoint([time, $system.dbpools."+poolName+".idleConnections], true, true, true);\n");
         	        	result.append("      /*if(window.chart"+poolName+")*/ window.chart"+poolName+".series[2].addPoint([time, $system.dbpools."+poolName+".pourcentage], true, true, true);\n");
 			        }
+        			//valeurs
+        	        if(poolNumber==1 && display1){
+        	        	result.append("      var $activeConnections1Tag = $('[id^=\"activeConnections1\"]'); \n");
+        	        	result.append("      var $idleConnections1Tag = $('[id^=\"idleConnections1\"]'); \n");
+        	        	result.append("      var $currentUsage1Tag = $('[id^=\"currentUsage1\"]'); \n");
+        	        	result.append("      $activeConnections1Tag.val($system.dbpools."+poolName+".activeConnections);$activeConnections1Tag.prev().html($system.dbpools."+poolName+".activeConnections); \n");
+        	        	result.append("      $idleConnections1Tag.val($system.dbpools."+poolName+".idleConnections);$idleConnections1Tag.prev().html($system.dbpools."+poolName+".idleConnections); \n");
+        	        	result.append("      $currentUsage1Tag.val($system.dbpools."+poolName+".pourcentage + '%');$currentUsage1Tag.prev().html($system.dbpools."+poolName+".pourcentage + '%'); \n");
+        	        }
+        	        if(poolNumber==2 && display2){
+        	        	result.append("      var $activeConnections2Tag = $('[id^=\"activeConnections2\"]'); \n");
+        	        	result.append("      var $idleConnections2Tag = $('[id^=\"idleConnections2\"]'); \n");
+        	        	result.append("      var $currentUsage2Tag = $('[id^=\"currentUsage2\"]'); \n");
+        	        	result.append("      $activeConnections2Tag.val($system.dbpools."+poolName+".activeConnections);$activeConnections2Tag.prev().html($system.dbpools."+poolName+".activeConnections); \n");
+        	        	result.append("      $idleConnections2Tag.val($system.dbpools."+poolName+".idleConnections);$idleConnections2Tag.prev().html($system.dbpools."+poolName+".idleConnections); \n");
+        	        	result.append("      $currentUsage2Tag.val($system.dbpools."+poolName+".pourcentage + '%');$currentUsage2Tag.prev().html($system.dbpools."+poolName+".pourcentage + '%'); \n");
+        	        }
+        	        if(poolNumber==3 && display3){
+        	        	result.append("      var $activeConnections3Tag = $('[id^=\"activeConnections3\"]'); \n");
+        	        	result.append("      var $idleConnections3Tag = $('[id^=\"idleConnections3\"]'); \n");
+        	        	result.append("      var $currentUsage3Tag = $('[id^=\"currentUsage3\"]'); \n");
+        	        	result.append("      $activeConnections3Tag.val($system.dbpools."+poolName+".activeConnections);$activeConnections3Tag.prev().html($system.dbpools."+poolName+".activeConnections); \n");
+        	        	result.append("      $idleConnections3Tag.val($system.dbpools."+poolName+".idleConnections);$idleConnections3Tag.prev().html($system.dbpools."+poolName+".idleConnections); \n");
+        	        	result.append("      $currentUsage3Tag.val($system.dbpools."+poolName+".pourcentage + '%');$currentUsage3Tag.prev().html($system.dbpools."+poolName+".pourcentage + '%'); \n");
+        	        }
+        	        if(poolNumber==4 && display4){
+        	        	result.append("      var $activeConnections4Tag = $('[id^=\"activeConnections4\"]'); \n");
+        	        	result.append("      var $idleConnections4Tag = $('[id^=\"idleConnections4\"]'); \n");
+        	        	result.append("      var $currentUsage4Tag = $('[id^=\"currentUsage4\"]'); \n");
+        	        	result.append("      $activeConnections4Tag.val($system.dbpools."+poolName+".activeConnections);$activeConnections4Tag.prev().html($system.dbpools."+poolName+".activeConnections); \n");
+        	        	result.append("      $idleConnections4Tag.val($system.dbpools."+poolName+".idleConnections);$idleConnections4Tag.prev().html($system.dbpools."+poolName+".idleConnections); \n");
+        	        	result.append("      $currentUsage4Tag.val($system.dbpools."+poolName+".pourcentage + '%');$currentUsage4Tag.prev().html($system.dbpools."+poolName+".pourcentage + '%'); \n");
+        	        }
+        	        if(poolNumber==5 && display5){
+        	        	result.append("      var $activeConnections5Tag = $('[id^=\"activeConnections5\"]'); \n");
+        	        	result.append("      var $idleConnections5Tag = $('[id^=\"idleConnections5\"]'); \n");
+        	        	result.append("      var $currentUsage5Tag = $('[id^=\"currentUsage5\"]'); \n");
+        	        	result.append("      $activeConnections5Tag.val($system.dbpools."+poolName+".activeConnections);$activeConnections5Tag.prev().html($system.dbpools."+poolName+".activeConnections); \n");
+        	        	result.append("      $idleConnections5Tag.val($system.dbpools."+poolName+".idleConnections);$idleConnections5Tag.prev().html($system.dbpools."+poolName+".idleConnections); \n");
+        	        	result.append("      $currentUsage5Tag.val($system.dbpools."+poolName+".pourcentage + '%');$currentUsage5Tag.prev().html($system.dbpools."+poolName+".pourcentage + '%'); \n");
+        	        }
         		}
         		poolNumber++;
         	}
@@ -1116,22 +1509,37 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
               	  		pourcentage = (activeConnections * 100f)/(1f* (Integer.valueOf(maxActivesConfiguratedString)));
               	  	}
 			        if(poolNumber==1){
+			        	setPoolUrl1(""+poolUrl);
+			        	setPoolStrategy1(""+poolStrategyProperty);
+			        	setPoolMaxPoolSize1(""+maxActivesConfiguratedString);
 			        	setActiveConnections1(""+activeConnections);
 			        	setIdleConnections1(""+idleConnections);
 			        	setCurrentUsage1(""+pourcentage+"%");
 			        }else if(poolNumber==2){
+			        	setPoolUrl2(""+poolUrl);
+			        	setPoolStrategy2(""+poolStrategyProperty);
+			        	setPoolMaxPoolSize2(""+maxActivesConfiguratedString);
 			        	setActiveConnections2(""+activeConnections);
 			        	setIdleConnections2(""+idleConnections);
 			        	setCurrentUsage2(""+pourcentage+"%");
 			        }else if(poolNumber==3){
+			        	setPoolUrl3(""+poolUrl);
+			        	setPoolStrategy3(""+poolStrategyProperty);
+			        	setPoolMaxPoolSize3(""+maxActivesConfiguratedString);
 			        	setActiveConnections3(""+activeConnections);
 			        	setIdleConnections3(""+idleConnections);
 			        	setCurrentUsage3(""+pourcentage+"%");
 			        }else if(poolNumber==4){
+			        	setPoolUrl4(""+poolUrl);
+			        	setPoolStrategy4(""+poolStrategyProperty);
+			        	setPoolMaxPoolSize4(""+maxActivesConfiguratedString);
 			        	setActiveConnections4(""+activeConnections);
 			        	setIdleConnections4(""+idleConnections);
 			        	setCurrentUsage4(""+pourcentage+"%");
 			        }else if(poolNumber==5){
+			        	setPoolUrl5(""+poolUrl);
+			        	setPoolStrategy5(""+poolStrategyProperty);
+			        	setPoolMaxPoolSize5(""+maxActivesConfiguratedString);
 			        	setActiveConnections5(""+activeConnections);
 			        	setIdleConnections5(""+idleConnections);
 			        	setCurrentUsage5(""+pourcentage+"%");
