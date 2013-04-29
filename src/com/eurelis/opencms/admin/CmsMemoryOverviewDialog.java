@@ -50,7 +50,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     public static final String KEY_PREFIX = "memory.stats";
 
     /** Defines which pages are valid for this dialog. */
-    public static final String[] PAGES = {"page1"};
+    public static final String[] PAGES = {"page0"};
 
     /** System infos . */
     private String m_memPermMax;
@@ -409,14 +409,35 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         	//settings
         	result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_SETTINGS)));
             result.append(createWidgetTableStart());
-        	result.append(createDialogRowsHtml(0, 4));
+        	result.append(createDialogRowsHtml(0, 0));
+        	
+        	int lineNumber = 1;
+        	
+        	String listOfMemories = "";
+        	for(java.lang.management.MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans())  {
+                String name = item.getName();
+                listOfMemories = listOfMemories + name + ",";
+                if(name.toLowerCase().contains("perm")){
+                	result.append(createDialogRowsHtml(lineNumber, lineNumber));
+                	lineNumber = lineNumber + 1;
+                }else if(name.toLowerCase().contains("old")){
+                	result.append(createDialogRowsHtml(lineNumber, lineNumber));
+                	lineNumber = lineNumber + 1;
+                }else if(name.toLowerCase().contains("eden")){
+                	result.append(createDialogRowsHtml(lineNumber, lineNumber));
+                	lineNumber = lineNumber + 1;
+                }else if(name.toLowerCase().contains("survivor")){
+                	result.append(createDialogRowsHtml(lineNumber, lineNumber));
+                	lineNumber = lineNumber + 1;
+                }
+        	}
+        	LOG.debug("createDialogHtml() :: listOfMemories = "+listOfMemories);
+        	
         	result.append(createWidgetTableEnd());
             result.append(dialogBlockEnd());
         	
             // create the widgets for the first dialog page
-            int lineNumber = 5;
             for(java.lang.management.MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans())  {
-                java.lang.management.MemoryUsage mu = item.getUsage();
                 String name = item.getName();
                 
                 if(name.toLowerCase().contains("perm")){
@@ -447,7 +468,9 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
                         lineNumber = lineNumber + 3;
                 	}
                 }else if(name.toLowerCase().contains("survivor")){
+                	LOG.debug("createDialogHtml() :: m_adminSettings.getDisplayMemSurvivor() = "+m_adminSettings.getDisplayMemSurvivor());
                 	if(m_adminSettings.getDisplayMemSurvivor()){
+                	//if(CmsAdminSettings.getSettingsDisplayMemSurvivorValue(getCms(), getSession())){
                 		result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_BLOCK_)+name.toUpperCase()));
                         result.append(createWidgetTableStart());
                         result.append(createDialogRowsHtml(lineNumber, lineNumber+2));
@@ -519,6 +542,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         return "";
     }
 
+    
     /**
      * Creates the list of widgets for this dialog.<p>
      */
@@ -531,10 +555,19 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         
         // widgets to display
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsDisplayWidget()));
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemPerm", PAGES[0], new CmsCheckboxWidget()));
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemOld", PAGES[0], new CmsCheckboxWidget()));
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemEden", PAGES[0], new CmsCheckboxWidget()));
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemSurvivor", PAGES[0], new CmsCheckboxWidget()));
+        
+        for(java.lang.management.MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans())  {
+            String name = item.getName();
+            if(name.toLowerCase().contains("perm")){
+            	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemPerm", PAGES[0], new CmsCheckboxWidget()));
+            }else if(name.toLowerCase().contains("old")){
+            	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemOld", PAGES[0], new CmsCheckboxWidget()));
+            }else if(name.toLowerCase().contains("eden")){
+            	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemEden", PAGES[0], new CmsCheckboxWidget()));
+            }else if(name.toLowerCase().contains("survivor")){
+            	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "displayMemSurvivor", PAGES[0], new CmsCheckboxWidget()));
+            }
+    	}
 
         // widgets to display
         int lineNumber = 5;
@@ -568,6 +601,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
             	}
             }else if(name.toLowerCase().contains("survivor")){
             	if(m_adminSettings.getDisplayMemSurvivor()){
+            	//if(CmsAdminSettings.getSettingsDisplayMemSurvivorValue(getCms(), getSession())){
             		addWidget(new CmsWidgetDialogParameter(this, "memSurvivorMax", PAGES[0], new CmsDisplayWidget()));
             		addWidget(new CmsWidgetDialogParameter(this, "memSurvivorTotal", PAGES[0], new CmsDisplayWidget()));
             		addWidget(new CmsWidgetDialogParameter(this, "memSurvivorUsed", PAGES[0], new CmsDisplayWidget()));
@@ -575,7 +609,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
 	                countItem++;
             	}
             }else{
-            	LOG.debug("MemoryPoolMXBean name = " + name.toLowerCase());
+            	//LOG.debug("MemoryPoolMXBean name = " + name.toLowerCase());
             }
             
             /*if(idname.equals("heap")){
@@ -636,7 +670,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     	    	setMemSurvivorTotal(""+mu.getCommitted());
     	    	setMemSurvivorUsed(""+mu.getUsed());
             }else{
-            	LOG.debug("MemoryPoolMXBean name = " + name.toLowerCase());
+            	//LOG.debug("MemoryPoolMXBean name = " + name.toLowerCase());
             }
 	    }
     	
@@ -655,7 +689,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
             m_adminSettings = (CmsAdminSettings)o;
         }
     	
-    	
+        setParamCloseLink(getJsp().link("/system/workplace/views/admin/admin-main.jsp?path=/eurelis_system_information/memory.jsp"));
     }
 
     /**
@@ -804,7 +838,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     protected StringBuffer getHighChartOld(){
 	
 		StringBuffer result = new StringBuffer(1024);
-		result.append("  window.chartOld = new Highcharts.StockChart({");
+		result.append("  window.chartOld = new Highcharts.StockChart({\n");
 		result.append("    chart : {");
 		result.append("      renderTo : 'old',");
 		result.append("      events : {");
@@ -845,7 +879,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
 		result.append("      {type : 'area', name : 'Total', data: (function(){var data=[],time=(new Date()).getTime(),i;for(i=-999;i<=0;i++){data.push([time+i*1000,0]);};return data;})()},");
 		result.append("      {type : 'area', name : 'Used', data: (function(){var data=[],time=(new Date()).getTime(),i;for(i=-999;i<=0;i++){data.push([time+i*1000,0]);};return data;})()}");
 		result.append("    ]       "); 
-		result.append("  });");
+		result.append("  });\n");
 		return result;
 	
     }
@@ -853,7 +887,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     protected StringBuffer getHighChartEden(){
     	
     	StringBuffer result = new StringBuffer(1024);
-    	result.append("  window.chartEden = new Highcharts.StockChart({");
+    	result.append("  window.chartEden = new Highcharts.StockChart({\n");
     	result.append("    chart : {");
     	result.append("      renderTo : 'eden',");
     	result.append("      events : {");
@@ -894,7 +928,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     	result.append("      {type : 'area', name : 'Total', data: (function(){var data=[],time=(new Date()).getTime(),i;for(i=-999;i<=0;i++){data.push([time+i*1000,0]);};return data;})()},");
     	result.append("      {type : 'area', name : 'Used', data: (function(){var data=[],time=(new Date()).getTime(),i;for(i=-999;i<=0;i++){data.push([time+i*1000,0]);};return data;})()}");
     	result.append("    ]  ");
-    	result.append("  });");
+    	result.append("  });\n");
     	return result;
     	
 	}
@@ -903,7 +937,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     protected StringBuffer getHighChartSurvivor(){
     	
     	StringBuffer result = new StringBuffer(1024);
-    	result.append("  window.chartSurvivor = new Highcharts.StockChart({");
+    	result.append("  window.chartSurvivor = new Highcharts.StockChart({\n");
     	result.append("    chart : {");
     	result.append("      renderTo : 'survivor',");
     	result.append("      events : {");
@@ -944,7 +978,7 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
     	result.append("      {type : 'line', name : 'Active connections', data: (function(){var data=[],time=(new Date()).getTime(),i;for(i=-999;i<=0;i++){data.push([time+i*1000,0]);};return data;})()},");
     	result.append("      {type : 'line', name : 'Idle connections', data: (function(){var data=[],time=(new Date()).getTime(),i;for(i=-999;i<=0;i++){data.push([time+i*1000,0]);};return data;})()}");
     	result.append("    ]  ");
-    	result.append("  });");
+    	result.append("  });\n");
     	return result;
     	
     }

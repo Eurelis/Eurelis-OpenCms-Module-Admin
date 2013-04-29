@@ -1285,6 +1285,8 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
             // reuse html import handler object stored in session
             m_adminSettings = (CmsAdminSettings)o;
         }
+        
+        setParamCloseLink(getJsp().link("/system/workplace/views/admin/admin-main.jsp?path=/eurelis_system_information/database_pools.jsp"));
     	
     }
 
@@ -1440,9 +1442,19 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         	result.append("        return s;");
         	result.append("      },");
         	result.append("    },");
-        	result.append("    rangeSelector: { enabled: false },");
+        	result.append("    rangeSelector: { \n");
+	        result.append("      buttons: [\n");
+	        result.append("        { count: 1, type: 'minute', text: '1m' },\n");
+	        result.append("        { count: 5, type: 'minute', text: '5m' }, \n");
+	        result.append("        { count: 30, type: 'minute', text: '½h' }, \n");
+	        result.append("        { count: 1, type: 'hour', text: '1h' },\n"); 
+	        result.append("        { count: 2, type: 'hour', text: '2h' }\n");
+	        result.append("      ],\n");
+	        result.append("      inputEnabled: false,\n");
+	        result.append("      selected: 0\n");
+	        result.append("     }, \n");
         	result.append("    exporting: { enabled: false },");
-        	result.append("    navigator: { enabled: false },");
+        	//result.append("    navigator: { enabled: false },");
         	result.append("    title : {");
         	result.append("      text : '"+poolName+"'");
         	result.append("    },");

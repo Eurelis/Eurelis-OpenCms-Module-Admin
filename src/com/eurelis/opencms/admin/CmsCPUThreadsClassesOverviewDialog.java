@@ -19,15 +19,18 @@
  */
 package com.eurelis.opencms.admin;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
@@ -55,7 +58,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     public static final String KEY_PREFIX = "cputhreadsclasses.stats";
 
     /** Defines which pages are valid for this dialog. */
-    public static final String[] PAGES = {"page1"};
+    public static final String[] PAGES = {"page0"};
 
     /** Process CPU time */
     public static final String PARAM_PROCESS_CPU_TIME = "process-cpu-time";
@@ -380,6 +383,9 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
 	            result.append(dialogBlockEnd());
 	            lineNumber = lineNumber + 2;
         	}
+        	if(m_adminSettings.getDisplayHeap()){
+        		
+        	}
         	if(m_adminSettings.getDisplayClasses()){
 	            result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_CPU_ADMIN_TOOL_BLOCK_2)));
 	            result.append(createWidgetTableStart());
@@ -521,6 +527,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     	
     	setCpuCount(""+osBean.getAvailableProcessors());
     	double usage = com.eurelis.opencms.admin.CmsCPUThreadsClassesOverviewDialog.getCPUUsage(getSession());
+    	usage = Math.round(usage * 100) / 100;
     	setCpuUsage(""+100*usage+"%");
     	
     	setLoadedClassesCount(""+classesBean.getLoadedClassCount());
@@ -546,6 +553,8 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
             // reuse html import handler object stored in session
             m_adminSettings = (CmsAdminSettings)o;
         }
+        
+        setParamCloseLink(getJsp().link("/system/workplace/views/admin/admin-main.jsp?path=/eurelis_system_information/cpu_and_threads.jsp"));
     	
     }
 
@@ -568,7 +577,8 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     protected void initWorkplaceMembers(CmsJspActionElement jsp) {
 
         super.initWorkplaceMembers(jsp);
-        setOnlineHelpUriCustom("/eurelis_system_information/");
+        setOnlineHelpUriCustom("/eurelis_system_information/cpu_and_threads");
+        
     }
     
     
@@ -605,8 +615,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         } 
         //valeurs
         if(displayCPU){
-        	result.append("      var $cpuUsageTag = $('[id^=\"cpuUsage\"]'); var cpuUsageValue = $system.cpu.usage +'%'; \n");
-        	result.append("      //console.log('getUpdateInfoFunction... #cpuUsage.0 : '+cpuUsageValue+' '+$cpuUsageTag.length); \n");
+        	result.append("      var $cpuUsageTag = $('[id^=\"cpuUsage\"]'); var cpuUsageValue = (Math.round($system.cpu.usage * 100) / 100) +'%'; \n");
         	result.append("      $cpuUsageTag.val(cpuUsageValue);$cpuUsageTag.prev().html(cpuUsageValue); \n");
         }
         if(displayClasses){

@@ -131,6 +131,7 @@ public class CmsAdminSettings {
 			m_displayMemPerm = getSettingsDisplayMemPermValue(adminObject, null);
 			m_displayMemOld = getSettingsDisplayMemOldValue(adminObject, null);
 			m_displayMemEden  = getSettingsDisplayMemEdenValue(adminObject, null);
+			m_displayMemSurvivor  = getSettingsDisplayMemSurvivorValue(adminObject, null);
 			m_displayPool1 = getSettingsDisplayPool1Value(adminObject, null);
 			m_displayPool2 = getSettingsDisplayPool2Value(adminObject, null);
 			m_displayPool3 = getSettingsDisplayPool3Value(adminObject, null);
@@ -175,6 +176,7 @@ public class CmsAdminSettings {
 			m_displayMemPerm = getSettingsDisplayMemPermValue(adminObject, session);
 			m_displayMemOld = getSettingsDisplayMemOldValue(adminObject, session);
 			m_displayMemEden  = getSettingsDisplayMemEdenValue(adminObject, session);
+			m_displayMemSurvivor  = getSettingsDisplayMemSurvivorValue(adminObject, session);
 			m_displayPool1 = getSettingsDisplayPool1Value(adminObject, session);
 			m_displayPool2 = getSettingsDisplayPool2Value(adminObject, session);
 			m_displayPool3 = getSettingsDisplayPool3Value(adminObject, session);
