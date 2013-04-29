@@ -60,6 +60,10 @@
     }
   }
   
+  /* Calculating usage */
+  double usage = com.eurelis.opencms.admin.CmsCPUThreadsClassesOverviewDialog.getCPUUsage(session);
+  
+  
   org.opencms.db.CmsSqlManager sqlM = org.opencms.main.OpenCms.getSqlManager() ;
 %>
 { 
@@ -67,7 +71,7 @@
     "os"  : "<%=osBean.getName()%>",
     "cpu" : {
       "number" : <%=osBean.getAvailableProcessors()%>,
-      "usage"  : <%=100*osBean.getSystemLoadAverage()%>
+      "usage"  : <%=usage%>  
     },
     "jvm" : {
       "uptime" : <%=runtimeBean.getUptime()%>,

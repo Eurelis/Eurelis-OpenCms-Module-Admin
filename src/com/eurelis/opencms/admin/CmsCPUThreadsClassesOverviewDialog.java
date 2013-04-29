@@ -20,12 +20,14 @@
 package com.eurelis.opencms.admin;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
@@ -37,6 +39,8 @@ import org.opencms.widgets.CmsCheckboxWidget;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
+
+import com.sun.management.OperatingSystemMXBean;
 
 /**
  * The system infos overview dialog.<p>
@@ -52,7 +56,12 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
 
     /** Defines which pages are valid for this dialog. */
     public static final String[] PAGES = {"page1"};
+
+    /** Process CPU time */
+    public static final String PARAM_PROCESS_CPU_TIME = "process-cpu-time";
     
+    /** Process CPU time */
+    public static final String PARAM_TIMESTAMP = "timestamp";
     
     
     /** System infos . */
@@ -828,6 +837,33 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         result.append("    ]  ");      
         result.append("  });");
     	return result;
+    	
+    }
+    
+    
+    
+    public static double getCPUUsage(HttpSession session){
+    	
+    	OperatingSystemMXBean operatingSystemMXBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+        int availableProcessors = operatingSystemMXBean.getAvailableProcessors();
+        Long prevUpTime = (Long)session.getAttribute(PARAM_TIMESTAMP);
+        Long prevProcessCpuTime = (Long)session.getAttribute(PARAM_PROCESS_CPU_TIME);
+        double cpuUsage;
+        operatingSystemMXBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        long upTime = runtimeMXBean.getUptime();
+        long processCpuTime = operatingSystemMXBean.getProcessCpuTime();
+        if(prevProcessCpuTime!=null || prevUpTime!=null){
+        	long elapsedCpu = processCpuTime - prevProcessCpuTime.longValue();
+            long elapsedTime = upTime - prevUpTime.longValue();
+
+            cpuUsage = Math.min(99F, elapsedCpu / (elapsedTime * 10000F * availableProcessors));
+        }else{
+        	cpuUsage = 0;
+        }
+        session.setAttribute(PARAM_PROCESS_CPU_TIME, processCpuTime);
+    	session.setAttribute(PARAM_TIMESTAMP, upTime);
+    	return cpuUsage;
     	
     }
     
