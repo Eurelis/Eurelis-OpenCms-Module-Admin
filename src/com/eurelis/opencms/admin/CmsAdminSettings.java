@@ -80,6 +80,18 @@ public class CmsAdminSettings {
     /** Display Pool5 graph. */
     private boolean m_displayPool5;
     
+    
+    /** Search file folder */
+    private String m_filesFolder;
+    /** Search file min length */
+    private int m_filesMinLength;
+    /** Search file max length */
+    private int m_filesMaxLength;
+    /** Search file created before */
+    private long m_filesCreatedBefore;
+    /** Search file created after */
+    private long m_filesCreatedAfter;
+    
 
     public static final String SETTINGS_FILE_PATH = "/system/shared/eurelis-admin.txt";
     
@@ -97,6 +109,11 @@ public class CmsAdminSettings {
     public static final String KEY_DISPLAY_POOL3 = "displaypool3";
     public static final String KEY_DISPLAY_POOL4 = "displaypool4";
     public static final String KEY_DISPLAY_POOL5 = "displaypool5";
+    public static final String KEY_FILES_FOLDER = "filesfolder";
+    public static final String KEY_FILES_MINLENGTH = "filesminlength";
+    public static final String KEY_FILES_MAXLENGTH = "filesmaxlength";
+    public static final String KEY_FILES_CREATEDBEFORE = "filescreatedbefore";
+    public static final String KEY_FILES_CREATEDAFTER = "filescreatedafter";
     
     public static final int DEFAULT_VALUE_INTERVAL = 5000;
     public static final boolean DEFAULT_VALUE_DISPLAY_CPU = true;
@@ -112,6 +129,11 @@ public class CmsAdminSettings {
     public static final boolean DEFAULT_VALUE_DISPLAY_POOL3 = true;
     public static final boolean DEFAULT_VALUE_DISPLAY_POOL4 = true;
     public static final boolean DEFAULT_VALUE_DISPLAY_POOL5 = true;
+    public static final String DEFAULT_VALUE_FILES_FOLDER = "/";
+    public static final int DEFAULT_VALUE_FILES_MINLENGTH = 0;
+    public static final int DEFAULT_VALUE_FILES_MAXLENGTH = -1;
+    public static final long DEFAULT_VALUE_FILES_CREATEDBEFORE = Long.MIN_VALUE;
+    public static final long DEFAULT_VALUE_FILES_CREATEDAFTER = Long.MAX_VALUE;
     
     /**
      * Default constructor initializing values.<p>
@@ -137,6 +159,11 @@ public class CmsAdminSettings {
 			m_displayPool3 = getSettingsDisplayPool3Value(adminObject, null);
 			m_displayPool4 = getSettingsDisplayPool4Value(adminObject, null);
 			m_displayPool5 = getSettingsDisplayPool5Value(adminObject, null);
+			m_filesFolder = getSettingsFilesFolderValue(adminObject, null);
+			m_filesMinLength = getSettingsFilesMinLengthValue(adminObject, null);
+			m_filesMaxLength = getSettingsFilesMaxLengthValue(adminObject, null);
+			m_filesCreatedBefore = getSettingsFilesCreatedBeforeValue(adminObject, null);
+			m_filesCreatedAfter = getSettingsFilesCreatedAfterValue(adminObject, null);
 		} catch (CmsException e) {
 			e.printStackTrace();
 			LOG.error(e);
@@ -154,6 +181,11 @@ public class CmsAdminSettings {
 			m_displayPool3 = DEFAULT_VALUE_DISPLAY_POOL3;
 			m_displayPool4 = DEFAULT_VALUE_DISPLAY_POOL4;
 			m_displayPool5 = DEFAULT_VALUE_DISPLAY_POOL5;
+			m_filesFolder = DEFAULT_VALUE_FILES_FOLDER;
+			m_filesMinLength = DEFAULT_VALUE_FILES_MINLENGTH;
+			m_filesMaxLength = DEFAULT_VALUE_FILES_MAXLENGTH;
+			m_filesCreatedBefore = DEFAULT_VALUE_FILES_CREATEDBEFORE;
+			m_filesCreatedAfter = DEFAULT_VALUE_FILES_CREATEDAFTER;
 		}
         
     }
@@ -182,6 +214,11 @@ public class CmsAdminSettings {
 			m_displayPool3 = getSettingsDisplayPool3Value(adminObject, session);
 			m_displayPool4 = getSettingsDisplayPool4Value(adminObject, session);
 			m_displayPool5 = getSettingsDisplayPool5Value(adminObject, session);
+			m_filesFolder = getSettingsFilesFolderValue(adminObject, session);
+			m_filesMinLength = getSettingsFilesMinLengthValue(adminObject, session);
+			m_filesMaxLength = getSettingsFilesMaxLengthValue(adminObject, session);
+			m_filesCreatedBefore = getSettingsFilesCreatedBeforeValue(adminObject, session);
+			m_filesCreatedAfter = getSettingsFilesCreatedAfterValue(adminObject, session);
 		} catch (CmsException e) {
 			e.printStackTrace();
 			LOG.error(e);
@@ -199,6 +236,11 @@ public class CmsAdminSettings {
 			m_displayPool3 = DEFAULT_VALUE_DISPLAY_POOL3;
 			m_displayPool4 = DEFAULT_VALUE_DISPLAY_POOL4;
 			m_displayPool5 = DEFAULT_VALUE_DISPLAY_POOL5;
+			m_filesFolder = DEFAULT_VALUE_FILES_FOLDER;
+			m_filesMinLength = DEFAULT_VALUE_FILES_MINLENGTH;
+			m_filesMaxLength = DEFAULT_VALUE_FILES_MAXLENGTH;
+			m_filesCreatedBefore = DEFAULT_VALUE_FILES_CREATEDBEFORE;
+			m_filesCreatedAfter = DEFAULT_VALUE_FILES_CREATEDAFTER;
 		}
         
     }
@@ -344,6 +386,42 @@ public class CmsAdminSettings {
         return m_displayPool5;
     }
     
+    public String getFilesFolder() {
+
+        if(CmsStringUtil.isEmptyOrWhitespaceOnly(m_filesFolder)){
+        	m_filesFolder = "/";
+        	LOG.warn("m_filesFolder null, empty, or not exists => /");
+        }
+        return m_filesFolder;
+    }
+    
+    public int getFilesMinLength() {
+
+        if(m_filesMinLength<0){
+        	m_filesMinLength = 0;
+        	LOG.warn("m_filesMinLength < 0 => 0");
+        }
+        return m_filesMinLength;
+    }
+    
+    public int getFilesMaxLength() {
+
+        if(m_filesMaxLength<=0){
+        	m_filesMaxLength = -1;
+        }
+        return m_filesMaxLength;
+    }
+    
+    public long getFilesCreatedBefore() {
+
+        return m_filesCreatedBefore;
+    }
+    
+    public long getFilesCreatedAfter() {
+
+        return m_filesCreatedAfter;
+    }
+    
     /**
      * Sets the interval between graphs refresh.<p>
      *
@@ -484,6 +562,47 @@ public class CmsAdminSettings {
     	m_displayPool5 = isDisplayed;
     }
     
+    public void setFilesFolder(String value) {
+
+        if (value == null) {
+            m_filesFolder = "/";
+            return;
+        }else{
+        	m_filesFolder = value;
+        }
+    }
+    
+    public void setFilesMinLength(int value) {
+
+        if (value <= 0) {
+        	m_filesMinLength = 0;
+            return;
+        }else{
+        	m_filesMinLength = value;
+        }
+    }
+    
+    public void setFilesMaxLength(int value) {
+
+        if (value <= 0) {
+        	m_filesMaxLength = -1;
+            return;
+        }else{
+        	m_filesMaxLength = value;
+        }
+    }
+    
+    public void setFilesCreatedBefore(long value) {
+
+    	m_filesCreatedBefore = value;
+    }
+    
+    
+    public void setFilesCreatedAfter(long value) {
+
+    	m_filesCreatedAfter = value;
+    }
+    
     
     /**
      * Read the file of settings (create it with default value if doesn't exists).
@@ -542,17 +661,10 @@ public class CmsAdminSettings {
     	int defaultValue = DEFAULT_VALUE_INTERVAL;
         if(session!=null && CmsStringUtil.isNotEmptyOrWhitespaceOnly((String)session.getAttribute(KEY_INTERVAL))){
         	defaultValue = Integer.valueOf((String)session.getAttribute(KEY_INTERVAL)).intValue();
-            LOG.debug("getSettingsIntervalValue... Get " + KEY_INTERVAL + " as " + defaultValue + " in session OK");
         }else{
-        	if(session==null){
-                LOG.debug("getSettingsIntervalValue... Get " + KEY_INTERVAL + " : session null");
-            }
         	String fileValue = readValueInSettingsFile(obj, KEY_INTERVAL);
             if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(fileValue)){
             	defaultValue = CmsStringUtil.getIntValueRounded(fileValue, defaultValue, Messages.GUI_ADMIN_SETTINGS_INTERVALS_ERROR_INTEGER);
-            	LOG.debug("getSettingsIntervalValue... Get " + KEY_INTERVAL + " as " + defaultValue + " in file OK");
-            }else{
-            	LOG.debug("getSettingsIntervalValue... Get " + KEY_INTERVAL + " : not found in session, not found in file, get " + DEFAULT_VALUE_INTERVAL + " (default value) OK");
             }
         }
     	return defaultValue;
@@ -740,17 +852,10 @@ public class CmsAdminSettings {
     	boolean defaultValue = DEFAULT_VALUE_DISPLAY_POOL1;
         if(session!=null && CmsStringUtil.isNotEmptyOrWhitespaceOnly((String)session.getAttribute(KEY_DISPLAY_POOL1))){
         	defaultValue = Boolean.valueOf((String)session.getAttribute(KEY_DISPLAY_POOL1)).booleanValue();
-        	LOG.debug("getSettingsDisplayPool1Value... Get " + KEY_DISPLAY_POOL1 + " as " + defaultValue + " in session OK");
         }else{
-        	if(session==null){
-                LOG.debug("getSettingsDisplayPool1Value... Get " + KEY_DISPLAY_POOL1 + " : session null");
-            }
         	String fileValue = readValueInSettingsFile(obj, KEY_DISPLAY_POOL1);
             if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(fileValue)){
             	defaultValue = Boolean.valueOf(fileValue).booleanValue();
-            	LOG.debug("getSettingsDisplayPool1Value... Get " + KEY_DISPLAY_POOL1 + " as " + defaultValue + " in file OK");
-            }else{
-            	LOG.debug("getSettingsDisplayPool1Value... Get " + KEY_DISPLAY_POOL1 + " : not found in session, not found in file, get " + DEFAULT_VALUE_DISPLAY_POOL1 + " (default value) OK");
             }
         }
     	return defaultValue;
@@ -841,7 +946,86 @@ public class CmsAdminSettings {
         
     }
     
+    public static String getSettingsFilesFolderValue(CmsObject obj, HttpSession session){
+    	
+    	String defaultValue = DEFAULT_VALUE_FILES_FOLDER;
+        if(session!=null && CmsStringUtil.isNotEmptyOrWhitespaceOnly((String)session.getAttribute(KEY_FILES_FOLDER))){
+        	defaultValue = (String)session.getAttribute(KEY_FILES_FOLDER);
+        }else{
+        	String fileValue = readValueInSettingsFile(obj, KEY_FILES_FOLDER);
+            if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(fileValue)){
+            	defaultValue = fileValue;
+            }
+        }
+    	return defaultValue;
+        
+    }
     
+    public static int getSettingsFilesMinLengthValue(CmsObject obj, HttpSession session){
+    	
+    	int defaultValue = DEFAULT_VALUE_FILES_MINLENGTH;
+    	if(session!=null && (Integer)session.getAttribute(KEY_FILES_MINLENGTH)!=null){
+        	defaultValue = ((Integer)session.getAttribute(KEY_FILES_MINLENGTH)).intValue();
+        }else{
+        	String fileValue = readValueInSettingsFile(obj, KEY_FILES_MINLENGTH);
+            if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(fileValue)){
+            	defaultValue = Integer.parseInt(fileValue);
+            }
+        }
+    	return defaultValue;
+        
+    }
+    
+    /**
+     * NB : -1 = pas de filtre
+     * @param obj
+     * @param session
+     * @return
+     */
+    public static int getSettingsFilesMaxLengthValue(CmsObject obj, HttpSession session){
+    	
+    	int defaultValue = DEFAULT_VALUE_FILES_MAXLENGTH;
+    	if(session!=null && (Integer)session.getAttribute(KEY_FILES_MAXLENGTH)!=null){
+        	defaultValue = ((Integer)session.getAttribute(KEY_FILES_MAXLENGTH)).intValue();
+        }else{
+        	String fileValue = readValueInSettingsFile(obj, KEY_FILES_MAXLENGTH);
+            if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(fileValue)){
+            	defaultValue = Integer.parseInt(fileValue);
+            }
+        }
+    	return defaultValue;
+        
+    }
+    
+    public static long getSettingsFilesCreatedBeforeValue(CmsObject obj, HttpSession session){
+    	
+    	long defaultValue = DEFAULT_VALUE_FILES_CREATEDBEFORE;
+    	if(session!=null && (Long)session.getAttribute(KEY_FILES_CREATEDBEFORE)!=null){
+        	defaultValue = ((Long)session.getAttribute(KEY_FILES_CREATEDBEFORE)).longValue();
+        }else{
+        	String fileValue = readValueInSettingsFile(obj, KEY_FILES_CREATEDBEFORE);
+            if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(fileValue)){
+            	defaultValue = Long.parseLong(fileValue);
+            }
+        }
+    	return defaultValue;
+        
+    }
+    
+    public static long getSettingsFilesCreatedAfterValue(CmsObject obj, HttpSession session){
+    	
+    	long defaultValue = DEFAULT_VALUE_FILES_CREATEDAFTER;
+    	if(session!=null && (Long)session.getAttribute(KEY_FILES_CREATEDAFTER)!=null){
+        	defaultValue = ((Long)session.getAttribute(KEY_FILES_CREATEDAFTER)).longValue();
+        }else{
+        	String fileValue = readValueInSettingsFile(obj, KEY_FILES_CREATEDAFTER);
+            if(CmsStringUtil.isNotEmptyOrWhitespaceOnly(fileValue)){
+            	defaultValue = Long.parseLong(fileValue);
+            }
+        }
+    	return defaultValue;
+        
+    }
     
     
     /**
@@ -1053,6 +1237,57 @@ public class CmsAdminSettings {
     		session.setAttribute(KEY_DISPLAY_POOL5, "" + isDisplayed);
     	}
     	//writeNewValueInSettingsFile(obj, KEY_DISPLAY_POOL5, isDisplayed);
+        
+    }
+    
+    public static void setSettingsFilesFolderValue(CmsObject obj, String folder, HttpSession session){
+    	
+    	if(session!=null){
+    		session.setAttribute(KEY_FILES_FOLDER, folder);
+    	}
+    	//writeNewValueInSettingsFile(obj, KEY_FILES_FOLDER, folder);
+        
+    }
+    
+    public static void setSettingsFilesMinLengthValue(CmsObject obj, int minLength, HttpSession session){
+    	
+    	if(session!=null){
+    		session.setAttribute(KEY_FILES_MINLENGTH, minLength);
+    	}
+    	//writeNewValueInSettingsFile(obj, KEY_FILES_MINLENGTH, minLength);
+        
+    }
+    
+    /**
+     * 
+     * @param obj
+     * @param maxLength -1 if no filter
+     * @param session
+     */
+    public static void setSettingsFilesMaxLengthValue(CmsObject obj, int maxLength, HttpSession session){
+    	
+    	if(session!=null){
+    		session.setAttribute(KEY_FILES_MAXLENGTH, maxLength);
+    	}
+    	//writeNewValueInSettingsFile(obj, KEY_FILES_MAXLENGTH, maxLength);
+        
+    }
+    
+    public static void setSettingsFilesCreatedBeforeValue(CmsObject obj, long createdBefore, HttpSession session){
+    	
+    	if(session!=null){
+    		session.setAttribute(KEY_FILES_CREATEDBEFORE, createdBefore);
+    	}
+    	//writeNewValueInSettingsFile(obj, KEY_FILES_CREATEDBEFORE, createdBefore);
+        
+    }
+    
+    public static void setSettingsFilesCreatedAfterValue(CmsObject obj, long createdAfter, HttpSession session){
+    	
+    	if(session!=null){
+    		session.setAttribute(KEY_FILES_CREATEDAFTER, createdAfter);
+    	}
+    	//writeNewValueInSettingsFile(obj, KEY_FILES_CREATEDAFTER, createdAfter);
         
     }
     

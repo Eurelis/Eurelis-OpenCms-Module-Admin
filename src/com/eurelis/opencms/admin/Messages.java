@@ -206,6 +206,42 @@ public final class Messages extends A_CmsMessageBundle {
     public static final String GUI_ADMIN_SETTINGS_INTERVALS_ERROR_INTEGER = "GUI_ADMIN_SETTINGS_INTERVALS_ERROR_INTEGER";
     
     
+    
+    
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_EDITOR_LABEL_BLOCK_0 = "GUI_FILEINFORMATION_EDITOR_LABEL_BLOCK_0";
+    
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_LIST_NAME_0 = "GUI_FILEINFORMATION_LIST_NAME_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_NOTICE_0 = "GUI_FILEINFORMATION_NOTICE_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_NOT_VISIBLE_RESOURCES_1 = "GUI_FILEINFORMATION_NOT_VISIBLE_RESOURCES_1";
+    
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_LIST_COLS_ROOTPATH_0 = "GUI_FILEINFORMATION_LIST_COLS_ROOTPATH_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_LIST_COLS_TITLE_0 = "GUI_FILEINFORMATION_LIST_COLS_TITLE_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_LIST_COLS_TYPE_0 = "GUI_FILEINFORMATION_LIST_COLS_TYPE_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_LIST_COLS_SIZE_0 = "GUI_FILEINFORMATION_LIST_COLS_SIZE_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_LIST_COLS_ROOT_0 = "GUI_FILEINFORMATION_LIST_COLS_ROOT_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_COLS_ICON_0 = "GUI_FILEINFORMATION_COLS_ICON_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_COLS_LOCKICON_0 = "GUI_FILEINFORMATION_COLS_LOCKICON_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_COLS_STATE_0 = "GUI_FILEINFORMATION_COLS_STATE_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_COLS_CREATIONDATE_0 = "GUI_FILEINFORMATION_COLS_CREATIONDATE_0";
+    
+    
+    
 
     /** Name of the used resource bundle. */
     private static final String BUNDLE_NAME = "com.eurelis.opencms.admin.messages";
