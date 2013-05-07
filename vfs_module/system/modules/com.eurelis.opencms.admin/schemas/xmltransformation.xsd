@@ -1,0 +1,29 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+	<xsd:include schemaLocation="opencms://system/modules/com.eurelis.opencms.admin/schemas/nested/unitary-transformation.xsd"/>
+	<xsd:include schemaLocation="opencms://system/modules/com.eurelis.opencms.admin/schemas/nested/destination.xsd"/>
+	
+	<xsd:element name="XMLTransformationTypes" type="OpenCmsXMLTransformationTypes"/>
+	<xsd:complexType name="OpenCmsXMLTransformationTypes">
+		<xsd:sequence>
+			<xsd:element name="XMLTransformationType" type="OpenCmsXMLTransformationType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OpenCmsXMLTransformationType">
+		<xsd:sequence>
+			<xsd:element name="ContentType" type="OpenCmsString"/>
+			<xsd:element name="UnitaryTransformation" type="OpenCmsUnitaryTransformationType" minOccurs="0" maxOccurs="unbounded"/>
+			
+		</xsd:sequence>
+		<xsd:attribute name="language" type="OpenCmsLocale"  use="optional" />
+		
+	</xsd:complexType>
+	<xsd:annotation>
+		<xsd:appinfo>
+			<resourcebundle name="com.eurelis.opencms.admin" />
+			<layouts>
+				
+			</layouts>
+		</xsd:appinfo>
+	</xsd:annotation>
+</xsd:schema>

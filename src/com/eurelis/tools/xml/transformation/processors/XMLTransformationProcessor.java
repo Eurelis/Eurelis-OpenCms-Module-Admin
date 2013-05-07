@@ -28,8 +28,15 @@ import com.eurelis.tools.xml.transformation.model.XMLTransformation;
  */
 public class XMLTransformationProcessor extends Processor {
 
+	public static final String XMLPROCESSOR_INFO_PROCESSING_DID_START_0 = "XMLPROCESSOR_INFO_PROCESSING_DID_START_0";
+	public static final String XMLPROCESSOR_INFO_PROCESSING_DID_END_0 = "XMLPROCESSOR_INFO_PROCESSING_DID_END_0";
+	public static final String XMLPROCESSOR_ERROR_VALIDATEDOCUMENT_EXCEPTION_0 = "XMLPROCESSOR_ERROR_VALIDATEDOCUMENT_EXCEPTION_0";
+	public static final String XMLPROCESSOR_ERROR_DURINGVALIDATION_0 = "XMLPROCESSOR_ERROR_DURINGVALIDATION_0";
+	public static final String XMLPROCESSOR_WARNING_DURINGVALIDATION_0 = "XMLPROCESSOR_WARNING_DURINGVALIDATION_0";
+	
+	
 	/** The xml transformation. */
-	XMLTransformation xmlTransformation = null;
+	private XMLTransformation xmlTransformation = null;
 	
 	/**
 	 * Instantiates a new XML transformation processor.
@@ -51,7 +58,7 @@ public class XMLTransformationProcessor extends Processor {
 	public Document processTransformation(Document source) {
 		
 		Document destinationDocument = this.createDestinationDocument(source);
-		journal.info(this, "processing did start on document");		
+		journal.info(this, XMLPROCESSOR_INFO_PROCESSING_DID_START_0);		
 		
 		for (UnitaryTransformation ut : this.xmlTransformation.getTransformations()) {
 			
@@ -60,7 +67,7 @@ public class XMLTransformationProcessor extends Processor {
 			utp.processTransformation(source, destinationDocument);
 			
 		}
-		journal.info(this, "processing did end on document");
+		journal.info(this, XMLPROCESSOR_INFO_PROCESSING_DID_END_0);
 		
 		return destinationDocument;
 	}
@@ -147,11 +154,11 @@ public class XMLTransformationProcessor extends Processor {
 			documentIsValid = !journalErrorHandler.hasErrorBeenEncountered();
 		
 		} catch (ParserConfigurationException e) {
-			journal.error(this, e.getMessage());
+			journal.error(this, XMLPROCESSOR_ERROR_VALIDATEDOCUMENT_EXCEPTION_0, e.getClass().getName(), e.getMessage());
 		} catch (SAXException e) {
-			journal.error(this, e.getMessage());
+			journal.error(this, XMLPROCESSOR_ERROR_VALIDATEDOCUMENT_EXCEPTION_0, e.getClass().getName(), e.getMessage());
 		} catch (DocumentException e) {
-			journal.error(this, e.getMessage());
+			journal.error(this, XMLPROCESSOR_ERROR_VALIDATEDOCUMENT_EXCEPTION_0, e.getClass().getName(), e.getMessage());
 		}
 		
 		
@@ -211,7 +218,7 @@ class JournalErrorHandler implements ErrorHandler {
 	 */
 	public void error(SAXParseException exception) throws SAXException {
 		if (!initialPass) {
-			journal.error(processor, exception.getMessage());
+			journal.error(processor, XMLTransformationProcessor.XMLPROCESSOR_ERROR_DURINGVALIDATION_0, "error", exception.getMessage());
 		}
 		errorEncountered = true;
 	}
@@ -221,7 +228,7 @@ class JournalErrorHandler implements ErrorHandler {
 	 */
 	public void fatalError(SAXParseException exception) throws SAXException {
 		if (!initialPass) {
-			journal.error(processor, exception.getMessage());
+			journal.error(processor, XMLTransformationProcessor.XMLPROCESSOR_ERROR_DURINGVALIDATION_0, "fatalError", exception.getMessage());
 		}
 		errorEncountered = true;
 	}
@@ -231,7 +238,7 @@ class JournalErrorHandler implements ErrorHandler {
 	 */
 	public void warning(SAXParseException exception) throws SAXException {
 		if (!initialPass) {
-			journal.warning(processor, exception.getMessage());
+			journal.warning(processor, XMLTransformationProcessor.XMLPROCESSOR_WARNING_DURINGVALIDATION_0,  exception.getMessage());
 		}
 	}
 	

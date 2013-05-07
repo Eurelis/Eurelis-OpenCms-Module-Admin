@@ -1,7 +1,28 @@
+/**
+ * This file is part of the Eurelis OpenCms Admin Module.
+ * 
+ * Copyright (c) 2013 Eurelis (http://www.eurelis.com)
+ *
+ * This module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this module. 
+ * If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.eurelis.tools.xml.transformation.processors;
 
 import java.util.List;
 
+import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -42,6 +63,7 @@ public class TemplateTransformationProcessor extends Processor {
 	 * @param source the source node relative to which look for template parameter values
 	 * @return the root element of the xml document created while processing this template transformation
 	 */
+	@SuppressWarnings("unchecked")
 	public Element processTransformation(Node source) {
 		
 		String result = this.templateTransformation.getTemplate();
@@ -61,7 +83,13 @@ public class TemplateTransformationProcessor extends Processor {
 					stringValue = valueBuilder.toString();
 				}
 				else if (value instanceof Node) {
-					stringValue = ((Node)value).asXML();
+					
+					if (value instanceof Attribute) {
+						stringValue = ((Attribute)value).getValue();
+					}
+					else {
+						stringValue = ((Node)value).asXML();
+					}
 				}
 				else if (value instanceof String) {
 					stringValue = (String)value;
@@ -75,7 +103,8 @@ public class TemplateTransformationProcessor extends Processor {
 		try {
 			doc = DocumentHelper.parseText(result);
 		} catch (DocumentException e) {
-
+			System.err.println(result);
+			e.printStackTrace();
 		}
 		
 		return (doc != null)?doc.getRootElement():null;

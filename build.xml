@@ -140,6 +140,9 @@
     <mkdir dir="${folder.build.module}/system/modules/${module.module.name}/lib"/>
     <copy file="${folder.build.jar}/${jar.file}" todir="${folder.build.module}/system/modules/${module.module.name}/lib" />
   	<copy file="${folder.src}/${folder.package}/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}" />
+  	<copy file="${folder.src}/${folder.package}/xmltransformation/ui/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/xmltransformation/ui/" />
+  	<copy file="${folder.src}/${folder.package}/xmltransformation/ui/threads/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/xmltransformation/ui/threads/" />
+  	
   	<!-- UNCOMMENT TO MINIFY -->
   	<!--antcall target="optimize-css"/-->
     <copy todir="${folder.build.module}">

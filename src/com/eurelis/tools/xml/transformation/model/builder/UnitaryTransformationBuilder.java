@@ -1,7 +1,28 @@
+/**
+ * This file is part of the Eurelis OpenCms Admin Module.
+ * 
+ * Copyright (c) 2013 Eurelis (http://www.eurelis.com)
+ *
+ * This module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this module. 
+ * If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.eurelis.tools.xml.transformation.model.builder;
 
 import org.dom4j.XPath;
 
+import com.eurelis.tools.xml.transformation.model.Destination.Position;
 import com.eurelis.tools.xml.transformation.model.SXPathDestination;
 import com.eurelis.tools.xml.transformation.model.TemplateTransformation;
 import com.eurelis.tools.xml.transformation.model.UnitaryTransformation;
@@ -77,8 +98,8 @@ public class UnitaryTransformationBuilder {
 	 * @param destination the SXPath destination string representation
 	 * @return this unitary transformation builder instance
 	 */
-	public UnitaryTransformationBuilder setSXPathDestination(String destination) {
-		this.unitaryTransformation.setDestination(new SXPathDestination(destination));
+	public UnitaryTransformationBuilder setSXPathDestination(String destination, Position position) {
+		this.unitaryTransformation.setDestination(new SXPathDestination(destination, position));
 		return this;
 		
 	}
@@ -89,8 +110,8 @@ public class UnitaryTransformationBuilder {
 	 * @param destination the XPath destination string representation
 	 * @return this unitary transformation builder instance
 	 */
-	public UnitaryTransformationBuilder setXPathDestination(String destination) {
-		this.unitaryTransformation.setDestination(new XPathDestination(destination));
+	public UnitaryTransformationBuilder setXPathDestination(String destination, Position position) {
+		this.unitaryTransformation.setDestination(new XPathDestination(destination, position));
 		return this;
 	}
 	

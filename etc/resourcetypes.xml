@@ -1,0 +1,8 @@
+<resourcetypes>
+	<type class="org.opencms.file.types.CmsResourceTypeXmlContent" name="xmltransformation" id="777">
+		<properties>
+			
+		</properties>
+    	<param name="schema">/system/modules/com.eurelis.opencms.admin/schemas/xmltransformation.xsd</param>
+    </type>
+</resourcetypes>

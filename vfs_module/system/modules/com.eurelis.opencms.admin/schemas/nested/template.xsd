@@ -1,0 +1,27 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+	<xsd:include schemaLocation="opencms://system/modules/com.eurelis.opencms.admin/schemas/nested/template-parameter.xsd"/>
+	
+
+	<xsd:element name="TemplateTypes" type="OpenCmsTemplateTypes"/>
+	<xsd:complexType name="OpenCmsTemplateTypes">
+		<xsd:sequence>
+			<xsd:element name="TemplateType" type="OpenCmsTemplateType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OpenCmsTemplateType">
+		<xsd:sequence>
+			<xsd:element name="Template" type="OpenCmsString"/>
+			<xsd:element name="Parameters" type="OpenCmsTemplateParameterType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="language" type="OpenCmsLocale"  use="optional" />
+	</xsd:complexType>
+	<xsd:annotation>
+		<xsd:appinfo>
+			<resourcebundle name="com.eurelis.opencms.admin" />
+			<layouts>
+				<layout element="Template" widget="TextareaWidgetPlaintext"/>
+			</layouts>
+		</xsd:appinfo>
+	</xsd:annotation>
+</xsd:schema>

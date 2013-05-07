@@ -15,9 +15,11 @@ import org.dom4j.Node;
 import org.dom4j.Text;
 import org.dom4j.XPath;
 import org.dom4j.tree.DefaultAttribute;
+import org.dom4j.tree.DefaultElement;
 
 import com.eurelis.tools.xml.transformation.Journal;
 import com.eurelis.tools.xml.transformation.model.Destination;
+import com.eurelis.tools.xml.transformation.model.Destination.Position;
 import com.eurelis.tools.xml.transformation.model.TemplateTransformation;
 import com.eurelis.tools.xml.transformation.model.UnitaryTransformation;
 import com.eurelis.tools.xml.transformation.nodeselection.SXPath;
@@ -31,6 +33,20 @@ import com.eurelis.tools.xml.transformation.nodeselection.XPATHParser;
  */
 public class UnitaryTransformationProcessor extends Processor implements DestinationProcessor {
 
+	public static final String UNITARYPROCESSOR_ERROR_DESTINATION_NOT_FOUND_0 = "UNITARYPROCESSOR_ERROR_DESTINATION_NOT_FOUND_0";
+	public static final String UNITARYPROCESSOR_ERROR_TEMPLATE_ROOTNODE_CREATION_IMPOSSIBLE_0 = "UNITARYPROCESSOR_ERROR_TEMPLATE_ROOTNODE_CREATION_IMPOSSIBLE_0";
+	public static final String UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_NODE_NOTFOUND_0 = "UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_NODE_NOTFOUND_0";
+	public static final String UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_UNIQUE_NODE_NOTFOUND_0 = "UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_UNIQUE_NODE_NOTFOUND_0";
+	public static final String UNITARYPROCESSOR_ERROR_DESTINATION_SXPATH_UNIQUE_NODE_NOTFOUND_0 = "UNITARYPROCESSOR_ERROR_DESTINATION_SXPATH_UNIQUE_NODE_NOTFOUND_0";
+	public static final String UNITARYPROCESSOR_ERROR_LASTNODE_CREATION_IMPOSSIBLE_INCOMPATIBLE_SOURCE_0 = "UNITARYPROCESSOR_ERROR_LASTNODE_CREATION_IMPOSSIBLE_INCOMPATIBLE_SOURCE_0";
+	public static final String UNITARYPROCESSOR_ERROR_LASTNODE_CREATION_IMPOSSIBLE_NOTEMPTY_NODE_ALREADYEXISTS_0 = "UNITARYPROCESSOR_ERROR_LASTNODE_CREATION_IMPOSSIBLE_NOTEMPTY_NODE_ALREADYEXISTS_0";
+	public static final String UNITARYPROCESSOR_ERROR_REFERENCE_NODE_NOTFOUND_0 = "UNITARYPROCESSOR_ERROR_REFERENCE_NODE_NOTFOUND_0";
+	public static final String UNITARYPROCESSOR_ERROR_SXPATH_FIRSTSECTION_INCOMPATIBLE_WITH_DOCUMENT_ROOTNODE_0 = "UNITARYPROCESSOR_ERROR_SXPATH_FIRSTSECTION_INCOMPATIBLE_WITH_DOCUMENT_ROOTNODE_0";
+	public static final String UNITARYPROCESSOR_ERROR_MERGENODES_INCOMPATIBLE_SOURCE_DESTINATION_0 = "UNITARYPROCESSOR_ERROR_MERGENODES_INCOMPATIBLE_SOURCE_DESTINATION_0";
+	public static final String UNITARYPROCESSOR_ERROR_MERGE_NOTEMPTY_DESTINATION_0 = "UNITARYPROCESSOR_ERROR_MERGE_NOTEMPTY_DESTINATION_0";
+	public static final String UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_FIRSTNODE_NOTFOUND_0 = "UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_FIRSTNODE_NOTFOUND_0";
+	
+	
 	/** The unitaryTransformation to process. */
 	private UnitaryTransformation uTransformation = null;
 	
@@ -74,6 +90,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 	 */
 	public void processTransformationForElement(Document original, Document target, Node source) {
 		
+		
 		Destination dst = uTransformation.getDestination();
 		Node destinationElement = null;
 		
@@ -84,7 +101,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 			
 			if (destinationElement == null) {
 				// destination specifiee mais non trouvee = erreur
-				journal.error(this, "impossible de trouver la destination " + dst.toString());
+				journal.error(this, UNITARYPROCESSOR_ERROR_DESTINATION_NOT_FOUND_0,  dst.toString());
 				destinationElementNotFound = true;
 			}
 			
@@ -94,36 +111,45 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 		if (!destinationElementNotFound) {
 			if (tt != null) {
 				// si transformation de template
+				
+				
 				TemplateTransformationProcessor ttp = new TemplateTransformationProcessor(journal, this, tt);
 				
 				Element transformationResult = ttp.processTransformation(source);
 				
+				
 				Node transformationTarget = null;
 						
+			
 				if (destinationElement != null) {	
 					// la transformation de template est applique au niveau de la source
 					String newName = transformationResult.getName();
 					
 					@SuppressWarnings("rawtypes")
 					List test = destinationElement.selectNodes(newName);
+					
+					
 					if (test.isEmpty() && destinationElement instanceof Element) {
 						transformationTarget = ((Element)destinationElement).addElement(newName);
 						
 					}
 					else {
-						journal.error(this, "impossible de creer le noeud racine de la transformation par template : un noeud existe deja avec ce nom");
+						journal.error(this, UNITARYPROCESSOR_ERROR_TEMPLATE_ROOTNODE_CREATION_IMPOSSIBLE_0, newName);
 						transformationTarget = null;
 					}
 					
 				}
 				else {
+					
+					
 					// le resultat de la transformation de template est place ailleurs
 					Element sourceParent = source.getParent();
-					String sourceName = source.getName();
+					//String sourceName = source.getName();
 					
 					String parentXPATH = sourceParent.getUniquePath();
 					
 					Element dstParent = (Element) target.selectSingleNode(parentXPATH);
+					
 					
 					if (dstParent != null) {
 						String newName = transformationResult.getName();
@@ -131,14 +157,16 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 						
 						@SuppressWarnings("rawtypes")
 						List test = dstParent.selectNodes(newName);
+						
 						if (test.isEmpty()) {
 							transformationTarget = dstParent.addElement(newName);
 							
 						}
 						else {
-							journal.error(this, "impossible de creer le noeud racine de la transformation par template : un noeud existe deja avec ce nom");
+							journal.error(this, UNITARYPROCESSOR_ERROR_TEMPLATE_ROOTNODE_CREATION_IMPOSSIBLE_0, newName);
 							transformationTarget = null;
 						}
+						
 						
 					}
 					else {
@@ -148,6 +176,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 					
 					
 				}
+				
 				
 				if (transformationTarget != null) {
 					this.mergeNodes(transformationTarget, transformationResult);
@@ -170,6 +199,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 		}
 		
 		
+		
 	}
 
 	/**
@@ -187,7 +217,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 	/* (non-Javadoc)
 	 * @see com.eurelis.tools.xml.transformation.processors.DestinationProcessor#processXPathDestination(org.dom4j.Document, org.dom4j.Node, java.lang.String)
 	 */
-	public Node processXPathDestination(Document target, Node source, String dst) {
+	public Node processXPathDestination(Document target, Node source, String dst, Position pos) {
 		
 		Element originalParentNode = source.getParent();
 		String originalParentXPath = originalParentNode.getUniquePath();
@@ -211,7 +241,8 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 		
 		Node resultNode = null;
 		
-		XPATHDecomposition pathDecomposition = XPATHParser.getInstance().decomposeXpath(dst);
+		XPATHDecomposition pathDecomposition = XPATHParser.getInstance().decomposeXpath(dst, pos);
+		
 		
 		XPath firstXpath = pathDecomposition.getFirstElement();
 		
@@ -223,15 +254,15 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 				// avec le mode xpath, le noeud suivant DOIT exister
 				String position = workNode.getUniquePath();
 				
+				@SuppressWarnings("unchecked")
 				List<Node> subNodes = xpath.selectNodes(workNode);
-				List<Node> possibleNodes = new ArrayList<Node>();
 				
 				
 				workNode = xpath.selectSingleNode(workNode);
 			
 				if (subNodes.isEmpty()) {
-					journal.error(this, "noeud " + (xpath.toString()) + " non trouve dans la decomposition xpath de " + dst + " position actuelle : " + position);
-					
+					//journal.error(this, "noeud " + (xpath.toString()) + " non trouve dans la decomposition xpath de " + dst + " position actuelle : " + position);
+					journal.error(this, UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_NODE_NOTFOUND_0, xpath.toString(), dst, position);	
 					return null;
 				}
 				else if (subNodes.size() == 1) {
@@ -249,7 +280,8 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 					}
 					
 					if (workNode == null) {
-						journal.error(this, "noeud " + (xpath.toString()) + " non trouve dans la decomposion xpath de " + dst + " position actuelle : " + position + " plusieurs candidats trouves, aucun n'est parent de la source");
+						journal.error(this, UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_UNIQUE_NODE_NOTFOUND_0, xpath.toString(), dst, position);
+						//journal.error(this, "noeud " + (xpath.toString()) + " non trouve dans la decomposion xpath de " + dst + " position actuelle : " + position + " plusieurs candidats trouves, aucun n'est parent de la source");
 					}
 					
 				}
@@ -261,21 +293,33 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 				lastElement = "";
 			}
 			
-			
-			journal.info(this, "lastElement " + lastElement);
-			
+						
 			if (lastElement.isEmpty() && workNode instanceof Element) {
 				
 				if (source instanceof Attribute) {
-					resultNode = ((Element)workNode).addAttribute(source.getName(), ""); // attribut vide pour le merge
+					
+						resultNode = ((Element)workNode).addAttribute(source.getName(), ""); // attribut vide pour le merge
+					
+					
+					
 				}
 				else if (source instanceof Element) {
 					
-					resultNode = ((Element)workNode).addElement(source.getName());
+					if (pos == Position.FIRST) {
+						Element element = new DefaultElement(source.getName());
+						((Element)workNode).getParent().elements().add(0, element);
+						resultNode = element;
+					}
+					else if (pos == Position.LAST) {
+						resultNode = ((Element)workNode).addElement(source.getName());
+					}
+					
+					
+					
 				}
 				
 				else {
-					journal.error(this, "impossible de creer le dernier noeud : la source n'est ni un attribut ni un element");
+					journal.error(this, UNITARYPROCESSOR_ERROR_LASTNODE_CREATION_IMPOSSIBLE_INCOMPATIBLE_SOURCE_0);
 					
 				}	
 			}
@@ -290,33 +334,87 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 			}
 			else {
 				// existe t'il un noeud vide unique portant ce nom ?
+				@SuppressWarnings("unchecked")
 				List<Element> testList = workNode.selectNodes(lastElement);
+				
+				
+				// TODO GESTION DE LA POSITION !!!!
 				
 				if (testList.size() == 1) {
 					Element testElement = testList.get(0);
 					
-					if (testElement.attributeCount() == 0 && testElement.elements().isEmpty() && testElement.getTextTrim().isEmpty()) {
-						resultNode = testList.get(0);
+					if (pos == Position.FIRST || pos == Position.LAST) {
+					
+						if (testElement.attributeCount() == 0 && testElement.elements().isEmpty() && testElement.getTextTrim().isEmpty()) {
+							resultNode = testList.get(0);
+						}
+						else {
+							journal.error(this, UNITARYPROCESSOR_ERROR_LASTNODE_CREATION_IMPOSSIBLE_NOTEMPTY_NODE_ALREADYEXISTS_0);
+							return null;
+						}
+					
 					}
+					
 					else {
-						journal.error(this, "impossible de creer le dernier noeud : un noeud non vide du meme nom a ete trouve");
-						return null;
+						int index = testElement.getParent().elements().indexOf(testElement);
+						if (pos == Position.AFTER) {
+							index++;
+						}
+						
+						Element newElement = new DefaultElement(lastElement);
+						testElement.getParent().elements().add(index, newElement);
+						
+						resultNode = newElement;
+						
 					}
 					
 				}
 				else if (testList.isEmpty()) {
-					resultNode = ((Element)workNode).addElement(lastElement);
+					if (pos == Position.FIRST) {
+						Element newElement = new DefaultElement(lastElement);
+						((Element)workNode).elements().add(0, newElement);
+						resultNode = newElement;
+						
+					}
+					else if (pos == Position.LAST) {
+						resultNode = ((Element)workNode).addElement(lastElement);
+					}
+					else {
+						journal.error(this, UNITARYPROCESSOR_ERROR_REFERENCE_NODE_NOTFOUND_0);
+					}
+					
+					
 				}
 				else {
-					journal.error(this, "impossible de creer le dernier noeud : plusieurs candidats possible deja existant");
-					return null;
+					
+					
+					if (pos == Position.FIRST || pos == Position.LAST) {
+						journal.error(this, UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_UNIQUE_NODE_NOTFOUND_0);
+						return null;
+					}
+					else if (pos == Position.BEFORE) {
+						Element firstElement = testList.get(0);
+						int index = ((Element)workNode).elements().indexOf(firstElement);
+						
+						Element newElement = new DefaultElement(lastElement);
+						((Element)workNode).elements().add(index, newElement);
+						resultNode = newElement;
+					}
+					else if (pos == Position.AFTER) {
+						Element lastEl = testList.get(testList.size() - 1);
+						int index = ((Element)workNode).elements().indexOf(lastEl) + 1;
+						
+						Element newElement = new DefaultElement(lastElement);
+						((Element)workNode).elements().add(index, newElement);
+						resultNode = newElement;
+					}
 				}
 				
 			}
 		
 		}
 		else {
-			journal.error(this, "premier noeud non trouve dans la decomposion xpath de " + dst);
+			journal.error(this, UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_FIRSTNODE_NOTFOUND_0);
 		}
 		
 		
@@ -326,13 +424,14 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 	/* (non-Javadoc)
 	 * @see com.eurelis.tools.xml.transformation.processors.DestinationProcessor#processSXPathDestination(org.dom4j.Document, org.dom4j.Node, java.lang.String)
 	 */
-	public Node processSXPathDestination(Document target, Node source, String dst) {
+	public Node processSXPathDestination(Document target, Node source, String dst, Position position) {
 		
 		Node resultNode = null;
 		
 		// le parentNodeSet doit etre construit a partir du document de destination !!!
 		
-		SXPath sxpath = XPATHParser.getInstance().parseFailOverPath(dst);
+		SXPath sxpath = XPATHParser.getInstance().parseFailOverPath(dst, position);
+		
 		
 		Element originalParentNode = source.getParent();
 		String originalParentXPath = originalParentNode.getUniquePath();
@@ -371,12 +470,12 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 				while (workNode != null && sxPathNodeIterator.hasNext()) {
 					SXPathNode pathNode = sxPathNodeIterator.next();
 				
-					workNode = processSXPathNode(workNode, pathNode, parentNodeSet);
+					workNode = processSXPathNode(workNode, pathNode, parentNodeSet, position);
 				
 				}
 			}
 			else {
-				journal.error(this, "la premiere section du  sxpath ne correspond pas a la racine du document");
+				journal.error(this, UNITARYPROCESSOR_ERROR_SXPATH_FIRSTSECTION_INCOMPATIBLE_WITH_DOCUMENT_ROOTNODE_0);
 				workNode = null;
 			}
 			
@@ -400,7 +499,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 					}
 					
 					else {
-						journal.error(this, "impossible de creer le dernier noeud : la source n'est ni un attribut ni un element");
+						journal.error(this, UNITARYPROCESSOR_ERROR_LASTNODE_CREATION_IMPOSSIBLE_INCOMPATIBLE_SOURCE_0);
 						
 					}	
 				}
@@ -417,6 +516,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 					//resultNode = ((Element)workNode).addElement(lastElement);
 					
 					// existe t'il un noeud vide unique portant ce nom ?
+					@SuppressWarnings("unchecked")
 					List<Element> testList = workNode.selectNodes(lastElement);
 					
 					if (testList.size() == 1) {
@@ -426,7 +526,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 							resultNode = testList.get(0);
 						}
 						else {
-							journal.error(this, "impossible de creer le dernier noeud : un noeud non vide du meme nom a ete trouve");
+							journal.error(this, UNITARYPROCESSOR_ERROR_LASTNODE_CREATION_IMPOSSIBLE_NOTEMPTY_NODE_ALREADYEXISTS_0);
 							return null;
 						}
 						
@@ -435,7 +535,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 						resultNode = ((Element)workNode).addElement(lastElement);
 					}
 					else {
-						journal.error(this, "impossible de creer le dernier noeud : plusieurs candidats possible deja existant");
+						journal.error(this, UNITARYPROCESSOR_ERROR_DESTINATION_XPATH_UNIQUE_NODE_NOTFOUND_0);
 						return null;
 					}
 					
@@ -462,7 +562,8 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 	 * @param parentNodeSet a Set of node representing all parent nodes of the source one in the destination document
 	 * @return the found or created node if successful, null otherwise
 	 */
-	public Node processSXPathNode(Node dst, SXPathNode sxPathNode, Set<Node> parentNodeSet) {
+	@SuppressWarnings("unchecked")
+	public Node processSXPathNode(Node dst, SXPathNode sxPathNode, Set<Node> parentNodeSet, Position position) {
 		
 		Node returnNode = null;
 		
@@ -491,7 +592,17 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 			
 			
 			if (firstNodeList.isEmpty()) {
-				Element newElement = dstElement.addElement(sxPathNode.getName());
+				Element newElement = null;
+				
+				if (position == Position.LAST) {
+					newElement = dstElement.addElement(sxPathNode.getName());
+				}
+				
+				else if (position == Position.FIRST) {
+					newElement = new DefaultElement(sxPathNode.getName());
+					dstElement.elements().add(0, newElement);
+				}
+				
 				
 				for (SXPathNodeAttribute sxAttribute : sxPathNode.getAttributes()) {
 					newElement.addAttribute(sxAttribute.getName(), sxAttribute.getValue());
@@ -510,7 +621,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 				}
 				
 				else {
-					journal.error(this, "il n'a pas ete possible de trouver un noeud unique");
+					journal.error(this, UNITARYPROCESSOR_ERROR_DESTINATION_SXPATH_UNIQUE_NODE_NOTFOUND_0, sxPathNode.toString(), dstElement.getName());
 				}
 				
 			}
@@ -562,7 +673,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 		}
 		
 		else {
-			journal.error(this, "type de destination et de source incompatibles : " + dst.getClass().getName() +  " et " + src.getClass().getName());
+			journal.error(this, UNITARYPROCESSOR_ERROR_MERGENODES_INCOMPATIBLE_SOURCE_DESTINATION_0,  dst.getClass().getName(), src.getClass().getName());
 		}
 		
 		return success;
@@ -584,7 +695,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 			success = true;
 		}
 		else {
-			journal.error(this, "destination Attribute non vide");
+			journal.error(this, UNITARYPROCESSOR_ERROR_MERGE_NOTEMPTY_DESTINATION_0);
 		}
 		
 		
@@ -606,7 +717,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 			success = true;
 		}
 		else {
-			journal.error(this, "destination CDATA non vide");
+			journal.error(this, UNITARYPROCESSOR_ERROR_MERGE_NOTEMPTY_DESTINATION_0);
 		}
 		
 		
@@ -628,7 +739,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 			success = true;
 		}
 		else {
-			journal.error(this, "destination CharacterData non vide : '" + dst.getText() + "'");
+			journal.error(this, UNITARYPROCESSOR_ERROR_MERGE_NOTEMPTY_DESTINATION_0);
 		}
 		
 		return success;	
@@ -646,12 +757,14 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 		
 		if (dst.attributeCount() == 0 && dst.elements().isEmpty() && dst.getTextTrim().isEmpty()) {
 			
+			@SuppressWarnings("unchecked")
 			List<Attribute> attributeList = src.attributes();
 			for (Attribute attribute : attributeList) {
 				dst.addAttribute(attribute.getName(), attribute.getValue());
 			}
 			
 			
+			@SuppressWarnings("unchecked")
 			List<Node> contentList = src.content();
 			
 			for (Node n : contentList) {
@@ -664,7 +777,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 			
 		}
 		else {
-			journal.error(this, "destination Element non vide");
+			journal.error(this, UNITARYPROCESSOR_ERROR_MERGE_NOTEMPTY_DESTINATION_0);
 		}
 		
 		return success;	
@@ -686,7 +799,7 @@ public class UnitaryTransformationProcessor extends Processor implements Destina
 			success = true;
 		}
 		else {
-			journal.error(this, "destination Text non vide");
+			journal.error(this, UNITARYPROCESSOR_ERROR_MERGE_NOTEMPTY_DESTINATION_0);
 		}
 		
 		

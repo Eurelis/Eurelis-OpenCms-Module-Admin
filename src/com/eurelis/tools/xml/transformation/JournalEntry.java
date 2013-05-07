@@ -1,3 +1,24 @@
+/**
+ * This file is part of the Eurelis OpenCms Admin Module.
+ * 
+ * Copyright (c) 2013 Eurelis (http://www.eurelis.com)
+ *
+ * This module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this module. 
+ * If not, see <http://www.gnu.org/licenses/>
+ */
+
+
 package com.eurelis.tools.xml.transformation;
 
 import com.eurelis.tools.xml.transformation.processors.Processor;
@@ -18,9 +39,12 @@ public class JournalEntry {
 	/** The processor instance that sent this message. */
 	private Processor writer;
 	
-	/** The sender, in most cases the document which was being processed when this entry has been added. */
-	private String sender;
+	
 
+	
+	private String key = null;
+	private Object[] args = null;
+	
 	
 	/**
 	 * Instantiates a new journal entry.
@@ -30,13 +54,21 @@ public class JournalEntry {
 	 * @param writer the processor instance that sent this message
 	 * @param sender the sender
 	 */
-	public JournalEntry(EntryKind kind, String message, Processor writer, String sender) {
+	public JournalEntry(EntryKind kind, String key, Object[] args, Processor writer) {
 		this.kind = kind;
-		this.message = message;
+		this.key = key;
+		this.args = args;
 		this.writer = writer;
-		this.sender = sender;
 	}
 
+	
+	public String getKey() {
+		return this.key;
+	}
+	
+	public Object[] getArgs() {
+		return this.args;
+	}
 	
 	/**
 	 * Returns a description of the entry.
@@ -55,7 +87,7 @@ public class JournalEntry {
 			levelKind = "ERROR";
 		}
 		
-		return String.format("%s - %s : %s, %s", levelKind, this.writer.getName(), this.sender, this.message);
+		return String.format("%s - %s : %s", levelKind, this.writer.getName(), this.message);
 	}
 	
 	
