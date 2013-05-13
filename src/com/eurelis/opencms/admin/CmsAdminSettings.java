@@ -132,8 +132,8 @@ public class CmsAdminSettings {
     public static final String DEFAULT_VALUE_FILES_FOLDER = "/";
     public static final int DEFAULT_VALUE_FILES_MINLENGTH = 0;
     public static final int DEFAULT_VALUE_FILES_MAXLENGTH = -1;
-    public static final long DEFAULT_VALUE_FILES_CREATEDBEFORE = Long.MIN_VALUE;
-    public static final long DEFAULT_VALUE_FILES_CREATEDAFTER = Long.MAX_VALUE;
+    public static final long DEFAULT_VALUE_FILES_CREATEDBEFORE = 0 /*Long.MAX_VALUE*/;
+    public static final long DEFAULT_VALUE_FILES_CREATEDAFTER = 0 /*Long.MIN_VALUE*/;
     
     /**
      * Default constructor initializing values.<p>
@@ -412,6 +412,31 @@ public class CmsAdminSettings {
         return m_filesMaxLength;
     }
     
+    public String getFilesMinLengthInString() {
+
+        if(m_filesMinLength<0){
+        	m_filesMinLength = 0;
+        	LOG.warn("m_filesMinLength < 0 => 0");
+        }
+        if(m_filesMinLength == 0){
+        	return "";
+        }else{
+        	return m_filesMinLength+"";
+        }
+    }
+    
+    public String getFilesMaxLengthInString() {
+
+        if(m_filesMaxLength<=0){
+        	m_filesMaxLength = -1;
+        }
+        if(m_filesMaxLength == -1){
+        	return "";
+        }else{
+        	return m_filesMaxLength+"";
+        }
+    }
+    
     public long getFilesCreatedBefore() {
 
         return m_filesCreatedBefore;
@@ -589,6 +614,28 @@ public class CmsAdminSettings {
             return;
         }else{
         	m_filesMaxLength = value;
+        }
+    }
+    
+    public void setFilesMinLengthInString(String value) {
+
+    	int valueinint = CmsStringUtil.getIntValueRounded(value, 0, null);
+        if (valueinint <= 0) {
+        	m_filesMinLength = 0;
+            return;
+        }else{
+        	m_filesMinLength = valueinint;
+        }
+    }
+    
+    public void setFilesMaxLengthInString(String value) {
+
+    	int valueinint = CmsStringUtil.getIntValueRounded(value, -1, null);
+        if (valueinint <= 0) {
+        	m_filesMaxLength = -1;
+            return;
+        }else{
+        	m_filesMaxLength = valueinint;
         }
     }
     

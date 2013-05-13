@@ -315,11 +315,12 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
 
         // widgets to display
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesFolder", PAGES[0], new CmsVfsFileWidget()));
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesMinLength", PAGES[0], new CmsInputWidget()));
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesMaxLength", PAGES[0], new CmsInputWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesMinLengthInString", PAGES[0], new CmsInputWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesMaxLengthInString", PAGES[0], new CmsInputWidget()));
         
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesCreatedBefore", PAGES[0], new CmsCalendarWidget()));
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesCreatedAfter", PAGES[0], new CmsCalendarWidget()));
+        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesCreatedBefore", PAGES[0], new CmsCalendarWidget()));
+        
     }
 
     /**
