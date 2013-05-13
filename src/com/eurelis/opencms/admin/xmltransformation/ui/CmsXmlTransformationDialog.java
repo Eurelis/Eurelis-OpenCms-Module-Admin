@@ -80,6 +80,8 @@ public class CmsXmlTransformationDialog extends CmsWidgetDialog {
 	
 	public CmsXmlTransformationDialog(CmsJspActionElement jsp) {
 		super(jsp);
+		
+		
 	}
 	
 	
@@ -444,6 +446,7 @@ public class CmsXmlTransformationDialog extends CmsWidgetDialog {
         StringBuffer result = new StringBuffer(1024);
 
         
+        
         // create table
         result.append(createWidgetTableStart());
 
@@ -515,6 +518,12 @@ public class CmsXmlTransformationDialog extends CmsWidgetDialog {
 		super.initWorkplaceRequestValues(settings, request);
 				
 		setDialogObject(this.cmsXmlTransformation);
+		
+		
+	}
+	
+	protected String getDialogTitle() {
+		return Messages.getLbl(Messages.GUI_XMLTRANSFORMATION_FIRST_STEP_0, getLocale());
 	}
 	
 	

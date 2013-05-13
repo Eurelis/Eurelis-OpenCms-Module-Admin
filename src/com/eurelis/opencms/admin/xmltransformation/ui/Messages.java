@@ -72,6 +72,9 @@ public final class Messages extends A_CmsMessageBundle {
 	
 	public static final String GUI_CHOOSE_FILE_TO_APPLY_TRANSFORMATION_0 = "GUI_CHOOSE_FILE_TO_APPLY_TRANSFORMATION_0";
 	
+	public static final String GUI_XMLTRANSFORMATION_FIRST_STEP_0 = "GUI_XMLTRANSFORMATION_FIRST_STEP_0";
+	
+	
 	/**
 	 * Hides the public constructor for this utility class.<p>
 	 */

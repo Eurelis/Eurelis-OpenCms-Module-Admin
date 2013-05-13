@@ -33,7 +33,7 @@ public class XMLTransformationProcessor extends Processor {
 	public static final String XMLPROCESSOR_ERROR_VALIDATEDOCUMENT_EXCEPTION_0 = "XMLPROCESSOR_ERROR_VALIDATEDOCUMENT_EXCEPTION_0";
 	public static final String XMLPROCESSOR_ERROR_DURINGVALIDATION_0 = "XMLPROCESSOR_ERROR_DURINGVALIDATION_0";
 	public static final String XMLPROCESSOR_WARNING_DURINGVALIDATION_0 = "XMLPROCESSOR_WARNING_DURINGVALIDATION_0";
-	
+	public static final String XMLPROCESSOR_WARNING_NOELEMENTFOUND_FORSOURCE_0 = "XMLPROCESSOR_WARNING_NOELEMENTFOUND_FORSOURCE_0";
 	
 	/** The xml transformation. */
 	private XMLTransformation xmlTransformation = null;
@@ -88,7 +88,12 @@ public class XMLTransformationProcessor extends Processor {
 			if (sourceXpath != null) {
 				@SuppressWarnings("unchecked")
 				List<Node> nodeList = sourceXpath.selectNodes(source);
-				elementList.addAll(nodeList);
+				if (nodeList.isEmpty()) {
+					journal.warning(this, XMLPROCESSOR_WARNING_NOELEMENTFOUND_FORSOURCE_0, sourceXpath.toString());
+				}
+				else {
+					elementList.addAll(nodeList);
+				}
 			}
 		}
 		
