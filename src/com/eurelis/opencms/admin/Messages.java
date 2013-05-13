@@ -236,9 +236,73 @@ public final class Messages extends A_CmsMessageBundle {
     /** Message constant for key in the resource bundle. */
     public static final String GUI_FILEINFORMATION_COLS_LOCKICON_0 = "GUI_FILEINFORMATION_COLS_LOCKICON_0";
     /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_COLS_PROJECTICON_0 = "GUI_FILEINFORMATION_COLS_PROJECTICON_0";
+    /** Message constant for key in the resource bundle. */
     public static final String GUI_FILEINFORMATION_COLS_STATE_0 = "GUI_FILEINFORMATION_COLS_STATE_0";
     /** Message constant for key in the resource bundle. */
     public static final String GUI_FILEINFORMATION_COLS_CREATIONDATE_0 = "GUI_FILEINFORMATION_COLS_CREATIONDATE_0";
+    
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_MDELETE_NAME_0 = "GUI_FILEINFORMATION_ACTION_MDELETE_NAME_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_MDELETE_CONF_0 = "GUI_FILEINFORMATION_ACTION_MDELETE_CONF_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_MDELETE_HELP_0 = "GUI_FILEINFORMATION_ACTION_MDELETE_HELP_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_COLS_DELETE_0	= "GUI_FILEINFORMATION_COLS_DELETE_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_DELETE_NAME_0 = "GUI_FILEINFORMATION_ACTION_DELETE_NAME_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_DELETE_CONF_0 = "GUI_FILEINFORMATION_ACTION_DELETE_CONF_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_DELETE_HELP_0 = "GUI_FILEINFORMATION_ACTION_DELETE_HELP_0";
+    
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String LOG_DELETE_THREAD_STARTED_0 = "LOG_DELETE_THREAD_STARTED_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String LOG_DELETE_THREAD_FINISHED_0 = "LOG_DELETE_THREAD_FINISHED_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String LOG_DELETE_THREAD_CONSTRUCTED_0 = "LOG_DELETE_THREAD_CONSTRUCTED_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_DELETE_FILEINFORMATION_THREAD_NAME_1 = "GUI_DELETE_FILEINFORMATION_THREAD_NAME_1";
+    /** Message constant for key in the resource bundle. */
+    public static final String LOG_FILEINFORMATION_DELETE_FAILED_1 = "LOG_FILEINFORMATION_DELETE_FAILED_1";
+    /** Message constant for key in the resource bundle. */
+    public static final String LOG_FILEINFORMATION_DELETE_FAILED = "LOG_FILEINFORMATION_DELETE_FAILED";
+    /** Message constant for key in the resource bundle. */
+    public static final String LOG_FILEINFORMATION_DELETE_DONE = "LOG_FILEINFORMATION_DELETE_DONE";
+    /** Message constant for key in the resource bundle. */
+    public static final String RPT_DELETE_FILEINFORMATION_BEGIN_0 = "RPT_DELETE_FILEINFORMATION_BEGIN_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String RPT_DELETE_0 = "RPT_DELETE_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String RPT_DELETE_FILEINFORMATION_END_0 = "RPT_DELETE_FILEINFORMATION_END_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String RPT_PUBLISH_FILEINFORMATION_BEGIN_0 = "RPT_PUBLISH_FILEINFORMATION_BEGIN_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String RPT_PUBLISH_0 = "RPT_PUBLISH_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String RPT_PUBLISH_FILEINFORMATION_END_0 = "RPT_PUBLISH_FILEINFORMATION_END_0";
+    
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_NAME_0 = "GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_NAME_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_CONF_0 = "GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_CONF_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_HELP_0 = "GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_HELP_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_COLS_DELETEANDPUBLISH_0	= "GUI_FILEINFORMATION_COLS_DELETEANDPUBLISH_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_NAME_0 = "GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_NAME_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_CONF_0 = "GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_CONF_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_HELP_0 = "GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_HELP_0";
+    
+    
     
     
     

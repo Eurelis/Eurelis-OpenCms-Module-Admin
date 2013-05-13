@@ -1,36 +1,33 @@
-/*
- * This library is part of OpenCms -
- * the Open Source Content Management System
- *
- * Copyright (c) Alkacon Software GmbH (http://www.alkacon.com)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * For further information about Alkacon Software GmbH, please see the
- * company website: http://www.alkacon.com
- *
- * For further information about OpenCms, please see the
- * project website: http://www.opencms.org
+/**
+ * This file is part of the Eurelis OpenCms Admin Module.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Copyright (c) 2013 Eurelis (http://www.eurelis.com)
+ *
+ * This module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this module. 
+ * If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.eurelis.opencms.admin;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
@@ -50,13 +47,16 @@ import org.opencms.workplace.CmsWorkplace;
 import org.opencms.workplace.list.A_CmsListDialog;
 import org.opencms.workplace.list.CmsListColumnAlignEnum;
 import org.opencms.workplace.list.CmsListColumnDefinition;
+import org.opencms.workplace.list.CmsListDirectAction;
 import org.opencms.workplace.list.CmsListItem;
 import org.opencms.workplace.list.CmsListItemActionIconComparator;
 import org.opencms.workplace.list.CmsListItemDefaultComparator;
 import org.opencms.workplace.list.CmsListItemNumericalComparator;
 import org.opencms.workplace.list.CmsListMetadata;
+import org.opencms.workplace.list.CmsListMultiAction;
 import org.opencms.workplace.list.CmsListOrderEnum;
 import org.opencms.workplace.list.CmsListSearchAction;
+import org.opencms.workplace.tools.CmsToolDialog;
 
 
 
@@ -74,12 +74,21 @@ public class CmsFileInformationList extends A_CmsListDialog {
 
     /** The log object for this class. */
     private static final Log LOG = CmsLog.getLog(CmsFileInformationList.class);
+    
+    /** List column delete. */
+    public static final String LIST_COLUMN_DELETE = "cd";
+    
+    /** List column delete. */
+    public static final String LIST_COLUMN_DELETEANDPUBLISH = "cdp";
 
     /** list column id constant. */
     private static final String LIST_COLUMN_TYPEICON = "ci";
     
     /** list column id constant. */
     private static final String LIST_COLUMN_LOCKICON = "cli";
+    
+    /** list column id constant. */
+    private static final String LIST_COLUMN_PROJECTICON = "cpi";
     
     /** list column id constant. */
     private static final String LIST_COLUMN_STATE = "cst";
@@ -103,7 +112,23 @@ public class CmsFileInformationList extends A_CmsListDialog {
     private static final String LIST_COLUMN_CREATIONDATE = "ccd";
     
     
+    /** List action delete. */
+    public static final String LIST_ACTION_DELETE = "ad";
     
+    /** List action multi delete. */
+    public static final String LIST_MACTION_DELETE = "md";
+    
+    /** List action delete and publish. */
+    public static final String LIST_ACTION_DELETEANDPUBLISH = "adp";
+    
+    /** List action multi delete and publish. */
+    public static final String LIST_MACTION_DELETEANDPUBLISH = "mdp";
+    
+    /** Path to the file info reports. */
+    public static final String PATH_REPORTS = "/system/workplace/admin/eurelis_file_information/reports/";
+    
+    /** Resource parameter. */
+    public static final String PARAM_RESOURCE = "resource";
     
    
     /**
@@ -137,17 +162,66 @@ public class CmsFileInformationList extends A_CmsListDialog {
     /**
      * @see org.opencms.workplace.list.A_CmsListDialog#executeListMultiActions()
      */
-    public void executeListMultiActions() {
+    public void executeListMultiActions() throws IOException, ServletException {
 
-        
+    	if (getParamListAction().equals(LIST_MACTION_DELETE)) {
+            String rscList = "";
+            // execute the delete multiaction
+            Iterator itItems = getSelectedItems().iterator();
+            StringBuffer resources = new StringBuffer(32);
+            while (itItems.hasNext()) {
+                CmsListItem listItem = (CmsListItem)itItems.next();
+                resources.append(listItem.getId());
+                resources.append(",");
+            }
+            rscList = new String(resources);
+            rscList = rscList.substring(0, rscList.length() - 1);
+            Map params = new HashMap();
+            params.put(PARAM_RESOURCE, rscList);
+            params.put(PARAM_ACTION, DIALOG_INITIAL);
+            params.put(PARAM_STYLE, CmsToolDialog.STYLE_NEW);
+            getToolManager().jspForwardPage(this, PATH_REPORTS + "delete.jsp", params);
+        }else if (getParamListAction().equals(LIST_MACTION_DELETEANDPUBLISH)) {
+            String rscList = "";
+            // execute the delete multiaction
+            Iterator itItems = getSelectedItems().iterator();
+            StringBuffer resources = new StringBuffer(32);
+            while (itItems.hasNext()) {
+                CmsListItem listItem = (CmsListItem)itItems.next();
+                resources.append(listItem.getId());
+                resources.append(",");
+            }
+            rscList = new String(resources);
+            rscList = rscList.substring(0, rscList.length() - 1);
+            Map params = new HashMap();
+            params.put(PARAM_RESOURCE, rscList);
+            params.put(PARAM_ACTION, DIALOG_INITIAL);
+            params.put(PARAM_STYLE, CmsToolDialog.STYLE_NEW);
+            getToolManager().jspForwardPage(this, PATH_REPORTS + "deleteandpublish.jsp", params);
+        }
+        listSave();
     }
 
     /**
      * @see org.opencms.workplace.list.A_CmsListDialog#executeListSingleActions()
      */
-    public void executeListSingleActions() {
+    public void executeListSingleActions() throws IOException, ServletException {
 
-        
+    	String resource = getSelectedItem().getId();
+        Map params = new HashMap();
+        params.put(PARAM_RESOURCE, resource);
+        if (getParamListAction().equals(LIST_ACTION_DELETE)) {
+            // forward to the delete resource screen   
+            params.put(PARAM_ACTION, DIALOG_INITIAL);
+            params.put(PARAM_STYLE, CmsToolDialog.STYLE_NEW);
+            getToolManager().jspForwardPage(this, PATH_REPORTS + "delete.jsp", params);
+        } else if (getParamListAction().equals(LIST_ACTION_DELETEANDPUBLISH)) {
+            // forward to the delete resource screen   
+            params.put(PARAM_ACTION, DIALOG_INITIAL);
+            params.put(PARAM_STYLE, CmsToolDialog.STYLE_NEW);
+            getToolManager().jspForwardPage(this, PATH_REPORTS + "deleteandpublish.jsp", params);
+        }
+        listSave();
     }
 
     /**
@@ -182,12 +256,12 @@ public class CmsFileInformationList extends A_CmsListDialog {
         
         long createdBefore = settings.getSettingsFilesCreatedBeforeValue(getCms(), getSession());
         long createdAfter = settings.getSettingsFilesCreatedAfterValue(getCms(), getSession());
-        LOG.debug("getListItems... : createdBefore=" + createdBefore + " createdAfter=" + createdAfter);
+        LOG.debug("getListItems... : createdBefore=" + createdBefore + " (" + CmsDateUtil.getDateTimeShort(createdBefore) + ")" + " createdAfter=" + createdAfter + " (" + CmsDateUtil.getDateTimeShort(createdAfter) + ")");
         
         //recuperation des fichiers
         List<CmsResource> allRsc = new ArrayList<CmsResource>();
         try {
-        	allRsc = getCms().readResources(folder, CmsResourceFilter.DEFAULT_FILES, true);
+        	allRsc = getCms().readResources(folder, CmsResourceFilter.ALL.addRequireFile(), true);
         	if(allRsc==null){
         		LOG.warn("getListItems... allRsc null");
         		return ret;
@@ -209,14 +283,14 @@ public class CmsFileInformationList extends A_CmsListDialog {
       		  	String iconpath = OpenCms.getSystemInfo().getContextPath() + "/resources/" + CmsWorkplace.RES_PATH_FILETYPES + OpenCms.getWorkplaceManager().getExplorerTypeSetting(type).getIcon();
       		  	
       			// lock
-      		  	CmsLock lock = this.getCms().getLock(resource);
+      		  	CmsLock lock = getCms().getLock(resource);
     		  	String lockiconpath = null;
     		  	if(!lock.isUnlocked()){
     		  		lockiconpath = OpenCms.getSystemInfo().getContextPath() + "/resources/explorer/lock_other.gif";
-    		  		if(lock.isDirectlyOwnedBy(this.getCms().getRequestContext().getCurrentUser())){
+    		  		if(lock.isDirectlyOwnedBy(getCms().getRequestContext().getCurrentUser())){
     		  			lockiconpath = OpenCms.getSystemInfo().getContextPath() + "/resources/explorer/lock_user.gif";
     		  		}
-    		  		if(lock.isOwnedBy(this.getCms().getRequestContext().getCurrentUser()) && lock.isShared()){
+    		  		if(lock.isOwnedBy(getCms().getRequestContext().getCurrentUser()) && lock.isShared()){
     		  			lockiconpath = OpenCms.getSystemInfo().getContextPath() + "/resources/explorer/lock_shared.gif";
     		  		}
     		  	}
@@ -236,13 +310,20 @@ public class CmsFileInformationList extends A_CmsListDialog {
       		  	if(!resource.isReleasedAndNotExpired(System.currentTimeMillis())) 	spanitalic = "font-style:italic;";
       		  	String spanlined = "";
       		  	if(resource.getState().isDeleted()) 	spanlined = "text-decoration: line-through;";
+      		  	
+      		  	//project
+      		  	String projecticonpath = null;
+    		  	if(resource.getState().isChanged()) 	projecticonpath = OpenCms.getSystemInfo().getContextPath() + "/resources/explorer/project_this.png";
+    		  	if(resource.getState().isDeleted()) 	projecticonpath = OpenCms.getSystemInfo().getContextPath() + "/resources/explorer/project_this.png";
+    		  	if(resource.getState().isNew()) 		projecticonpath = OpenCms.getSystemInfo().getContextPath() + "/resources/explorer/project_this.png";
+    		  	if(resource.getState().isUnchanged()) 	projecticonpath = null;
                 
       		  	// rootpath
                 String rootPath = resource.getRootPath();
                 
                 // title property
                 CmsProperty property = getCms().readPropertyObject(resource.getRootPath(), "Title", false);
-                String title = property!=null ?  property.getValue() : "";
+                String title = (property!=null && property.getValue()!=null) ?  property.getValue() : "";
                 
                 // size
                 String size = resource.getLength() + "";
@@ -254,6 +335,7 @@ public class CmsFileInformationList extends A_CmsListDialog {
                 
       		  	item.set(LIST_COLUMN_TYPEICON, "<img src=\""+iconpath+"\" border=\"0\" width=\"16\" height=\"16\" alt=\"\"/>");
     		  	item.set(LIST_COLUMN_LOCKICON, lockiconpath!=null ? "<img src=\""+lockiconpath+"\" border=\"0\" width=\"16\" height=\"16\" alt=\"\"/>" : "");
+    		  	item.set(LIST_COLUMN_PROJECTICON, projecticonpath!=null ? "<img src=\""+projecticonpath+"\" border=\"0\" width=\"16\" height=\"16\" alt=\"\"/>" : "");
       		  	item.set(LIST_COLUMN_STATE, "<span style=\""+spancolor+spanitalic+spanlined+"\">" + state + "</span>");
       		  	item.set(LIST_COLUMN_PATH, "<span style=\""+spancolor+spanitalic+spanlined+"\">" + rootPath + "</span>");
       		  	item.set(LIST_COLUMN_TITLE, "<span style=\""+spancolor+spanitalic+spanlined+"\">" + title + "</span>");
@@ -329,13 +411,61 @@ public class CmsFileInformationList extends A_CmsListDialog {
      */
     protected void setMultiActions(CmsListMetadata metadata) {
 
-        // no LMA        
+    	// add the delete resource multi action
+        CmsListMultiAction deleteResources = new CmsListMultiAction(LIST_MACTION_DELETE);
+        deleteResources.setName(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_MDELETE_NAME_0));
+        deleteResources.setConfirmationMessage(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_MDELETE_CONF_0));
+        deleteResources.setIconPath(ICON_MULTI_DELETE);
+        deleteResources.setEnabled(true);
+        deleteResources.setHelpText(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_MDELETE_HELP_0));
+        metadata.addMultiAction(deleteResources); 
+        
+        // add the delete and publish resource multi action
+        CmsListMultiAction deleteandpublishResources = new CmsListMultiAction(LIST_MACTION_DELETEANDPUBLISH);
+        deleteandpublishResources.setName(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_NAME_0));
+        deleteandpublishResources.setConfirmationMessage(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_CONF_0));
+        deleteandpublishResources.setIconPath(ICON_MULTI_DELETE);
+        deleteandpublishResources.setEnabled(true);
+        deleteandpublishResources.setHelpText(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_MDELETEANDPUBLISH_HELP_0));
+        metadata.addMultiAction(deleteandpublishResources); 
     }
 
     /**
      * @see org.opencms.workplace.list.A_CmsListDialog#setColumns(org.opencms.workplace.list.CmsListMetadata)
      */
 	protected void setColumns(CmsListMetadata metadata) {
+		
+		// add column for delete action
+        CmsListColumnDefinition delCol = new CmsListColumnDefinition(LIST_COLUMN_DELETE);
+        delCol.setName(Messages.get().container(Messages.GUI_FILEINFORMATION_COLS_DELETE_0));
+        delCol.setWidth("20");
+        delCol.setSorteable(false);
+        delCol.setAlign(CmsListColumnAlignEnum.ALIGN_CENTER);
+        // direct action: delete resource
+        CmsListDirectAction delResource = new CmsListDirectAction(LIST_ACTION_DELETE);
+        delResource.setName(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_DELETE_NAME_0));
+        delResource.setConfirmationMessage(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_DELETE_CONF_0));
+        delResource.setIconPath(ICON_DELETE);
+        delResource.setEnabled(true);
+        delResource.setHelpText(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_DELETE_HELP_0));
+        delCol.addDirectAction(delResource);
+        metadata.addColumn(delCol);
+        
+        // add column for delete and publish action
+        CmsListColumnDefinition delPubCol = new CmsListColumnDefinition(LIST_COLUMN_DELETEANDPUBLISH);
+        delPubCol.setName(Messages.get().container(Messages.GUI_FILEINFORMATION_COLS_DELETEANDPUBLISH_0));
+        delPubCol.setWidth("20");
+        delPubCol.setSorteable(false);
+        delPubCol.setAlign(CmsListColumnAlignEnum.ALIGN_CENTER);
+        // direct action: delete resource
+        delResource = new CmsListDirectAction(LIST_ACTION_DELETEANDPUBLISH);
+        delResource.setName(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_NAME_0));
+        delResource.setConfirmationMessage(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_CONF_0));
+        delResource.setIconPath(ICON_DELETE);
+        delResource.setEnabled(true);
+        delResource.setHelpText(Messages.get().container(Messages.GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_HELP_0));
+        delPubCol.addDirectAction(delResource);
+        metadata.addColumn(delPubCol);
 		
 		// add column icon
 		CmsListColumnDefinition col = new CmsListColumnDefinition(LIST_COLUMN_TYPEICON);
@@ -351,6 +481,17 @@ public class CmsFileInformationList extends A_CmsListDialog {
         // add column lock icon
         col = new CmsListColumnDefinition(LIST_COLUMN_LOCKICON);
         col.setName(Messages.get().container(Messages.GUI_FILEINFORMATION_COLS_LOCKICON_0));
+        col.setWidth("20");
+        col.setAlign(CmsListColumnAlignEnum.ALIGN_CENTER);
+        col.setPrintable(false);
+        col.setSorteable(true);
+        col.setListItemComparator(new CmsListItemActionIconComparator());
+        col.setVisible(true);
+        metadata.addColumn(col);
+        
+        // add column project icon
+        col = new CmsListColumnDefinition(LIST_COLUMN_PROJECTICON);
+        col.setName(Messages.get().container(Messages.GUI_FILEINFORMATION_COLS_PROJECTICON_0));
         col.setWidth("20");
         col.setAlign(CmsListColumnAlignEnum.ALIGN_CENTER);
         col.setPrintable(false);
