@@ -680,7 +680,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         result.append("      buttons: [\n");
         result.append("        { count: 1, type: 'minute', text: '1m' },\n");
         result.append("        { count: 5, type: 'minute', text: '5m' }, \n");
-        result.append("        { count: 30, type: 'minute', text: '&#189;h' }, \n");
+        result.append("        { count: 30, type: 'minute', text: '\u00bdh' }, \n");
         result.append("        { count: 1, type: 'hour', text: '1h' },\n"); 
         result.append("        { count: 2, type: 'hour', text: '2h' }\n");
         result.append("      ],\n");
@@ -737,7 +737,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         result.append("      buttons: [");
         result.append("        { count: 1, type: 'minute', text: '1m' },");
         result.append("        { count: 5, type: 'minute', text: '5m' }, ");
-        result.append("        { count: 30, type: 'minute', text: '&#189;h' }, ");
+        result.append("        { count: 30, type: 'minute', text: '\u00bdh' }, ");
         result.append("        { count: 1, type: 'hour', text: '1h' }, ");
         result.append("        { count: 2, type: 'hour', text: '2h' }");
         result.append("      ],");
@@ -795,7 +795,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         result.append("      buttons: [");
         result.append("        { count: 1, type: 'minute', text: '1m' },");
         result.append("        { count: 5, type: 'minute', text: '5m' }, ");
-        result.append("        { count: 30, type: 'minute', text: '&#189;h' }, ");
+        result.append("        { count: 30, type: 'minute', text: '\u00bdh' }, ");
         result.append("        { count: 1, type: 'hour', text: '1h' }, ");
         result.append("        { count: 2, type: 'hour', text: '2h' }");
         result.append("      ],");
@@ -852,7 +852,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
         result.append("      buttons: [");
         result.append("        { count: 1, type: 'minute', text: '1m' },");
         result.append("        { count: 5, type: 'minute', text: '5m' }, ");
-        result.append("        { count: 30, type: 'minute', text: '&#189;h' }, ");
+        result.append("        { count: 30, type: 'minute', text: '\u00bdh' }, ");
         result.append("        { count: 1, type: 'hour', text: '1h' }, ");
         result.append("        { count: 2, type: 'hour', text: '2h' }");
         result.append("      ],");
