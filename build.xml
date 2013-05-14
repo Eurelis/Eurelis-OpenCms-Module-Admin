@@ -179,8 +179,8 @@
       <!--Les RESSOURCES DE MODULE-->
       <resource uri="/system/modules/${module.module.name}/" />
       <!--Les PARAMETRES-->
-      <!--<parameter name="config.sitemap" value="/system/modules/${module.module.name}/config/sitemap.config" />
-      <parameter name="config.containerpage" value="/system/modules/${module.module.name}/config/sitemap.config" />-->
+      <parameter name="README_FILEPATH" value="/system/modules/${module.module.name}/readme.txt" />
+			<!--<parameter name="config.containerpage" value="/system/modules/${module.module.name}/config/sitemap.config" />-->
       <!--Les DEPENDANCES (vis a vis d'autres modules)-->
       <!--dependency name="com.eurelis.opencms.utils" version="1.0.0.3" />
 			<dependency name="com.alkacon.opencms.v8.formgenerator" version="2.0.1" /-->

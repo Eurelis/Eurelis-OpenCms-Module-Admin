@@ -303,7 +303,18 @@ public final class Messages extends A_CmsMessageBundle {
     public static final String GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_HELP_0 = "GUI_FILEINFORMATION_ACTION_DELETEANDPUBLISH_HELP_0";
     
     
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_RESOURCE_1 = "GUI_FILEINFORMATION_RESOURCE_1";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_MULTI_2 = "GUI_FILEINFORMATION_MULTI_2";
+    /** Message constant for key in the resource bundle. */
+    public static final String ERR_FILEINFORMATION_MULTI_0 = "ERR_FILEINFORMATION_MULTI_0";
     
+    
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_LABEL_MINLENGTH_0 = "GUI_LABEL_MINLENGTH_0";
+    /** Message constant for key in the resource bundle. */
+    public static final String GUI_LABEL_MAXLENGTH_0 = "GUI_LABEL_MAXLENGTH_0";
     
     
 
