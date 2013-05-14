@@ -54,6 +54,7 @@
       var url = getURLParameter('url');
       var orientation = getURLParameter('orientation');
       var device = getURLParameter('device'); 
+      /*
       var ios = {
         'iphone' : {
           'portrait' : {
@@ -83,7 +84,24 @@
             'img': '<cms:link>/system/modules/com.eurelis.opencms.admin/resources/rotate-cw.png</cms:link>',
           }
         }
-      };
+      };*/
+      var ios = new Array();
+      <c:forEach var="device" items="${deviceVOList}">
+      ios['${device.id}'] = {
+              'portrait' : {
+                  'width' : ${device.imageWidth},
+                  'height': ${device.imageHeight},
+                  'next-class' : 'landscape',
+                  'img': '<cms:link>/system/modules/com.eurelis.opencms.admin/resources/rotate-ccw.png</cms:link>',
+                },
+                'landscape' : {
+                  'width' : ${device.imageHeight},
+                  'height': ${device.imageWidth},
+                  'next-class' : 'portrait',
+                  'img': '<cms:link>/system/modules/com.eurelis.opencms.admin/resources/rotate-cw.png</cms:link>',
+                }};
+      </c:forEach>
+      
       function getURLParameter(name) {
         return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]);
       }
@@ -163,10 +181,10 @@
         content: "";
         position: absolute;
         z-index: -1;
-        width: 200%;
-        height: 200%;
+        width: ${device.imageHeight * 2}px;
+        height: ${device.imageWidth * 2}px;
         top: -${device.imageHeight}px;
-        left: -${device.imageWidth}px;
+        left: -${device.imageHeight - device.imageWidth}px;
         background: url(<cms:link>${device.imageSrc}</cms:link>) no-repeat;
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
