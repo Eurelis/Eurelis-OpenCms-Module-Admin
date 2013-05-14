@@ -17,9 +17,9 @@
 	</xsd:complexType>
 	<xsd:annotation>
 		<xsd:appinfo>
-			<resourcebundle name="com.eurelis.opencms.admin" />
+			<resourcebundle name="com.eurelis.opencms.admin.workplace" />
 			<layouts>
-				<layout element="Position" widget="ComboWidget" configuration="value='FIRST' help='${key.position.FIRST}'|value='BEFORE' help='${key.position.BEFORE}'|value='AFTER' help='${key.position.AFTER}'|value='LAST' help='${key.position.LAST}'"/>
+				<layout element="Position" widget="ComboWidget" configuration="value='FIRST' help='${key.position.FIRST}' |value='BEFORE' help='${key.position.BEFORE}' |value='AFTER' help='${key.position.AFTER}' |value='LAST' help='${key.position.LAST}' "/>
 			</layouts>
 		</xsd:appinfo>
 	</xsd:annotation>

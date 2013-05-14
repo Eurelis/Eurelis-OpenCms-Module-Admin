@@ -31,11 +31,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
-import org.opencms.file.CmsFile;
 import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.main.CmsLog;
 import org.opencms.report.I_CmsReportThread;
-import org.opencms.workplace.explorer.CmsExplorer;
 import org.opencms.workplace.list.A_CmsListReport;
 
 import com.eurelis.opencms.admin.xmltransformation.CmsXmlTransformation;
