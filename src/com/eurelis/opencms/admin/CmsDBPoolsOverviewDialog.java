@@ -1014,8 +1014,8 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
         
         
         result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/jquery/packed/jquery.js") + "'></script>\n");
-        result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/highstock.js'></script>\n");
-        result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/modules/exporting.js'></script>\n");
+        result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/highcharts/highstock-1.3.0.js") + "'></script>\n");
+        result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/highcharts/exporting-3.0.0.js") + "'></script>\n");
         
         result.append("<script type='text/javascript'>\n");
         result.append("$(function() {\n");
@@ -1446,7 +1446,7 @@ public class CmsDBPoolsOverviewDialog extends CmsWidgetDialog {
 	        result.append("      buttons: [\n");
 	        result.append("        { count: 1, type: 'minute', text: '1m' },\n");
 	        result.append("        { count: 5, type: 'minute', text: '5m' }, \n");
-	        result.append("        { count: 30, type: 'minute', text: '½h' }, \n");
+	        result.append("        { count: 30, type: 'minute', text: '\u00bdh' }, \n");
 	        result.append("        { count: 1, type: 'hour', text: '1h' },\n"); 
 	        result.append("        { count: 2, type: 'hour', text: '2h' }\n");
 	        result.append("      ],\n");

@@ -9,6 +9,7 @@ package com.eurelis.opencms.admin.responsivepreview;
 public class DeviceVO {
 
 	private String id;
+	private String label;
 	private int imageWidth;
 	private int imageHeight;
 	private String imageSrc;
@@ -21,8 +22,9 @@ public class DeviceVO {
 		
 	}
 	
-	public DeviceVO(String id, int imageWidth, int imageHeight, String imageSrc, int screenWidth, int screenHeight, int screenTop, int screenLeft) {
+	public DeviceVO(String id, String label, int imageWidth, int imageHeight, String imageSrc, int screenWidth, int screenHeight, int screenTop, int screenLeft) {
 		this.id = id;
+		this.label = label;
 		this.imageWidth = imageWidth;
 		this.imageHeight = imageHeight;
 		this.imageSrc = imageSrc;
@@ -34,6 +36,10 @@ public class DeviceVO {
 
 	public String getId() {
 		return id;
+	}
+	
+	public String getLabel() {
+		return label;
 	}
 
 	public int getImageWidth() {

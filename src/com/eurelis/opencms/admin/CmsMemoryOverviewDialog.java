@@ -487,8 +487,8 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
         result.append(createWidgetTableEnd());
         
         result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/jquery/packed/jquery.js") + "'></script>\n");
-        result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/highstock.js'></script>\n");
-        result.append("<script type='text/javascript' src='http://code.highcharts.com/stock/modules/exporting.js'></script>\n");
+        result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/highcharts/highstock-1.3.0.js") + "'></script>\n");
+        result.append("<script type='text/javascript' src='" + getJsp().link("/system/workplace/resources/highcharts/exporting-3.0.0.js") + "'></script>\n");
         result.append("<script type='text/javascript'>\n");
         result.append("$(function() {\n");
         result.append("  $('form#EDITOR').after('");

@@ -82,8 +82,10 @@ public class DeviceListReader {
 		
 		Element image = (Element)deviceElement.selectSingleNode("image");
 		Element screen = (Element)deviceElement.selectSingleNode("screen");
+		Element labelElement = (Element)deviceElement.selectSingleNode("label");
 		
 		String id = deviceElement.attributeValue("id");
+		String label = labelElement.getTextTrim();
 		int imageWidth = Integer.parseInt(image.attributeValue("width"));
 		int imageHeight = Integer.parseInt(image.attributeValue("height"));
 		String imageSrc = image.getTextTrim();
@@ -92,7 +94,7 @@ public class DeviceListReader {
 		int screenTop = Integer.parseInt(screen.attributeValue("top"));
 		int screenLeft = Integer.parseInt(screen.attributeValue("left"));
 		
-		return new DeviceVO(id, imageWidth, imageHeight, imageSrc, screenWidth, screenHeight, screenTop, screenLeft);
+		return new DeviceVO(id, label, imageWidth, imageHeight, imageSrc, screenWidth, screenHeight, screenTop, screenLeft);
 	}
 	
 	
