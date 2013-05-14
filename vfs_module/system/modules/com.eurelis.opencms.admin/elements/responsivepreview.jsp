@@ -38,7 +38,7 @@
 		
  		String resourceName =  CmsEncoder.decode(jsp.getRequest().getParameter(CmsDialog.PARAM_RESOURCE));
 	
- 		String onlineLink = OpenCms.getLinkManager().getOnlineLink(cmsObject, resourceName);
+ 		String onlineLink = OpenCms.getLinkManager().getServerLink(cmsObject, resourceName);
  	
 		DeviceListReader dlr = new DeviceListReader(jsp);
 		dlr.processRequest(request);
@@ -49,42 +49,12 @@
 <html>
   <head>
     <link href="<cms:link>/system/workplace/commons/style/workplace.css</cms:link>" type="text/css" rel="stylesheet"></link>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="<cms:link>/system/modules/com.eurelis.opencms.admin/resources/jquery.min.js</cms:link>"></script>
     <script>
       var url = getURLParameter('url');
       var orientation = getURLParameter('orientation');
       var device = getURLParameter('device'); 
-      /*
-      var ios = {
-        'iphone' : {
-          'portrait' : {
-            'width' : 378,
-            'height': 744,
-            'next-class' : 'landscape',
-            'img': '<cms:link>/system/modules/com.eurelis.opencms.admin/resources/rotate-ccw.png</cms:link>',
-          },
-          'landscape' : {
-            'width' : 744,
-            'height': 378,
-            'next-class' : 'portrait',
-            'img': '<cms:link>/system/modules/com.eurelis.opencms.admin/resources/rotate-cw.png</cms:link>',
-          }
-        },
-        'ipad' : {
-          'portrait' : {
-            'width' : 986,
-            'height': 1268,
-            'next-class' : 'landscape',
-            'img': '<cms:link>/system/modules/com.eurelis.opencms.admin/resources/rotate-ccw.png</cms:link>',
-          },
-          'landscape' : {
-            'width' : 1268,
-            'height': 986,
-            'next-class' : 'portrait',
-            'img': '<cms:link>/system/modules/com.eurelis.opencms.admin/resources/rotate-cw.png</cms:link>',
-          }
-        }
-      };*/
+     
       var ios = new Array();
       <c:forEach var="device" items="${deviceVOList}">
       ios['${device.id}'] = {
@@ -120,7 +90,7 @@
       }
       function rotate() {
         var next = ios[device][orientation]['next-class'];
-        openWindow(ios[device][next]['width'], ios[device][next]['height'], location.pathname+'?url='+url+'&device='+device+'&orientation='+next);
+        openWindow(ios[device][next]['width'] + 10, ios[device][next]['height'] + 10, location.pathname+'?url='+url+'&device='+device+'&orientation='+next);
         window.close();
       }
       $(document).ready(function(){
@@ -198,10 +168,22 @@
         height: ${device.screenWidth}px;
         padding: ${device.imageWidth - device.screenWidth - device.screenLeft}px ${device.imageHeight - device.screenHeight - device.screenTop}px ${device.screenLeft}px ${device.screenTop}px;
       }
+      
       .${device.id}.portrait iframe {
         width: ${device.screenWidth}px;
         height: ${device.screenHeight}px;
         padding: ${device.screenTop}px ${device.imageWidth - device.screenWidth - device.screenLeft}px ${device.imageHeight - device.screenHeight - device.screenTop}px ${device.screenLeft}px;
+      }
+      
+      
+      div#ios.${device.id}.portrait #iphone_alert {
+        top: ${device.screenTop + device.screenHeight / 2 - 220}px;
+        left: ${device.screenLeft + device.screenWidth / 2 - 160}px;
+      }
+      
+      div#ios.${device.id}.landscape #iphone_alert {
+        top: ${device.imageWidth - device.screenWidth - device.screenLeft + device.screenWidth / 2 - 220}px;
+        left: ${device.screenTop + device.screenHeight / 2 - 160}px;
       }
       
       </c:forEach>
@@ -224,27 +206,7 @@
         z-index:1;
       }
       
-      
-      div#ios.iphone.portrait #iphone_alert {
-        top: 125px;
-        left: 30px;
-      }
-      
-      div#ios.iphone.landscape #iphone_alert {
-        top: -40px;
-        left: 215px;
-      }
-      
-      div#ios.ipad.portrait #iphone_alert {
-        top: 300px;
-        left: 330px;
-      }
-      
-      div#ios.ipad.landscape #iphone_alert {
-        top: 240px;
-        left: 480px;
-      }
-      
+     
       /* Alert */
       #iphone_alert {
         width : 320px;
@@ -428,8 +390,9 @@
           									<tr>
             									<td>Terminal mobile:</td>
             									<td>
-              										<label id="deviceiphone"><input type="radio" name="device" value="iphone" checked="checked"/><img src="<cms:link>/system/modules/com.eurelis.opencms.admin/resources/iphone.png</cms:link>" width="30"/>iPhone</label>  
-              										<label id="deviceipad"><input type="radio" name="device" value="ipad"/><img src="<cms:link>/system/modules/com.eurelis.opencms.admin/resources/ipad.png</cms:link>" width="80"/>iPad</label>  
+            										<c:forEach var="device" items="${deviceVOList}" varStatus="status">
+              										<label id="device${device.id}"><input type="radio" name="device" value="${device.id}" ${status.first?"checked=\"checked\"":"" }/><img src="<cms:link>${device.imageSrc}</cms:link>" height="60"/>${device.label}</label>  
+              										</c:forEach>
             									</td>
           									</tr>
           									<tr>
