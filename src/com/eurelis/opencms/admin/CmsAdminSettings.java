@@ -678,10 +678,12 @@ public class CmsAdminSettings {
 				e.printStackTrace();
 				LOG.error(e);
 			}finally{
-				try {
-					obj.unlockResource(file);
-				} catch (CmsException e) {
-					//
+				if(file != null){
+					try {
+						obj.unlockResource(file);
+					} catch (CmsException e) {
+						//
+					}
 				}
 			}
         }else{
