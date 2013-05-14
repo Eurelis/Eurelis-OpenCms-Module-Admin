@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<devices>
+	<device id="iphone">
+		<image width="378" height="744">/system/modules/com.eurelis.opencms.admin/resources/iphone.png</image>
+		<screen width="320" height="480" top="133" left="31"/>
+	</device>
+	<device id="ipad">
+		<image width="986" height="1268">/system/modules/com.eurelis.opencms.admin/resources/ipad.png</image>
+		<screen width="768" height="1024" top="122" left="117"/>
+	</device>
+</devices>
