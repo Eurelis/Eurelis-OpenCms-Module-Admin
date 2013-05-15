@@ -17,11 +17,10 @@
  * License along with this module. 
  * If not, see <http://www.gnu.org/licenses/>
  */
-package com.eurelis.opencms.admin;
+package com.eurelis.opencms.admin.systeminformation;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +35,8 @@ import org.opencms.widgets.CmsCheckboxWidget;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
+
+import com.eurelis.opencms.admin.CmsAdminSettings;
 
 /**
  * The system infos overview dialog.<p>
@@ -611,20 +612,6 @@ public class CmsMemoryOverviewDialog extends CmsWidgetDialog {
             }else{
             	//LOG.debug("MemoryPoolMXBean name = " + name.toLowerCase());
             }
-            
-            /*if(idname.equals("heap")){
-            	result.append(writeRow(Messages.get().getBundle().key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_LABEL_HEAPFREE), ""+Runtime.getRuntime().freeMemory()));
-            	result.append(writeRow(Messages.get().getBundle().key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_LABEL_HEAPTOTAL), ""+Runtime.getRuntime().totalMemory()));
-            	result.append(writeRow(Messages.get().getBundle().key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_LABEL_HEAPMAX), ""+Runtime.getRuntime().maxMemory()));
-            }else if(idname.equals("physical")){
-            	result.append(writeRow(Messages.get().getBundle().key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_LABEL_PHYSICALFREE), ""+sunOsBean.getFreePhysicalMemorySize()));
-            	result.append(writeRow(Messages.get().getBundle().key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_LABEL_PHYSICALTOTAL), ""+sunOsBean.getTotalPhysicalMemorySize()));
-            }else if(idname.equals("swap")){
-            	result.append(writeRow(Messages.get().getBundle().key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_LABEL_SWAPFREE), ""+sunOsBean.getFreeSwapSpaceSize()));
-            	result.append(writeRow(Messages.get().getBundle().key(Messages.GUI_SYSTEMINFORMATION_MEMORY_ADMIN_TOOL_LABEL_SWAPTOTAL), ""+sunOsBean.getTotalSwapSpaceSize()));
-            }else{
-            	
-            }*/
             
             
         }

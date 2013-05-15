@@ -19,16 +19,10 @@
  * If not, see <http://www.gnu.org/licenses/>
  */
  %>
-<%@page import="
-					java.util.*,
-					org.opencms.file.*,
-					org.opencms.db.*,
-					org.opencms.jsp.CmsJspActionElement,
-					org.opencms.main.OpenCms,
-					org.opencms.workplace.CmsDialog,
-					com.eurelis.opencms.admin.CmsFileInformationList,
-					com.eurelis.opencms.admin.Messages" %>
+<%@page language="java" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
+<%@page import="com.eurelis.opencms.admin.fileinformation.CmsFileInformationList" %>
 <%	
-		CmsFileInformationList wp = new CmsFileInformationList(pageContext, request, response);
-    wp.displayDialog();
+//initialize the widget dialog
+CmsFileInformationList wp = new CmsFileInformationList(pageContext, request, response);
+wp.displayDialog();
 %>

@@ -17,11 +17,10 @@
  * License along with this module. 
  * If not, see <http://www.gnu.org/licenses/>
  */
-package com.eurelis.opencms.admin;
+package com.eurelis.opencms.admin.systeminformation;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +38,8 @@ import org.opencms.widgets.CmsCheckboxWidget;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
+
+import com.eurelis.opencms.admin.CmsAdminSettings;
 
 /**
  * The system infos overview dialog.<p>

@@ -18,7 +18,7 @@
  * If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.eurelis.opencms.admin;
+package com.eurelis.opencms.admin.fileinformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +57,8 @@ import org.opencms.workplace.list.CmsListMultiAction;
 import org.opencms.workplace.list.CmsListOrderEnum;
 import org.opencms.workplace.list.CmsListSearchAction;
 import org.opencms.workplace.tools.CmsToolDialog;
+
+import com.eurelis.opencms.admin.CmsAdminSettings;
 
 
 

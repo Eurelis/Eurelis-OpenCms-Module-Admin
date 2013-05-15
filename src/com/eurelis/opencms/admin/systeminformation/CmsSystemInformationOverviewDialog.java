@@ -17,35 +17,29 @@
  * License along with this module. 
  * If not, see <http://www.gnu.org/licenses/>
  */
-package com.eurelis.opencms.admin;
+package com.eurelis.opencms.admin.systeminformation;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
-import org.opencms.file.CmsFile;
-import org.opencms.file.CmsObject;
-import org.opencms.file.CmsProperty;
-import org.opencms.file.CmsResource;
 import org.opencms.jsp.CmsJspActionElement;
-import org.opencms.main.CmsException;
-import org.opencms.main.CmsIllegalArgumentException;
 import org.opencms.main.CmsLog;
 import org.opencms.main.OpenCms;
 import org.opencms.util.CmsStringUtil;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.widgets.CmsInputWidget;
-import org.opencms.widgets.CmsSelectWidget;
 import org.opencms.widgets.CmsSelectWidgetOption;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
+
+import com.eurelis.opencms.admin.CmsAdminSettings;
 
 /**
  * The system infos overview dialog.<p>
@@ -73,6 +67,15 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
     
     /** System infos . */
     private String m_jvmStarttime;
+    
+    /** System infos . */
+    private String m_opencmsVersion;
+    
+    /** System infos . */
+    private String m_opencmsRuntime;
+    
+    /** System infos . */
+    private String m_opencmsStartupTime;
     
     /** The admin settings object that is edited on this dialog. */
     protected CmsAdminSettings m_adminSettings;
@@ -161,7 +164,35 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         return m_jvmStarttime;
     }
     
+    /**
+     * Returns the OpenCms version.<p>
+     *
+     * @return the OpenCms version
+     */
+    public String getOpenCmsVersion() {
+
+        return m_opencmsVersion;
+    }
     
+    /**
+     * Returns the OpenCms runtime.<p>
+     *
+     * @return the OpenCms runtime
+     */
+    public String getOpenCmsRuntime() {
+
+        return m_opencmsRuntime;
+    }
+    
+    /**
+     * Returns the OpenCms startup time.<p>
+     *
+     * @return the OpenCms startup time
+     */
+    public String getOpenCmsStartupTime() {
+
+        return m_opencmsStartupTime;
+    }
 
 
     /**
@@ -204,6 +235,35 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         m_jvmStarttime = jvmStarttime;
     }
     
+    /**
+     * Sets the OpenCms version.<p>
+     *
+     * @param opencmsVersion the OpenCms version to set
+     */
+    public void setOpenCmsVersion(String opencmsVersion) {
+
+        m_opencmsVersion = opencmsVersion;
+    }
+    
+    /**
+     * Sets the OpenCms runtime.<p>
+     *
+     * @param opencmsRuntime the OpenCms runtime to set
+     */
+    public void setOpenCmsRuntime(String opencmsRuntime) {
+
+        m_opencmsRuntime = opencmsRuntime;
+    }
+    
+    /**
+     * Sets the OpenCms startup time.<p>
+     *
+     * @param opencmsStartupTime the OpenCms startup time to set
+     */
+    public void setOpenCmsStartupTime(String opencmsStartupTime) {
+
+        m_opencmsStartupTime = opencmsStartupTime;
+    }
    
 
     /**
@@ -228,14 +288,14 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
             // create the widgets for the first dialog page
             result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_OVERVIEW_ADMIN_TOOL_BLOCK_1)));
             result.append(createWidgetTableStart());
-            result.append(createDialogRowsHtml(0, 3));
+            result.append(createDialogRowsHtml(0, 6));
             result.append(createWidgetTableEnd());
             result.append(dialogBlockEnd());
             
             // create the widgets for the settings page
             result.append(dialogBlockStart(key(Messages.GUI_SYSTEMINFORMATION_OVERVIEW_SETTINGS_NAME_0)));
             result.append(createWidgetTableStart());
-            result.append(createDialogRowsHtml(4, 4));
+            result.append(createDialogRowsHtml(7, 7));
             result.append(createWidgetTableEnd());
             result.append(dialogBlockEnd());
         }
@@ -269,6 +329,9 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
         addWidget(new CmsWidgetDialogParameter(this, "javaVersion", PAGES[0], new CmsDisplayWidget()));
         addWidget(new CmsWidgetDialogParameter(this, "jvmUptime", PAGES[0], new CmsDisplayWidget()));
         addWidget(new CmsWidgetDialogParameter(this, "jvmStarttime", PAGES[0], new CmsDisplayWidget()));
+        addWidget(new CmsWidgetDialogParameter(this, "openCmsVersion", PAGES[0], new CmsDisplayWidget()));
+        addWidget(new CmsWidgetDialogParameter(this, "openCmsRuntime", PAGES[0], new CmsDisplayWidget()));
+        addWidget(new CmsWidgetDialogParameter(this, "openCmsStartupTime", PAGES[0], new CmsDisplayWidget()));
            
         //addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsSelectWidget(getIntervals())));
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "interval", PAGES[0], new CmsInputWidget()));
@@ -305,10 +368,21 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
     	date = new Date(runtimeBean.getStartTime());
     	String jvmstarttimestring = simpleFormatH.format(date) + "h " + simpleFormatM.format(date) + "min " + simpleFormatS.format(date) + "s ";
     	
+    	//OpenCms runtime
+    	date = new Date(OpenCms.getSystemInfo().getRuntime());
+    	String opencmsruntimestring = simpleFormatH.format(date) + "h " + simpleFormatM.format(date) + "min " + simpleFormatS.format(date) + "s ";
+    	
+    	//OpenCms startup time
+    	date = new Date(OpenCms.getSystemInfo().getStartupTime());
+    	String opencmsstartuptimestring = simpleFormatH.format(date) + "h " + simpleFormatM.format(date) + "min " + simpleFormatS.format(date) + "s ";
+    	
     	setOperatingSystem(""+osBean.getName());
     	setJavaVersion(""+runtimeBean.getVmVersion());
     	setJvmUptime(""+jvmuptimestring);
     	setJvmStarttime(""+jvmstarttimestring);
+    	setOpenCmsVersion(OpenCms.getSystemInfo().getVersionNumber());
+    	setOpenCmsRuntime(""+opencmsruntimestring);
+    	setOpenCmsStartupTime(""+opencmsstartuptimestring);
 
     	
     	Object o;
@@ -363,9 +437,6 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
 
         //recuperation du parametre memorise en system
         int defaultInterval = CmsAdminSettings.getSettingsIntervalValue(getCms(), getSession());
-        /*LOG.debug("Admin settings getIntervals(), defaultInterval = " + defaultInterval);
-        LOG.debug("Admin settings getIntervals(), defaultInterval =? 5000 " + (defaultInterval==5000));
-        LOG.debug("Admin settings getIntervals(), defaultInterval =? 10000 " + (defaultInterval==10000));*/
         
         ret.add(new CmsSelectWidgetOption(
             String.valueOf(5000),

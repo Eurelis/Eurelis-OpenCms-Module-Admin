@@ -1,14 +1,3 @@
-<%@page taglibs="c,cms,fn,fmt" language="java" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
-<%@page import="
-					java.util.*,
-					org.opencms.file.*,
-					org.opencms.db.*,
-					org.opencms.jsp.CmsJspActionElement,
-					org.opencms.main.OpenCms,
-					org.opencms.workplace.CmsDialog,
-					com.eurelis.opencms.admin.Messages,
-					com.eurelis.opencms.admin.CmsCPUThreadsClassesOverviewDialog,
-					java.lang.management.ManagementFactory" %>
 <% 			
 /**
  * This file is part of the Eurelis OpenCms Admin Module.
@@ -29,7 +18,10 @@
  * License along with this module. 
  * If not, see <http://www.gnu.org/licenses/>
  */
- %>					
+ %>
+<%@page language="java" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
+<%@page import="com.eurelis.opencms.admin.systeminformation.CmsCPUThreadsClassesOverviewDialog" %>
+					
 					
 <%
 //initialize the widget dialog

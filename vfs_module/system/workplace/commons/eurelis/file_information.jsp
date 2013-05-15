@@ -19,21 +19,14 @@
  * If not, see <http://www.gnu.org/licenses/>
  */
  %>
+<%@page language="java" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
 <%@page import="
-					java.util.*,
-					org.opencms.file.*,
-					org.opencms.db.*,
-					org.opencms.jsp.CmsJspActionElement,
-					org.opencms.main.OpenCms,
 					org.opencms.workplace.CmsDialog,
-					com.eurelis.opencms.admin.CmsFileInformationDialog,
-					com.eurelis.opencms.admin.Messages" %>
+					com.eurelis.opencms.admin.fileinformation.CmsFileInformationDialog" %>
 	
 <%
 CmsDialog dial = new CmsDialog(pageContext, request, response);
 //initialize the widget dialog
 CmsFileInformationDialog wpWidget = new CmsFileInformationDialog(pageContext, request, response, dial.getCms().getRequestContext().addSiteRoot(dial.getParamResource()));
-
-//wpWidget.setFolder(wpWidget.getCms().getRequestContext().addSiteRoot(wpWidget.getParamResource()));
 wpWidget.displayDialog();
 %>

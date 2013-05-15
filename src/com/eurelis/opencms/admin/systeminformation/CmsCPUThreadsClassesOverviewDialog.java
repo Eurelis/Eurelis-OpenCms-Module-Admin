@@ -17,24 +17,19 @@
  * License along with this module. 
  * If not, see <http://www.gnu.org/licenses/>
  */
-package com.eurelis.opencms.admin;
+package com.eurelis.opencms.admin.systeminformation;
 
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
-import org.opencms.file.CmsObject;
 import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.main.CmsLog;
 import org.opencms.util.CmsStringUtil;
@@ -43,6 +38,7 @@ import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
 
+import com.eurelis.opencms.admin.CmsAdminSettings;
 import com.sun.management.OperatingSystemMXBean;
 
 /**
@@ -526,7 +522,7 @@ public class CmsCPUThreadsClassesOverviewDialog extends CmsWidgetDialog {
     	
     	
     	setCpuCount(""+osBean.getAvailableProcessors());
-    	double usage = com.eurelis.opencms.admin.CmsCPUThreadsClassesOverviewDialog.getCPUUsage(getSession());
+    	double usage = com.eurelis.opencms.admin.systeminformation.CmsCPUThreadsClassesOverviewDialog.getCPUUsage(getSession());
     	usage = Math.round(usage * 100) / 100;
     	setCpuUsage(""+100*usage+"%");
     	
