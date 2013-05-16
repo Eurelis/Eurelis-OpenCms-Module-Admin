@@ -14,6 +14,7 @@
 		<h4>Autres</h4>
 		<ul>
 			<li>Transformation xmlcontent : Suppression / Deplacement des champs d'un xmlcontent</li>
+			<li>Sonde</li>
 		</ul>
 	</div>
 	<h3>Historique</h3>
