@@ -402,6 +402,15 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
 
     	m_createdAfter = value;
     }
+    
+    
+    
+    protected String getDialogTitle() {
+
+        return key(Messages.GUI_FILEINFORMATION_DIALOG_TITLE);
+    }
+    
+    
 
     /**
      * @see org.opencms.workplace.CmsWidgetDialog#createDialogHtml(java.lang.String)

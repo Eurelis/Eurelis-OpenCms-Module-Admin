@@ -24,6 +24,9 @@ import org.opencms.i18n.I_CmsMessageBundle;
 
 
 public final class Messages extends A_CmsMessageBundle {
+	
+	/** Message constant for key in the resource bundle. */
+    public static final String GUI_FILEINFORMATION_DIALOG_TITLE = "GUI_FILEINFORMATION_DIALOG_TITLE";
 
 	
 	/** Message constant for key in the resource bundle. */
