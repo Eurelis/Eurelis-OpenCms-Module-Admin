@@ -177,6 +177,7 @@
       <!--Les POINTS D'EXPORTS-->
       <exportpoint src="/system/modules/${module.module.name}/lib/" dst="WEB-INF/lib/" />
       <exportpoint src="/system/modules/${module.module.name}/classes/" dst="WEB-INF/classes/" />
+			<exportpoint src="/system/workplace/locales/fr/messages/" dst="WEB-INF/classes/" />
       <exportpoint src="/system/modules/${module.module.name}/taglib/" dst="WEB-INF/" />
       <!--Les RESSOURCES DE MODULE-->
       <resource uri="/system/modules/${module.module.name}/" />
