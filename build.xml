@@ -142,6 +142,9 @@
   	<copy file="${folder.src}/${folder.package}/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}" />
   	<copy file="${folder.src}/${folder.package}/xmltransformation/ui/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/xmltransformation/ui/" />
   	<copy file="${folder.src}/${folder.package}/xmltransformation/ui/threads/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/xmltransformation/ui/threads/" />
+  	<copy file="${folder.src}/${folder.package}/responsivepreview/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/responsivepreview/" />
+  	<copy file="${folder.src}/${folder.package}/responsivepreview/messages_fr.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/responsivepreview/" />
+  	  	  	
   	
   	<!-- UNCOMMENT TO MINIFY -->
   	<!--antcall target="optimize-css"/-->
