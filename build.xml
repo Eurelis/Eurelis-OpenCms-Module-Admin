@@ -140,6 +140,8 @@
     <mkdir dir="${folder.build.module}/system/modules/${module.module.name}/lib"/>
     <copy file="${folder.build.jar}/${jar.file}" todir="${folder.build.module}/system/modules/${module.module.name}/lib" />
   	<copy file="${folder.src}/${folder.package}/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}" />
+  	<copy file="${folder.src}/${folder.package}/systeminformation/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/systeminformation/" />
+  	<copy file="${folder.src}/${folder.package}/fileinformation/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/fileinformation/" />
   	<copy file="${folder.src}/${folder.package}/xmltransformation/ui/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/xmltransformation/ui/" />
   	<copy file="${folder.src}/${folder.package}/xmltransformation/ui/threads/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/xmltransformation/ui/threads/" />
   	<copy file="${folder.src}/${folder.package}/responsivepreview/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/responsivepreview/" />
@@ -178,12 +180,13 @@
       <!--Les POINTS D'EXPORTS-->
       <exportpoint src="/system/modules/${module.module.name}/lib/" dst="WEB-INF/lib/" />
       <exportpoint src="/system/modules/${module.module.name}/classes/" dst="WEB-INF/classes/" />
+			<exportpoint src="/system/workplace/locales/fr/messages/" dst="WEB-INF/classes/" />
       <exportpoint src="/system/modules/${module.module.name}/taglib/" dst="WEB-INF/" />
       <!--Les RESSOURCES DE MODULE-->
       <resource uri="/system/modules/${module.module.name}/" />
       <!--Les PARAMETRES-->
-      <!--<parameter name="config.sitemap" value="/system/modules/${module.module.name}/config/sitemap.config" />
-      <parameter name="config.containerpage" value="/system/modules/${module.module.name}/config/sitemap.config" />-->
+      <parameter name="README_FILEPATH" value="/system/modules/${module.module.name}/readme.txt" />
+			<!--<parameter name="config.containerpage" value="/system/modules/${module.module.name}/config/sitemap.config" />-->
       <!--Les DEPENDANCES (vis a vis d'autres modules)-->
       <!--dependency name="com.eurelis.opencms.utils" version="1.0.0.3" />
 			<dependency name="com.alkacon.opencms.v8.formgenerator" version="2.0.1" /-->

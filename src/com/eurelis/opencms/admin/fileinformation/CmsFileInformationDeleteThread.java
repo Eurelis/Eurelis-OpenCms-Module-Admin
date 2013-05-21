@@ -18,26 +18,23 @@
  * If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.eurelis.opencms.admin;
-
-import org.opencms.file.CmsObject;
-import org.opencms.file.CmsResource;
-import org.opencms.file.CmsResourceFilter;
-import org.opencms.file.CmsVfsResourceNotFoundException;
-import org.opencms.i18n.CmsMessageContainer;
-import org.opencms.lock.CmsLock;
-import org.opencms.main.CmsLog;
-import org.opencms.main.OpenCms;
-import org.opencms.module.CmsModuleManager;
-import org.opencms.report.A_CmsReportThread;
-import org.opencms.report.I_CmsReport;
-import org.opencms.util.CmsStringUtil;
+package com.eurelis.opencms.admin.fileinformation;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
+import org.opencms.file.CmsObject;
+import org.opencms.file.CmsResource;
+import org.opencms.file.CmsResourceFilter;
+import org.opencms.file.CmsVfsResourceNotFoundException;
+import org.opencms.lock.CmsLock;
+import org.opencms.main.CmsLog;
+import org.opencms.module.CmsModuleManager;
+import org.opencms.report.A_CmsReportThread;
+import org.opencms.report.I_CmsReport;
+
 
 /**
  * Deletes a resource.<p>

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.opencms.file.CmsFile;
 import org.opencms.file.CmsObject;
+import org.opencms.file.CmsProject;
 import org.opencms.file.CmsProperty;
 import org.opencms.file.CmsResource;
 import org.opencms.main.CmsException;
@@ -661,31 +662,51 @@ public class CmsAdminSettings {
     	
     	CmsFile file = null;
         if(!obj.existsResource(SETTINGS_FILE_PATH)){
-        	try {
-        		String content = KEY_INTERVAL + "=" + DEFAULT_VALUE_INTERVAL;
-				List<CmsProperty> properties = new ArrayList<CmsProperty>();
-				CmsResource rsc = obj.createResource(SETTINGS_FILE_PATH, 1, content.getBytes(), properties);
-				file = new CmsFile(rsc);
-				OpenCms.getPublishManager().publishResource(obj, SETTINGS_FILE_PATH);
-				LOG.info("Admin settings : memorisation => " + content);
+        	
+    		String content = KEY_INTERVAL + "=" + DEFAULT_VALUE_INTERVAL;
+			List<CmsProperty> properties = new ArrayList<CmsProperty>();
+			LOG.debug("Admin settings : creating settings file... => content = " + content);
+			
+			String currentSiteRoot = obj.getRequestContext().getSiteRoot();
+			obj.getRequestContext().setSiteRoot("/");
+			CmsProject currentProject = obj.getRequestContext().getCurrentProject();
+			CmsProject offlineProject = currentProject;
+			try {
+				offlineProject = obj.readProject("Offline");
+			} catch (CmsException e1) {
+				e1.printStackTrace();
+				LOG.error("getSettingsFile() " + e1,e1);
+			}
+			obj.getRequestContext().setCurrentProject(offlineProject);
+			LOG.debug("Admin settings : creating settings file... => switch on site root /");
+			CmsResource rsc = null;
+			try {
+				rsc = obj.createResource(SETTINGS_FILE_PATH, 1, content.getBytes(), properties);
+				LOG.debug("Admin settings : creating settings file... => resource created " + SETTINGS_FILE_PATH);
+				obj.writeResource(rsc);
+				LOG.debug("Admin settings : creating settings file... => resource written " + SETTINGS_FILE_PATH);
 			} catch (CmsIllegalArgumentException e) {
 				e.printStackTrace();
-				LOG.error(e);
+				LOG.error("getSettingsFile() " + e,e);
 			} catch (CmsException e) {
 				e.printStackTrace();
-				LOG.error(e);
-			} catch (Exception e) {
-				e.printStackTrace();
-				LOG.error(e);
-			}finally{
-				if(file != null){
-					try {
-						obj.unlockResource(file);
-					} catch (CmsException e) {
-						//
-					}
+				LOG.error("getSettingsFile() " + e,e);
+			}
+			if(rsc != null){
+				try {
+					OpenCms.getPublishManager().publishResource(obj, SETTINGS_FILE_PATH);
+					LOG.debug("Admin settings : creating settings file... => resource published " + SETTINGS_FILE_PATH);
+					LOG.info("Admin settings : memorisation => " + content);
+				} catch (Exception e) {
+					e.printStackTrace();
+					LOG.error("getSettingsFile() " + e,e);
 				}
 			}
+			obj.getRequestContext().setSiteRoot(currentSiteRoot);
+			obj.getRequestContext().setCurrentProject(currentProject);
+			LOG.debug("Admin settings : creating settings file... => switch on site root " + currentSiteRoot);
+			
+			
         }else{
         	try {
         		file = obj.readFile(SETTINGS_FILE_PATH);
@@ -1357,10 +1378,10 @@ public class CmsAdminSettings {
 	        			result = (String)map.get(key);
 	        		}
 	        	}else{
-	        		LOG.error("Admin settings : get " + key + " failed, settings file empty");
+	        		//LOG.warn("Admin settings : get " + key + " failed, settings file empty");
 	        	}
 	        }else{
-	        	LOG.error("Admin settings : get " + key + " failed, settings file null");
+	        	//LOG.warn("Admin settings : get " + key + " failed, settings file null");
 	        }
     	}
         return result;

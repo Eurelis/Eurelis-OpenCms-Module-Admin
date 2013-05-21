@@ -20,9 +20,13 @@
  */
  %>
 <%@page language="java" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
-<%@page import="com.eurelis.opencms.admin.fileinformation.CmsFileInformationList" %>
-<%	
+<%@page import="
+					org.opencms.workplace.CmsDialog,
+					com.eurelis.opencms.admin.fileinformation.CmsFileInformationDialog" %>
+	
+<%
+CmsDialog dial = new CmsDialog(pageContext, request, response);
 //initialize the widget dialog
-CmsFileInformationList wp = new CmsFileInformationList(pageContext, request, response);
-wp.displayDialog();
+CmsFileInformationDialog wpWidget = new CmsFileInformationDialog(pageContext, request, response, dial.getCms().getRequestContext().addSiteRoot(dial.getParamResource()));
+wpWidget.displayDialog();
 %>

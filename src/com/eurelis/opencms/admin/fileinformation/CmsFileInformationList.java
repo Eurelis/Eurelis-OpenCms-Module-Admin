@@ -18,7 +18,7 @@
  * If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.eurelis.opencms.admin;
+package com.eurelis.opencms.admin.fileinformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +57,8 @@ import org.opencms.workplace.list.CmsListMultiAction;
 import org.opencms.workplace.list.CmsListOrderEnum;
 import org.opencms.workplace.list.CmsListSearchAction;
 import org.opencms.workplace.tools.CmsToolDialog;
+
+import com.eurelis.opencms.admin.CmsAdminSettings;
 
 
 
@@ -129,6 +131,9 @@ public class CmsFileInformationList extends A_CmsListDialog {
     
     /** Resource parameter. */
     public static final String PARAM_RESOURCE = "resource";
+    
+    /** Resource parameter. */
+    public static final String PARAM_FORCEDFOLDER = "forcedfolder";
     
    
     /**
@@ -250,9 +255,17 @@ public class CmsFileInformationList extends A_CmsListDialog {
         if(!getCms().existsResource(folder)){
         	return ret;
         }
+        LOG.debug("getListItems... : folder=" + folder + " ");
+        
+        String forcedfolder = null;
+        if(getParameterMap()!=null && getParameterMap().containsKey(PARAM_FORCEDFOLDER)){
+        	forcedfolder = getParameterMap().get(PARAM_FORCEDFOLDER)[0];
+        }
+        LOG.debug("getListItems... : forcedfolder=" + forcedfolder + " ");
+        
         int minLength = settings.getSettingsFilesMinLengthValue(getCms(), getSession());
         int maxLength = settings.getSettingsFilesMaxLengthValue(getCms(), getSession());
-        LOG.debug("getListItems... : folder=" + folder + " minLength=" + minLength + " maxLength=" + maxLength);
+        LOG.debug("getListItems... : minLength=" + minLength + " maxLength=" + maxLength);
         
         long createdBefore = settings.getSettingsFilesCreatedBeforeValue(getCms(), getSession());
         long createdAfter = settings.getSettingsFilesCreatedAfterValue(getCms(), getSession());
@@ -261,12 +274,21 @@ public class CmsFileInformationList extends A_CmsListDialog {
         //recuperation des fichiers
         List<CmsResource> allRsc = new ArrayList<CmsResource>();
         try {
-        	allRsc = getCms().readResources(folder, CmsResourceFilter.ALL.addRequireFile(), true);
+        	if(CmsStringUtil.isEmptyOrWhitespaceOnly(forcedfolder)){
+        		allRsc = getCms().readResources(folder, CmsResourceFilter.ALL.addRequireFile(), true);
+        		LOG.debug("getListItems... " + allRsc.size() + " files in " + folder);
+        	}else{
+        		String currentSiteRoot1 = getCms().getRequestContext().getSiteRoot();
+            	getCms().getRequestContext().setSiteRoot("/");
+        		allRsc = getCms().readResources(forcedfolder, CmsResourceFilter.ALL.addRequireFile(), true);
+        		getCms().getRequestContext().setSiteRoot(currentSiteRoot1);
+        		LOG.debug("getListItems... " + allRsc.size() + " files in " + forcedfolder);
+        	}
         	if(allRsc==null){
         		LOG.warn("getListItems... allRsc null");
         		return ret;
         	}
-        	LOG.debug("getListItems... " + allRsc.size() + " files");
+        	
         	
         	//on passe sur siteroot "/"
         	String currentSiteRoot = getCms().getRequestContext().getSiteRoot();
@@ -349,16 +371,19 @@ public class CmsFileInformationList extends A_CmsListDialog {
                 	displayed = false;
                 }
                 if(maxLength != -1){
+                	LOG.debug("getListItems... filter on max length " + maxLength);
             		if(resource.getLength() > maxLength){
             			displayed = false;
             		}
             	}
-                if(createdBefore != Long.MIN_VALUE && createdBefore != 0){
+                if(createdBefore != Long.MIN_VALUE && createdBefore != Long.MAX_VALUE && createdBefore != 0){
+                	LOG.debug("getListItems... filter on creation date < " + CmsDateUtil.getDateTimeShort(createdBefore));
             		if(resource.getDateCreated() > createdBefore){
             			displayed = false;
             		}
             	}
-                if(createdAfter != Long.MAX_VALUE && createdAfter != 0){
+                if(createdBefore != Long.MIN_VALUE && createdAfter != Long.MAX_VALUE && createdAfter != 0){
+                	LOG.debug("getListItems... filter on creation date > " + CmsDateUtil.getDateTimeShort(createdBefore));
             		if(resource.getDateCreated() < createdAfter){
             			displayed = false;
             		}
@@ -374,7 +399,7 @@ public class CmsFileInformationList extends A_CmsListDialog {
         	
 		} catch (CmsException e) {
 			e.printStackTrace();
-			LOG.error(e);
+			LOG.error(e,e);
 		}
         
 		LOG.debug("getListItems... " + ret.size() + " files found");

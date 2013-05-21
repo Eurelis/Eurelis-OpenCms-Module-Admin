@@ -1,31 +1,24 @@
-/*
- * This library is part of OpenCms -
- * the Open Source Content Management System
- *
- * Copyright (c) Alkacon Software GmbH (http://www.alkacon.com)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * For further information about Alkacon Software GmbH, please see the
- * company website: http://www.alkacon.com
- *
- * For further information about OpenCms, please see the
- * project website: http://www.opencms.org
+/**
+ * This file is part of the Eurelis OpenCms Admin Module.
  * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Copyright (c) 2013 Eurelis (http://www.eurelis.com)
+ *
+ * This module is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this module. 
+ * If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.eurelis.opencms.admin;
+package com.eurelis.opencms.admin.fileinformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +29,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
@@ -47,10 +41,11 @@ import org.opencms.widgets.CmsCalendarWidget;
 import org.opencms.widgets.CmsDisplayWidget;
 import org.opencms.widgets.CmsInputWidget;
 import org.opencms.widgets.CmsVfsFileWidget;
-import org.opencms.workplace.CmsDialog;
 import org.opencms.workplace.CmsWidgetDialog;
 import org.opencms.workplace.CmsWidgetDialogParameter;
-import org.opencms.workplace.CmsWorkplaceSettings;
+
+import com.eurelis.opencms.admin.CmsAdminSettings;
+
 
 /**
  * Dialog in the administration view, to edit the resources to check the internal links for.<p>
@@ -61,6 +56,9 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
 	
 	/** The log object for this class. */
     private static final Log LOG = CmsLog.getLog(CmsFileInformationDialog.class);
+    
+    /** The dialog type. */
+    public static final String DIALOG_TYPE = "filesadvsearch";
 
 
     /** localized messages Keys prefix. */
@@ -79,6 +77,9 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
     private long m_createdBefore;
     /** Auxiliary Property for the VFS resources. */
     private long m_createdAfter;
+    
+    /** Auxiliary Property for the VFS resources. */
+    private String m_forcedfolder;
     
     
     
@@ -109,6 +110,75 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
 
         this(new CmsJspActionElement(context, req, res));
     }
+    
+    /**
+     * Public constructor with JSP variables.<p>
+     * 
+     * @param context the JSP page context
+     * @param req the JSP request
+     * @param res the JSP response
+     * @param folder the forced folder used only via resource contextual menu action. Must be relative to /.
+     */
+    public CmsFileInformationDialog(PageContext context, HttpServletRequest req, HttpServletResponse res, String folder) {
+    	
+        this(new CmsJspActionElement(context, req, res));
+        setForcedFolder(folder);
+        
+        /*CmsJspActionElement jsp = new CmsJspActionElement(context, req, res);
+        if (jsp != null) {
+            m_jsp = jsp;
+            m_cms = m_jsp.getCmsObject();
+            m_session = m_jsp.getRequest().getSession();
+
+            // check role
+            try {
+                checkRole();
+            } catch (CmsRoleViolationException e) {
+                throw new CmsIllegalStateException(e.getMessageContainer(), e);
+            }
+
+            // get / create the workplace settings 
+            m_settings = (CmsWorkplaceSettings)m_session.getAttribute(CmsWorkplaceManager.SESSION_WORKPLACE_SETTINGS);
+
+            if (m_settings == null) {
+                // create the settings object
+                m_settings = new CmsWorkplaceSettings();
+                m_settings = initWorkplaceSettings(m_cms, m_settings, false);
+
+                storeSettings(m_session, m_settings);
+            }
+
+            // initialize messages            
+            CmsMessages messages = OpenCms.getWorkplaceManager().getMessages(getLocale());
+            // generate a new multi messages object and add the messages from the workplace
+            m_messages = new CmsMultiMessages(getLocale());
+            m_messages.addMessages(messages);
+            initMessages();
+
+            // check request for changes in the workplace settings
+            initWorkplaceRequestValues(m_settings, m_jsp.getRequest());
+
+            // set cms context accordingly
+            initWorkplaceCmsContext(m_settings, m_cms);
+
+            // timewarp reset logic
+            initTimeWarp(m_settings.getUserSettings(), m_session);
+        }*/
+        
+     	// check request for changes in the workplace settings (apelle defineWidgets()
+        initWorkplaceRequestValues(getSettings(), getJsp().getRequest());
+        
+        // set cms context accordingly
+        //initWorkplaceCmsContext(getSettings(), getCms());
+
+        // timewarp reset logic
+        //initTimeWarp(getSettings().getUserSettings(), getSession());
+        
+    }
+    
+    
+    
+    
 
     /**
      * Commits the edited project to the db.<p>
@@ -140,7 +210,17 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
         
         // forward to the list
         try {
-			getToolManager().jspForwardTool(this, "/eurelis_file_information/list", null);
+        	if(getForcedFolder()!=null){
+        		Map mapParam = new HashMap();
+        		mapParam.put("forcedfolder", getForcedFolder());
+        		
+        		// uri="views/admin/admin-main.jsp?root=explorer&amp;path=%2Fhistory"
+        		mapParam.put("root", "explorer");
+        		mapParam.put("path", "/eurelis/file_information");
+        		getToolManager().jspForwardPage(this, "/system/workplace/views/admin/admin-main.jsp", mapParam);
+        	}else{
+        		getToolManager().jspForwardTool(this, "/eurelis_file_information/list", null);
+        	}
 		} catch (IOException e) {
 			e.printStackTrace();
 			errors.add(e);
@@ -166,6 +246,33 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
         }
         return m_folder;
     }
+    
+    /**
+     * Returns the forced folder of VFS resources.<p>
+     * null if undefined.
+     *
+     * @return the forced folder of VFS resources
+     */
+    public String getForcedFolder() {
+
+        if(CmsStringUtil.isEmptyOrWhitespaceOnly(m_forcedfolder)){
+        	m_forcedfolder = null;
+        	//LOG.warn("m_forcedfolder null, empty => null");
+        	return null;
+        }
+        
+        String currentSiteRoot = getCms().getRequestContext().getSiteRoot();
+        getCms().getRequestContext().setSiteRoot("/");
+        if(!getCms().existsResource(m_forcedfolder)){
+        	m_forcedfolder = null;
+        	//LOG.warn("m_forcedfolder not exists => null");
+        	getCms().getRequestContext().setSiteRoot(currentSiteRoot);
+        	return null;
+    	}
+        getCms().getRequestContext().setSiteRoot(currentSiteRoot);
+        
+        return m_forcedfolder;
+    }
 
     /**
      * Sets the resources folder.<p>
@@ -178,7 +285,24 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
             m_folder = "/";
             return;
         }else{
+        	LOG.debug("setFolder() " + value);
         	m_folder = value;
+        }
+    }
+    
+    /**
+     * Sets the resources folder.<p>
+     * 
+     * @param value the resources to set
+     */
+    public void setForcedFolder(String value) {
+
+        if (value == null) {
+            m_forcedfolder = null;
+            return;
+        }else{
+        	//LOG.debug("setForcedFolder() " + value);
+        	m_forcedfolder = value;
         }
     }
     
@@ -278,6 +402,15 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
 
     	m_createdAfter = value;
     }
+    
+    
+    
+    protected String getDialogTitle() {
+
+        return key(Messages.GUI_FILEINFORMATION_DIALOG_TITLE);
+    }
+    
+    
 
     /**
      * @see org.opencms.workplace.CmsWidgetDialog#createDialogHtml(java.lang.String)
@@ -314,13 +447,26 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
         setKeyPrefix(KEY_PREFIX);
 
         // widgets to display
-        addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesFolder", PAGES[0], new CmsVfsFileWidget()));
+        LOG.debug("defineWidgets() getForcedFolder() = "+getForcedFolder());
+    	if(getForcedFolder()!=null){
+    		//LOG.debug("defineWidgets() getForcedFolder() != null => CmsDisplayWidget");
+        	addWidget(new CmsWidgetDialogParameter(this, "forcedFolder", PAGES[0], new CmsDisplayWidget()));
+        }else{
+        	//LOG.debug("defineWidgets() getForcedFolder() == null => CmsVfsFileWidget");
+        	addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesFolder", PAGES[0], new CmsVfsFileWidget()));
+        }
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesMinLengthInString", PAGES[0], new CmsInputWidget()));
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesMaxLengthInString", PAGES[0], new CmsInputWidget()));
         
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesCreatedAfter", PAGES[0], new CmsCalendarWidget()));
         addWidget(new CmsWidgetDialogParameter(m_adminSettings, "filesCreatedBefore", PAGES[0], new CmsCalendarWidget()));
         
+    }
+    
+    public void displayDialog() throws JspException, IOException, ServletException {
+
+    	//LOG.debug("displayDialog()");
+    	displayDialog(false);
     }
 
     /**
@@ -362,7 +508,16 @@ public class CmsFileInformationDialog extends CmsWidgetDialog {
             m_adminSettings = (CmsAdminSettings)o;
         }
         
-        setParamCloseLink(getJsp().link("/system/workplace/views/admin/admin-main.jsp?path=/eurelis_file_information/"));
+        setForcedFolder(getCms().getRequestContext().addSiteRoot(getParamResource()));
+        
+        //setParamCloseLink(getJsp().link("/system/workplace/views/admin/admin-main.jsp?path=/eurelis_file_information/"));
+        
+        if(getForcedFolder()!=null){
+        	setParamCloseLink(getJsp().link("/system/workplace/views/admin/admin-main.jsp?root=explorer"));
+        }else{
+        	setParamCloseLink(getJsp().link("/system/workplace/views/admin/admin-main.jsp?path=/"));
+        }
+        
         
     }
 }
