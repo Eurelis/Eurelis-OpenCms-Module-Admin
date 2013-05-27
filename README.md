@@ -12,14 +12,14 @@ The graphs rely on [highcharts][highcharts].
 ### Usage:
 This tool can be accessed through the **Administration** view of [OpenCms][opencms].
 
-### ![Overview][overview] Overview
+### ![Overview][overview] Overview:
 This section offers the Administrator to:
 - check the current operating system version
 - check the current java version
 - see the current JVM uptime and start time
 - set the refresh interval for the graphs (default: 5000 ms)
 
-### ![CPU & Threads & Classes][cpu-threads] CPU, Threads, Classes
+### ![CPU & Threads & Classes][cpu-threads] CPU, Threads, Classes:
 This section offers the Administrator to:
 - See the number of used processors
 - Check the CPU usage
@@ -27,14 +27,14 @@ This section offers the Administrator to:
 - Count the loaded and total loaded classes
 - Count the Live and Deamon threads
 
-### ![Memory][memory] Memory
+### ![Memory][memory] Memory:
 This section offers the Administrator to check the max, total and used memories:
 - Perm Gen memory
 - Old Gen memory
 - Edan Space memory
 - Survivor memory
 
-### ![Database Pools][database] Database Pools
+### ![Database Pools][database] Database Pools:
 This section offers the Administrator to see all the database pools used:
 - Usage graph
 - URL
@@ -60,7 +60,7 @@ This tool can be accessed:
 
 
 
-![XML Transformation icon][xml-transform-big] XML Transformation tool
+![XML Transformation icon][xml-transform-big] XML Transformation tool:
 -----------------------------------------------------------------
 The aim of the **XML Transformation** tool is to transform massively XML contents which corresponding XSD has changed with a new version of a module.
 
@@ -70,7 +70,7 @@ This tool can be used in the **Explorer**  view of [OpenCms][opencms] by:
 - Edit the created file by defining the transformation to apply (see [Editing an XML Transformation description file][xml-transfo-desc])
 - Right-click on the file and choose `Process transformation`: the document or folder containing XML documents to transform will be asked.
 
-### Editing an XML Transformation description file
+### Editing an XML Transformation description file:
 - Write the Content Type as it is displayed in the `Type` column in the **Explorer**  view of [OpenCms][opencms]
 - Add the Unitary Transformations according to your needs
   1. Write the XPath source to identify your node or group of nodes to transform (move, delete, update)
