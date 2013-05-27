@@ -49,7 +49,7 @@ This section offers the Administrator to see all the database pools used:
 The aim of the **File Information** tool is to search for files on [OpenCms][opencms] basing on:
 - a root folder *(default: `/`)*
 - a maximum and/or minimum file size
-- the creation date of the file *(created before oand/or after given dates)*
+- the creation date of the file *(created before and/or after given dates)*
 
 Then, the list of files appear and can be deleted and published.
 
@@ -66,7 +66,7 @@ The aim of the **XML Transformation** tool is to transform massively XML content
 
 ### Usage:
 This tool can be used in the **Explorer**  view of [OpenCms][opencms] by:
-- Creating a new ![XML Transformation icon][xml-transform] **XML Transformation description** file (accessible through the ![Eurelis tools][eurelis-icon] **Eurelis functionalities page**)
+- Creating a new ![XML Transformation icon][xml-transform] **XML Transformation description** file (accessible through the  ![Eurelis tools][eurelis-icon]  **Eurelis functionalities page**)
 - Edit the created file by defining the transformation to apply (see [Editing an XML Transformation description file][xml-transfo-desc])
 - Right-click on the file and choose `Process transformation`: the document or folder containing XML documents to transform will be asked.
 
@@ -89,7 +89,7 @@ This tool can be used in the **Explorer**  view of [OpenCms][opencms] by:
 [cpu-threads]: /vfs_module/system/workplace/resources/tools/admin/icons/small/cpu-threads.png "CPU & Threads & Classes"
 [memory]: /vfs_module/system/workplace/resources/tools/admin/icons/small/memory.png "Memory"
 [database]: /vfs_module/system/workplace/resources/tools/admin/icons/small/database.png "Database Pools"
-[eurelis-icon]: /vfs_module/system/workplace/resources/filetypes/eurelis_big.png "Eurelis Tools"
+[eurelis-icon]: /vfs_module/system/workplace/resources/filetypes/eurelis.png "Eurelis Tools"
 [xml-transform-big]: /vfs_module/system/workplace/resources/filetypes/xml-transform_big.png "XML Transformation tool"
 [xml-transform]: /vfs_module/system/workplace/resources/filetypes/xml-transform.png "XML Transformation tool"
 
