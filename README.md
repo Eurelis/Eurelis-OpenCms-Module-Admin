@@ -81,7 +81,7 @@ This tool can be used in the **Explorer**  view of [OpenCms][opencms] by:
 [eurelis]: http://www.eurelis.com "Agitateur de Technologies"
 [opencms]: http://www.opencms.org/ "OpenCms"
 [highcharts]: http://www.highcharts.com/ 'Highcharts JS"
-[xml-transfo-desc]: #xmltransfo "Editing an XML Transformation description file"
+[xml-transfo-desc]: #editing-an-xml-transformation-description-file "Editing an XML Transformation description file"
 
 [system-information]: /vfs_module/system/workplace/resources/tools/admin/icons/big/system-information.png "System Information"
 [file-information]: /vfs_module/system/workplace/resources/tools/admin/icons/big/file-information.png "File Information"
