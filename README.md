@@ -66,7 +66,7 @@ The aim of the **XML Transformation** tool is to transform massively XML content
 
 ### Usage:
 This tool can be used in the **Explorer**  view of [OpenCms][opencms] by:
-- Creating a new ![XML Transformation icon][xml-transform] **XML Transformation description** file (accessible through the ![Eurelis tools][eurelis] **Eurelis functionalities page**)
+- Creating a new ![XML Transformation icon][xml-transform] **XML Transformation description** file (accessible through the ![Eurelis tools][eurelis-icon] **Eurelis functionalities page**)
 - Edit the created file by defining the transformation to apply (see [Editing an XML Transformation description file][xml-transfo-desc])
 - Right-click on the file and choose `Process transformation`: the document or folder containing XML documents to transform will be asked.
 
