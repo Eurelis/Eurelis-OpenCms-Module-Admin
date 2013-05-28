@@ -1,4 +1,4 @@
-Eurelis - OpenCms Admin Module
+Eurelis - OpenCms Module Admin
 ==============================
 
 This module developed by [Eurelis][eurelis] is intended to add several tools to Administrators.
