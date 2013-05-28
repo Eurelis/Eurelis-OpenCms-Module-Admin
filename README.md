@@ -1,4 +1,4 @@
-Eurelis - OpenCms Module Admin
+![Eurelis][eurelis-icon-big]urelis - OpenCms Module Admin
 ==============================
 
 This module developed by [Eurelis][eurelis] is intended to add several tools to Administrators.
@@ -89,6 +89,7 @@ This tool can be used in the **Explorer**  view of [OpenCms][opencms] by:
 [cpu-threads]: /vfs_module/system/workplace/resources/tools/admin/icons/small/cpu-threads.png "CPU & Threads & Classes"
 [memory]: /vfs_module/system/workplace/resources/tools/admin/icons/small/memory.png "Memory"
 [database]: /vfs_module/system/workplace/resources/tools/admin/icons/small/database.png "Database Pools"
+[eurelis-icon-big]: /vfs_module/system/workplace/resources/filetypes/eurelis_big.png "Eurelis Tools"
 [eurelis-icon]: /vfs_module/system/workplace/resources/filetypes/eurelis.png "Eurelis Tools"
 [xml-transform-big]: /vfs_module/system/workplace/resources/filetypes/xml-transform_big.png "XML Transformation tool"
 [xml-transform]: /vfs_module/system/workplace/resources/filetypes/xml-transform.png "XML Transformation tool"
