@@ -1,6 +1,9 @@
 <explorertypes>
-	<explorertype name="xmltransformation" key="fileicon.xmltransformation" icon="binary.gif" bigicon="binary-big.png" reference="xmlcontent">
-        <newresource page="structurecontent" uri="newresource_xmlcontent.jsp?newresourcetype=xmltransformation" order="20" autosetnavigation="false" autosettitle="false" info="desc.xmltransformation"/>
+  <explorertype name="eurelis" key="fileicon.eurelis" icon="eurelis.png" reference="xmlcontent">
+    <newresource uri="newresource.jsp?page=eurelis" order="1" autosetnavigation="false" autosettitle="false" info="desc.eurelis" />
+  </explorertype>
+	<explorertype name="xmltransformation" key="fileicon.xmltransformation" icon="xml-transform.png" bigicon="xml-transform_big.png" reference="xmlcontent">
+        <newresource page="eurelis" uri="newresource_xmlcontent.jsp?newresourcetype=xmltransformation" order="20" autosetnavigation="false" autosettitle="false" info="desc.xmltransformation"/>
 	
 		<accesscontrol>
         	<accessentry principal="ROLE.WORKPLACE_USER" permissions="+r+v+w+c"/>
