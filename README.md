@@ -77,6 +77,15 @@ This tool can be used in the **Explorer**  view of [OpenCms][opencms] by:
   2. Choose a Destination to define the target place to insert the source node(s)
   3. Choose a Template with defined parameters to define the target result
 
+### Process transformation steps
+1. Select the document(s) on which to apply the transformation
+  - Select a file on the vfs or a folder for recursively include sub files
+  - Indicates if you want to ignore files that seems to be already correct. (Check if the xmlcontent is already valid according to it's schema, in which case we presume a transformation isn't needed and skip the file)
+2. Check the logs while the first, mock, processing is being run
+3. Check the results on the list, disable or not initial validations for files that seems to be already valid.
+4. Check the final log during the real processing
+
+
 
 [eurelis]: http://www.eurelis.com "Agitateur de Technologies"
 [opencms]: http://www.opencms.org/ "OpenCms"
