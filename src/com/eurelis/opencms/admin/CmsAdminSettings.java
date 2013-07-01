@@ -681,10 +681,15 @@ public class CmsAdminSettings {
 			LOG.debug("Admin settings : creating settings file... => switch on site root /");
 			CmsResource rsc = null;
 			try {
-				rsc = obj.createResource(SETTINGS_FILE_PATH, 1, content.getBytes(), properties);
-				LOG.debug("Admin settings : creating settings file... => resource created " + SETTINGS_FILE_PATH);
-				obj.writeResource(rsc);
-				LOG.debug("Admin settings : creating settings file... => resource written " + SETTINGS_FILE_PATH);
+				if(obj.existsResource(SETTINGS_FILE_PATH)){
+					rsc = obj.readResource(SETTINGS_FILE_PATH);
+					LOG.debug("Admin settings : reading settings file... => resource read " + SETTINGS_FILE_PATH);
+				}else{
+					rsc = obj.createResource(SETTINGS_FILE_PATH, 1, content.getBytes(), properties);
+					LOG.debug("Admin settings : creating settings file... => resource created " + SETTINGS_FILE_PATH);
+					obj.writeResource(rsc);
+					LOG.debug("Admin settings : creating settings file... => resource written " + SETTINGS_FILE_PATH);
+				}
 			} catch (CmsIllegalArgumentException e) {
 				e.printStackTrace();
 				LOG.error("getSettingsFile() " + e,e);
