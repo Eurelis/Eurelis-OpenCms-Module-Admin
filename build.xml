@@ -144,6 +144,7 @@
   	<copy file="${folder.src}/${folder.package}/fileinformation/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/fileinformation/" />
   	<copy file="${folder.src}/${folder.package}/xmltransformation/ui/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/xmltransformation/ui/" />
   	<copy file="${folder.src}/${folder.package}/xmltransformation/ui/threads/messages.properties" todir="${folder.build.module}/system/modules/${module.module.name}/classes/${folder.package}/xmltransformation/ui/threads/" />
+
   	
   	<!-- UNCOMMENT TO MINIFY -->
   	<!--antcall target="optimize-css"/-->
