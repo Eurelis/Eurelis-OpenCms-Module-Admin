@@ -377,7 +377,7 @@ public class CmsSystemInformationOverviewDialog extends CmsWidgetDialog {
     	String opencmsstartuptimestring = simpleFormatH.format(date) + "h " + simpleFormatM.format(date) + "min " + simpleFormatS.format(date) + "s ";
     	
     	setOperatingSystem(""+osBean.getName());
-    	setJavaVersion(""+runtimeBean.getVmVersion());
+    	setJavaVersion(System.getProperty("java.version"));
     	setJvmUptime(""+jvmuptimestring);
     	setJvmStarttime(""+jvmstarttimestring);
     	setOpenCmsVersion(OpenCms.getSystemInfo().getVersionNumber());

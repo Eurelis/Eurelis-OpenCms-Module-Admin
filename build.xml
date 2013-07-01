@@ -1,12 +1,11 @@
 <project name="com.eurelis.opencms.admin" default="module" basedir=".">
   
 	<!-- // VARIABLES A MODIFIER // -->
-  <property name="environment" value="DEV" />
-  <property name="build.major" value="0" /> <!-- Main technological changes (Galaxy release, ie : 2012 : v1)  / Should never change -->
+  <property name="environment" value="PUBLIC" />
+  <property name="build.major" value="1" /> <!-- Main technological changes (Galaxy release, ie : 2012 : v1)  / Should never change -->
   <property name="build.minor" value="0" /> <!-- Main functional release stream : 0 for dev / Should be increment for new functionnalities after v1, Should be increment ob sprint basis during dev -->
   <property name="build.bugfix" value="0" /> <!-- Minor functional release ou bug fix/ Should be increment ob sprint basis during dev -->
-  <property name="build.indice" value="1" /> <!-- Dev increment, should be 0 for qualification and production release -->
-  <!--property name="fileslist.css" value="generic/reset-html5boilerplate.css,generic/style.css,plugins/flexslider.css,editorial/style.css,editorial/slider.css,editorial/teaser-image.css,editorial/teaser-linkslist.css,generic/final.css" /-->
+  <property name="build.indice" value="0" /> <!-- Dev increment, should be 0 for qualification and production release -->
   
 	<!-- important -->
 	<property name="project.name" value="Eurelis OpenCms Admin tools" />
@@ -15,7 +14,6 @@
 	<property name="folder.package" value="com/eurelis/opencms/admin" />
 	<property name="jar.version" value="${build.major}.${build.minor}.${build.bugfix}.${build.indice}" />
 	<property name="jdk.version" value="1.6" />
-	<!--<property name="jarexists" value="true" />-->
 	<property name="flag.uuids" value="true" />
   
 	<!-- module -->
@@ -69,10 +67,6 @@
 	<property name="jar.name" value="${module.module.name}" />
 	<property name="jar.file" value="${jar.name}_${jar.version}.jar" />
 	<property name="classpath" value="${folder.bin}" />
-  <!-- css -->
-  <property name="css.path.from" value="${folder.module}/system/modules/${module.module.name}/resources/css" />
-  <property name="css.path.to" value="build/css" />
-  <!--property name="tools.yuicompressor" value="./etc/complib/yuicompressor-2.4.7.jar"/-->
 
   <path id="compil.classpath">
 	    <fileset dir="${folder.complib}" includes="*.jar" />
@@ -109,7 +103,7 @@
 	
 	<!-- COMPILATION DES CLASSES -->
   <target name="compile" depends="init" description="Compilation des classes.">
-    <javac srcdir="${folder.src}" destdir="${folder.build.jar.classes}" classpathref="compil.classpath" debug="off" />
+    <javac srcdir="${folder.src}" destdir="${folder.build.jar.classes}" classpathref="compil.classpath" debug="off" source="${jdk.version}" target="${jdk.version}"/>
     <jar jarfile="${folder.build.jar}/${jar.file}">
       <fileset dir="${folder.build.jar.classes}"/>
       <fileset dir="${folder.etc}/license" />
@@ -200,45 +194,5 @@
 			<zipfileset dir="${folder.build.module}" excludes="**/__properties/**" />
 		</zip>
 	 </target>
-
-	<!-- [BEGIN] CSS Tools -->
-  <target name="optimize-css">
-    <foreach list="${fileslist.css}" param="css_file" target="clean-css-files" />
-  	<antcall target="concat-min-css"/>
-  </target>
-	
-  <target name="clean-css-files">
-    <echo>Removing ${css_file} from files</echo>
-    <replaceregexp match="&lt;link.+href=&quot;.*${css_file}.*&quot;.*&gt;" replace="  " byline="true">
-      <fileset dir="${folder.build.module}" includes="**/*.jsp"/>
-    </replaceregexp>
-  </target>
-	
-  <target name="concat-min-css">
-    <echo message="Concatenating css..."/>
-    <tstamp><format property="letime" pattern="yyyyMMdd"/></tstamp>
-    <mkdir dir="./${css.path.to}" />
-    <concat destfile="./${css.path.to}/style-${letime}.css">
-      <filelist dir="${css.path.from}" files="${fileslist.css}"/>
-    </concat>
-    <echo message="Minifying css..."/>
-    <apply executable="java" parallel="false">
-      <fileset dir="./${css.path.to}/" includes="style-${letime}.css"/>
-      <arg line="-jar"/>
-      <arg path="./${tools.yuicompressor}"/>
-      <srcfile/>
-      <arg line="-o"/>
-      <mapper type="glob" from="style-${letime}.css" to="./${css.path.to}/style-${letime}.min.css"/>
-      <targetfile/>
-    </apply>
-    <replaceregexp match="(../)+images" replace="../images" byline="true" flags="g">
-      <fileset dir="./${css.path.to}/" includes="style-${letime}.min.css"/>
-    </replaceregexp>
-    <copy file="./${css.path.to}/style-${letime}.min.css" todir="${folder.build.module}/system/modules/${module.module.name}/resources/css/" />
-    <replaceregexp match="&lt;!--INCLUDECSS--&gt;" replace="&lt;link rel=&quot;stylesheet&quot; href=&quot;&lt;cms:link&gt;/system/modules/${module.module.name}/resources/css/style-${letime}.min.css&lt;/cms:link&gt;&quot; /&gt;" byline="true">
-      <fileset dir="${folder.build.module}" includes="**/*.jsp"/>
-    </replaceregexp>
-  </target>
-	<!-- [END] CSS Tools -->
 	
 </project>
