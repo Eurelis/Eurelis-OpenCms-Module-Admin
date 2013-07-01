@@ -61,7 +61,7 @@
   }
   
   /* Calculating usage */
-  double usage = com.eurelis.opencms.admin.CmsCPUThreadsClassesOverviewDialog.getCPUUsage(session);
+  double usage = com.eurelis.opencms.admin.systeminformation.CmsCPUThreadsClassesOverviewDialog.getCPUUsage(session);
   
   
   org.opencms.db.CmsSqlManager sqlM = org.opencms.main.OpenCms.getSqlManager() ;
