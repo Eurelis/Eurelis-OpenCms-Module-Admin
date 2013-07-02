@@ -198,6 +198,7 @@
 			<resource uri="/system/workplace/tools/admin/icons/small/overwiew.png" />
 			<resource uri="/system/workplace/tools/admin/icons/small/system-information.png" />
 			<resource uri="/system/workplace/locales/fr/messages/com/eurelis/opencms/admin/" />
+			<resource uri="/system/shared/eurelis-admin.txt" />
       <!--Les PARAMETRES-->
       <!--<parameter name="README_FILEPATH" value="/system/modules/${module.module.name}/readme.txt" />-->
 			<!--<parameter name="config.containerpage" value="/system/modules/${module.module.name}/config/sitemap.config" />-->
