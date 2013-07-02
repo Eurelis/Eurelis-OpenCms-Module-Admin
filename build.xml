@@ -176,8 +176,30 @@
       <exportpoint src="/system/modules/${module.module.name}/taglib/" dst="WEB-INF/" />
       <!--Les RESSOURCES DE MODULE-->
       <resource uri="/system/modules/${module.module.name}/" />
+			<resource uri="/system/workplace/admin/eurelis_file_information/" />
+			<resource uri="/system/workplace/admin/eurelis_system_information/" />
+			<resource uri="/system/workplace/commons/eurelis/file_information.jsp" />
+			<resource uri="/system/workplace/explorer/eurelis/file_information.jsp" />
+			<resource uri="/system/workplace/resources/filetypes/eurelis_big.png" />
+			<resource uri="/system/workplace/resources/filetypes/eurelis.png" />
+			<resource uri="/system/workplace/resources/filetypes/xml-transform_big.png" />
+			<resource uri="/system/workplace/resources/filetypes/xml-transform.png" />
+			<resource uri="/system/workplace/resources/highcharts/" />
+			<resource uri="/system/workplace/tools/admin/icons/big/cpu-threads.png" />
+			<resource uri="/system/workplace/tools/admin/icons/big/database.png" />
+			<resource uri="/system/workplace/tools/admin/icons/big/file-information.png" />
+			<resource uri="/system/workplace/tools/admin/icons/big/memory.png" />
+			<resource uri="/system/workplace/tools/admin/icons/big/overwiew.png" />
+			<resource uri="/system/workplace/tools/admin/icons/big/system-information.png" />
+			<resource uri="/system/workplace/tools/admin/icons/small/cpu-threads.png" />
+			<resource uri="/system/workplace/tools/admin/icons/small/database.png" />
+			<resource uri="/system/workplace/tools/admin/icons/small/file-information.png" />
+			<resource uri="/system/workplace/tools/admin/icons/small/memory.png" />
+			<resource uri="/system/workplace/tools/admin/icons/small/overwiew.png" />
+			<resource uri="/system/workplace/tools/admin/icons/small/system-information.png" />
+			<resource uri="/system/workplace/locales/fr/messages/com/eurelis/opencms/admin/" />
       <!--Les PARAMETRES-->
-      <parameter name="README_FILEPATH" value="/system/modules/${module.module.name}/readme.txt" />
+      <!--<parameter name="README_FILEPATH" value="/system/modules/${module.module.name}/readme.txt" />-->
 			<!--<parameter name="config.containerpage" value="/system/modules/${module.module.name}/config/sitemap.config" />-->
       <!--Les DEPENDANCES (vis a vis d'autres modules)-->
       <!--dependency name="com.eurelis.opencms.utils" version="1.0.0.3" />
