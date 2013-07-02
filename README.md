@@ -31,7 +31,7 @@ This section offers the Administrator to:
 This section offers the Administrator to check the max, total and used memories:
 - Perm Gen memory
 - Old Gen memory
-- Edan Space memory
+- Eden Space memory
 - Survivor memory
 
 ### ![Database Pools][database] Database Pools:
