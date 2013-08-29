@@ -1,7 +1,8 @@
-![Eurelis][eurelis-icon-big]urelis - OpenCms Module Admin
+Eurelis - OpenCms Module Admin
 ==============================
 
 This module developed by [Eurelis][eurelis] is intended to add several tools to Administrators.
+It is compatible with OpenCms 8.5+ versions.
 
 
 ![System Information icon][system-information] System Information

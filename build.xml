@@ -204,7 +204,8 @@
 			<!--<parameter name="config.containerpage" value="/system/modules/${module.module.name}/config/sitemap.config" />-->
       <!--Les DEPENDANCES (vis a vis d'autres modules)-->
       <!--dependency name="com.eurelis.opencms.utils" version="1.0.0.3" />
-			<dependency name="com.alkacon.opencms.v8.formgenerator" version="2.0.1" /-->
+      <dependency name="com.alkacon.opencms.v8.formgenerator" version="2.0.1" /-->
+      <dependency name="org.opencms.ade.properties" version="8.5.0" />
       <!--Un dernier type : le pack de fichiers traites par le module-->
       <fileset dir="${folder.build.module}" excludes="**/__properties,**/__properties/**" />
 		</manifest>
